@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
+import MapKit
+import SwiftData
 
 @main
 struct jpexApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [SaveModel.self])
     }
+    
+    
 }
+
