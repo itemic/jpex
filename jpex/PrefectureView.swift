@@ -11,7 +11,7 @@ struct PrefectureView: View {
     
     var prefecture: Prefecture
     
-    @State var visitStatus: Int = 0
+    @State var visitStatus: VisitStatus = .never
     @Environment(\.modelContext) var modelContext
     var saveModel: SaveModel
     
@@ -29,12 +29,9 @@ struct PrefectureView: View {
                         .foregroundStyle(.secondary)
                 }
                 Picker("Visit status", selection: $visitStatus) {
-                    Text("Never").tag(0)
-                    Text("Passed").tag(1)
-                    Text("Alighted").tag(2)
-                    Text("Visited").tag(3)
-                    Text("Stayed").tag(4)
-                    Text("Lived").tag(5)
+                    ForEach(VisitStatus.allCases) { vCase in
+                        Text(vCase.text).tag(vCase.id)
+                    }
                 }
                 .onChange(of: visitStatus) {
                     var existingStatus = saveModel.visitStatus

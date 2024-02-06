@@ -13,6 +13,7 @@ struct ContentView: View {
     @Environment(\.modelContext) var modelContext
 //    @State private var saveModel: SaveModel?
     @Query var saveModels: [SaveModel]
+    @Query var save: [PrefectureSave]
     
     func getPrefectureColor(_ value: Int) -> Color {
         switch(value) {
@@ -37,7 +38,7 @@ struct ContentView: View {
                             Text("Travel Score")
                                 .font(.body.smallCaps()).bold()
                                 .foregroundStyle(.secondary)
-                            Text("\(saveModel.visitStatus.reduce(0, +))")
+                            Text("\(saveModel.visitStatus.reduce(0) {$0 + $1.score})")
                                 .font(.largeTitle)
                         }
                         Spacer()
@@ -49,20 +50,49 @@ struct ContentView: View {
                     ForEach(Region.allCases, id: \.self) { region in
                         Section {
                             ForEach(Prefecture.prefecturesFrom(region)) { pref in
+                                
+                               
                                 NavigationLink(destination: PrefectureView(prefecture: pref, saveModel: saveModel), label: {
                                     
-                                    
-                                    HStack {
-                                        Text(pref.name).bold()
-                                            .foregroundStyle(getPrefectureColor(saveModel.visitStatus[pref.id-1]))
-                                        Spacer()
-                                        Text("\(saveModel.visitStatus[pref.id - 1])")
-                                        
-                                        //                                        Text(saveModel.visitStatus[pref.id - 1])
+                                    ZStack {
+                                        HStack {
+                                            Text(pref.name).bold()
+                                                .font(.system(size: 32))
+                                                .fontWeight(.light)
+                                                .kerning(-0.5)
+                                                .foregroundStyle(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? .tertiary : .primary)
+                                            Spacer()
+                                            VisitPillView(text: "\(saveModel.visitStatus[pref.id - 1].text)".uppercased(), color: saveModel.visitStatus[pref.id - 1].color)
+                                            
+                                        }
                                     }
                                     
+                                    .listRowSeparator(.hidden)
+                                    
                                 })
-                                .listRowBackground(getPrefectureColor(saveModel.visitStatus[pref.id-1]).opacity(0.05))
+                                .listRowBackground(
+                                    ZStack {
+                                        saveModel.visitStatus[pref.id - 1].color.opacity(0.2)
+                                            .mask(
+                                                LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(1)]), startPoint: .leading, endPoint: .trailing)
+                                            )
+                                            
+                                        HStack {
+                                            Image("jp_flag\(pref.id)").resizable().aspectRatio(contentMode: .fill).frame(width: 300, height: 60)
+                                                .grayscale(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? 1 : 0)
+
+                                                .mask(
+                                                    LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.3), Color.black.opacity(0)]), startPoint: .leading, endPoint: .trailing)
+                                                )
+                                            Spacer()
+                                        }
+                                        
+                                    }
+                                        
+                                )
+                                
+                                
+                                .listRowSeparator(.hidden)
 
                             }
                         } header: {
@@ -71,7 +101,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .listStyle(.sidebar)
+            .listStyle(.plain)
             .onAppear(perform: load)
             .navigationTitle("Prefectures")
             
@@ -84,15 +114,24 @@ struct ContentView: View {
         if saveModels.isEmpty {
             modelContext.insert(SaveModel())
         }
+        if save.count != 47 {
+            // TODO: Delete all
+            try? modelContext.delete(model: PrefectureSave.self)
+            for prefecture in Prefecture.allPrefectures {
+                let p = PrefectureSave(id: prefecture.id, status: .never)
+                modelContext.insert(p)
+            }
+        }
+        print (save.count)
 //        saveModel = data?.first
     }
     
    
     
-    func getVisitStatus(pref: Prefecture) -> VisitStatus {
-        let code = UserDefaults.standard.integer(forKey: "JP-\(pref.id)") as VisitCode
-        return VisitStatus(rawValue: code ) ?? .never
-    }
+//    func getVisitStatus(pref: Prefecture) -> VisitStatus {
+//        let code = UserDefaults.standard.integer(forKey: "JP-\(pref.id)") as VisitCode
+//        return VisitStatus(rawValue: code ) ?? .never
+//    }
     
 //    init() {
 //        /// In a real app, the event data probably downloads from a server. This sample loads GeoJSON data from a local file instead.

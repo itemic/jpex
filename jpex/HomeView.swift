@@ -9,7 +9,25 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            HStack {
+                Text("Kanagawa")
+                Spacer()
+                Text("Visited")
+                    .foregroundStyle(.secondary)
+            }
+            HStack {
+                Text("Tohoku")
+                Spacer()
+                Text("Visited")
+                    .foregroundStyle(.secondary)
+            }
+               
+        }
+        .padding()
+        .font(.system(size: 32))
+        .fontWeight(.semibold)
+        .kerning(-0.5)
     }
 }
 

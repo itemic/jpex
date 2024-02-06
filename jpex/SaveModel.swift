@@ -2,114 +2,141 @@
 //  SaveModel.swift
 //  jpex
 //
-//  Created by Terran Kroft on 27/1/2024.
+//  Created by Terran Kroft on 27/1/2.never24.
 //
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model class SaveModel {
     
+    var visitStatus: [VisitStatus] = []
     
     init() {
         visitStatus = [
-            0, //VISIT_hokkaido,
-            0, //VISIT_aomori,
-            0, //VISIT_iwate,
-            0, //VISIT_miyagi,
-            0, //VISIT_akita,
-            0, //VISIT_yamagata,
-            0, //VISIT_fukushima,
-            0, //VISIT_ibaraki,
-            0, //VISIT_tochigi,
-            0, //VISIT_gunma,
-            0, //VISIT_saitama,
-            0, //VISIT_chiba,
-            0, //VISIT_tokyo,
-            0, //VISIT_kanagawa,
-            0, //VISIT_niigata,
-            0, //VISIT_toyama,
-            0, //VISIT_ishikawa,
-            0, //VISIT_fukui,
-            0, //VISIT_yamanashi,
-            0, //VISIT_nagano,
-            0, //VISIT_gifu,
-            0, //VISIT_shizuoka,
-            0, //VISIT_aichi,
-            0, //VISIT_mie,
-            0, //VISIT_shiga,
-            0, //VISIT_kyoto,
-            0, //VISIT_osaka,
-            0, //VISIT_hyogo,
-            0, //VISIT_nara,
-            0, //VISIT_wakayama,
-            0, //VISIT_tottori,
-            0, //VISIT_shimane,
-            0, //VISIT_okayama,
-            0, //VISIT_hiroshima,
-            0, //VISIT_yamaguchi,
-            0, //VISIT_tokushima,
-            0, //VISIT_kagawa,
-            0, //VISIT_ehime,
-            0, //VISIT_kochi,
-            0, //VISIT_fukuoka,
-            0, //VISIT_saga,
-            0, //VISIT_nagano,
-            0, //VISIT_kumamoto,
-            0, //VISIT_oita,
-            0, //VISIT_miyagi,
-            0, //VISIT_kagoshima,
-            0, //VISIT_okinawa
+            .never, //VISIT_hokkaido,
+            .never, //VISIT_aomori,
+            .never, //VISIT_iwate,
+            .never, //VISIT_miyagi,
+            .never, //VISIT_akita,
+            .never, //VISIT_yamagata,
+            .never, //VISIT_fukushima,
+            .never, //VISIT_ibaraki,
+            .never, //VISIT_tochigi,
+            .never, //VISIT_gunma,
+            .never, //VISIT_saitama,
+            .never, //VISIT_chiba,
+            .never, //VISIT_tokyo,
+            .never, //VISIT_kanagawa,
+            .never, //VISIT_niigata,
+            .never, //VISIT_toyama,
+            .never, //VISIT_ishikawa,
+            .never, //VISIT_fukui,
+            .never, //VISIT_yamanashi,
+            .never, //VISIT_nagano,
+            .never, //VISIT_gifu,
+            .never, //VISIT_shizuoka,
+            .never, //VISIT_aichi,
+            .never, //VISIT_mie,
+            .never, //VISIT_shiga,
+            .never, //VISIT_kyoto,
+            .never, //VISIT_osaka,
+            .never, //VISIT_hyogo,
+            .never, //VISIT_nara,
+            .never, //VISIT_wakayama,
+            .never, //VISIT_tottori,
+            .never, //VISIT_shimane,
+            .never, //VISIT_okayama,
+            .never, //VISIT_hiroshima,
+            .never, //VISIT_yamaguchi,
+            .never, //VISIT_tokushima,
+            .never, //VISIT_kagawa,
+            .never, //VISIT_ehime,
+            .never, //VISIT_kochi,
+            .never, //VISIT_fukuoka,
+            .never, //VISIT_saga,
+            .never, //VISIT_nagano,
+            .never, //VISIT_kumamoto,
+            .never, //VISIT_oita,
+            .never, //VISIT_miyagi,
+            .never, //VISIT_kagoshima,
+            .never, //VISIT_okinawa
         ]
     }
     
-    var visitStatus = [
-        0, //VISIT_hokkaido,
-        0, //VISIT_aomori,
-        0, //VISIT_iwate,
-        0, //VISIT_miyagi,
-        0, //VISIT_akita,
-        0, //VISIT_yamagata,
-        0, //VISIT_fukushima,
-        0, //VISIT_ibaraki,
-        0, //VISIT_tochigi,
-        0, //VISIT_gunma,
-        0, //VISIT_saitama,
-        0, //VISIT_chiba,
-        0, //VISIT_tokyo,
-        0, //VISIT_kanagawa,
-        0, //VISIT_niigata,
-        0, //VISIT_toyama,
-        0, //VISIT_ishikawa,
-        0, //VISIT_fukui,
-        0, //VISIT_yamanashi,
-        0, //VISIT_nagano,
-        0, //VISIT_gifu,
-        0, //VISIT_shizuoka,
-        0, //VISIT_aichi,
-        0, //VISIT_mie,
-        0, //VISIT_shiga,
-        0, //VISIT_kyoto,
-        0, //VISIT_osaka,
-        0, //VISIT_hyogo,
-        0, //VISIT_nara,
-        0, //VISIT_wakayama,
-        0, //VISIT_tottori,
-        0, //VISIT_shimane,
-        0, //VISIT_okayama,
-        0, //VISIT_hiroshima,
-        0, //VISIT_yamaguchi,
-        0, //VISIT_tokushima,
-        0, //VISIT_kagawa,
-        0, //VISIT_ehime,
-        0, //VISIT_kochi,
-        0, //VISIT_fukuoka,
-        0, //VISIT_saga,
-        0, //VISIT_nagano,
-        0, //VISIT_kumamoto,
-        0, //VISIT_oita,
-        0, //VISIT_miyagi,
-        0, //VISIT_kagoshima,
-        0, //VISIT_okinawa
-    ]
+    
+}
+
+enum VisitStatus: CaseIterable, Identifiable, Codable {
+    case never
+    case want
+    case passed
+    case alighted
+    case visited
+    case stayed
+    case lived
+    
+    
+    var id: Self { self }
+    
+    var color: Color {
+        switch self {
+        case .never:
+            return .gray
+        case .passed:
+            return .sdgBlue
+        case .alighted:
+            return .sdgGreen
+        case .visited:
+            return .sdgYellow
+        case .stayed:
+            return .sdgOrange
+        case .lived:
+            return .sdgRed
+        case .want:
+            return .gray
+        }
+    
+    }
+    
+    var text: String {
+        switch self {
+        case .never:
+            return "Never been"
+        case .passed:
+            return "Passed thru"
+        case .alighted:
+            return "Alighted"
+        case .visited:
+            return "Visited"
+        case .stayed:
+            return "Stayed"
+        case .lived:
+            return "Lived"
+        case .want:
+            return "Want to go"
+        }
+    }
+    
+    var score: Int {
+        switch self {
+        case .never:
+            return 0
+        case .passed:
+            return 1
+        case .alighted:
+            return 2
+        case .visited:
+            return 3
+        case .stayed:
+            return 4
+        case .lived:
+            return 5
+        case .want:
+            return 0
+        }
+    }
+    
+    
 }
