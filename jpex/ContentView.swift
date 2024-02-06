@@ -14,6 +14,7 @@ struct ContentView: View {
 //    @State private var saveModel: SaveModel?
     @Query var saveModels: [SaveModel]
     @Query var save: [PrefectureSave]
+    @AppStorage("localLanguage") var localLanguage: Bool = false
     
     func getPrefectureColor(_ value: Int) -> Color {
         switch(value) {
@@ -27,21 +28,55 @@ struct ContentView: View {
         }
     }
     
+    func completionFrom(_ region: Region) -> Int {
+        let ids = Prefecture.prefecturesFrom(region).map({$0.id})
+        var counter = 0
+        if let saveModel = saveModels.first {
+            for id in ids {
+                if (saveModel.visitStatus[id-1].score > 0) {
+                    counter += 1
+                }
+            }
+            
+        }
+        
+        return counter
+    }
+    
+    
+    
     var body: some View {
 
         NavigationView {
             List {
                 if let saveModel = saveModels.first {
                     HStack {
-                        Spacer()
+//                        Spacer()
+//                        VStack {
+//                            Text("Travel Score")
+//                                .font(.body.smallCaps()).bold()
+//                                .foregroundStyle(.secondary)
+//                            Text("\(saveModel.visitStatus.reduce(0) {$0 + $1.score})")
+//                                .font(.largeTitle)
+//                        }
                         VStack {
-                            Text("Travel Score")
-                                .font(.body.smallCaps()).bold()
-                                .foregroundStyle(.secondary)
-                            Text("\(saveModel.visitStatus.reduce(0) {$0 + $1.score})")
-                                .font(.largeTitle)
+                            ForEach(Region.allCases, id: \.self) { region in
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Text(region.rawValue)
+                                        .font(.body.smallCaps()).bold()
+                                        .foregroundStyle(.secondary)
+                                    HStack {
+                                        ProgressBarView(percentage: Double(completionFrom(region)) / Double(Prefecture.prefecturesFrom(region).count), color: .sdgRed)
+                                            .frame(height: 10)
+                                        Text("\(completionFrom(region)) / \(Prefecture.prefecturesFrom(region).count)").monospacedDigit()
+                                            .font(.body.smallCaps()).bold()
+                                            .foregroundStyle(.sdgRed.secondary)
+                                    }
+                                }
+                            }
                         }
-                        Spacer()
+                        
+//                        Spacer()
                     }
                     .listRowInsets(.none)
                     .listRowSeparator(.hidden)
@@ -56,11 +91,19 @@ struct ContentView: View {
                                     
                                     ZStack {
                                         HStack {
-                                            Text(pref.name).bold()
-                                                .font(.system(size: 32))
-                                                .fontWeight(.light)
-                                                .kerning(-0.5)
-                                                .foregroundStyle(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? .tertiary : .primary)
+                                            VStack(alignment: .leading, spacing: -2) {
+                                                Text(localLanguage ? pref.localName : pref.name).bold()
+                                                    .font(.system(size: 32))
+                                                    .fontWeight(.light)
+                                                    .kerning(-0.5)
+                                                    .foregroundStyle(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? .tertiary : .primary)
+                                                Text(localLanguage ? pref.name : pref.localName).bold()
+                                                    .font(.system(size: 18))
+                                                    .fontWeight(.regular)
+                                                    .kerning(-0.5)
+                                                    .foregroundStyle(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? .quaternary : .secondary)
+                                            }
+                                            
                                             Spacer()
                                             VisitPillView(text: "\(saveModel.visitStatus[pref.id - 1].text)".uppercased(), color: saveModel.visitStatus[pref.id - 1].color)
                                             
@@ -78,7 +121,7 @@ struct ContentView: View {
                                             )
                                             
                                         HStack {
-                                            Image("jp_flag\(pref.id)").resizable().aspectRatio(contentMode: .fill).frame(width: 300, height: 60)
+                                            Image("jp_flag\(pref.id)").resizable().aspectRatio(contentMode: .fill).frame(width: 300, height: 80)
                                                 .grayscale(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? 1 : 0)
 
                                                 .mask(
@@ -104,6 +147,13 @@ struct ContentView: View {
             .listStyle(.plain)
             .onAppear(perform: load)
             .navigationTitle("Prefectures")
+            .toolbar {
+                Button {
+                    localLanguage.toggle()
+                } label: {
+                    Text("toggle")
+                }
+            }
             
         }
         

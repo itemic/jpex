@@ -20,6 +20,7 @@
 		45F6B6B72B63E3C200931EEB /* VisitStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F6B6B62B63E3C200931EEB /* VisitStatus.swift */; };
 		45FB0A3B2B70C6EA00517EF0 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FB0A3A2B70C6EA00517EF0 /* HomeView.swift */; };
 		45FB0A3D2B70CB9E00517EF0 /* PrefectureSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FB0A3C2B70CB9E00517EF0 /* PrefectureSave.swift */; };
+		45FE342A2B723518006BF802 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FE34292B723518006BF802 /* ProgressBarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		45F6B6B62B63E3C200931EEB /* VisitStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitStatus.swift; sourceTree = "<group>"; };
 		45FB0A3A2B70C6EA00517EF0 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		45FB0A3C2B70CB9E00517EF0 /* PrefectureSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefectureSave.swift; sourceTree = "<group>"; };
+		45FE34292B723518006BF802 /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 				45F6B6A12B63D05A00931EEB /* jpexApp.swift */,
 				4552E7662B64CFD600EEB0F0 /* SaveModel.swift */,
 				45F6B6A32B63D05A00931EEB /* ContentView.swift */,
+				45FE34292B723518006BF802 /* ProgressBarView.swift */,
 				45B3358E2B71FA26008C037B /* VisitPillView.swift */,
 				45FB0A3A2B70C6EA00517EF0 /* HomeView.swift */,
 				45F6B6B22B63DAAC00931EEB /* Prefecture.swift */,
@@ -183,6 +186,7 @@
 				45F6B6A22B63D05A00931EEB /* jpexApp.swift in Sources */,
 				45F6B6B52B63E0E500931EEB /* PrefectureView.swift in Sources */,
 				45F6B6B72B63E3C200931EEB /* VisitStatus.swift in Sources */,
+				45FE342A2B723518006BF802 /* ProgressBarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
