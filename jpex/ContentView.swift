@@ -19,13 +19,29 @@ struct ContentView: View {
     func getPrefectureColor(_ value: Int) -> Color {
         switch(value) {
         case 0: Color.secondary
-        case 1: Color.blue
-        case 2: Color.green
-        case 3: Color.yellow
-        case 4: Color.orange
-        case 5: Color.red
+        case 1: Color.sdgBlue
+        case 2: Color.sdgGreen
+        case 3: Color.sdgYellow
+        case 4: Color.sdgOrange
+        case 5: Color.sdgRed
         default: Color.secondary
         }
+    }
+    
+    func maximumColorFrom(_ region: Region) -> Color {
+        var max = 0
+        let ids = Prefecture.prefecturesFrom(region).map({$0.id})
+        var counter = 0
+        if let saveModel = saveModels.first {
+            for id in ids {
+                let score = saveModel.visitStatus[id-1].score
+                if score > max {
+                    max = score
+                }
+            }
+            
+        }
+        return getPrefectureColor(max)
     }
     
     func completionFrom(_ region: Region) -> Int {
@@ -66,11 +82,11 @@ struct ContentView: View {
                                         .font(.body.smallCaps()).bold()
                                         .foregroundStyle(.secondary)
                                     HStack {
-                                        ProgressBarView(percentage: Double(completionFrom(region)) / Double(Prefecture.prefecturesFrom(region).count), color: .sdgRed)
+                                        ProgressBarView(percentage: Double(completionFrom(region)) / Double(Prefecture.prefecturesFrom(region).count), color: maximumColorFrom(region), animated: completionFrom(region) != Prefecture.prefecturesFrom(region).count)
                                             .frame(height: 10)
                                         Text("\(completionFrom(region)) / \(Prefecture.prefecturesFrom(region).count)").monospacedDigit()
                                             .font(.body.smallCaps()).bold()
-                                            .foregroundStyle(.sdgRed.secondary)
+                                            .foregroundStyle(maximumColorFrom(region))
                                     }
                                 }
                             }

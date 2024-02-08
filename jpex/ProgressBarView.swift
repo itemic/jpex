@@ -13,6 +13,7 @@ struct ProgressBarView: View {
     var percentage: Double = 0.5
     var color: Color = .sdgBlue
     var degree: Double = 45
+    var animated: Bool = true
     @State var animationAmount = 0.0
     var clip: some View {
         GeometryReader { geometry in
@@ -32,11 +33,13 @@ struct ProgressBarView: View {
             .offset(x: -long, y: -long )
                         .offset(x: animationAmount)
                         .onAppear {
-                            animationAmount = (group / cos(Angle(degrees: degree).radians))
+                            if animated {
+                                animationAmount = (group / cos(Angle(degrees: degree).radians))
+                            }
                         }
             .background(color)
             .animation(
-                .linear(duration: 2)
+                .linear(duration: 4)
                 .repeatForever(autoreverses: false),
                 value: animationAmount)
         }
