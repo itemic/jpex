@@ -16,7 +16,7 @@ struct jpexApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [SaveModel.self, PrefectureSave.self])
+        .modelContainer(for: [SaveModel.self])
     }
     
     

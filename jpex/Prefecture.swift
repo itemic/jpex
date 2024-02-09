@@ -117,6 +117,49 @@ enum Region: String, CaseIterable {
     chugoku,
     shikoku,
     kyushu
+    
+    var eng: String {
+        switch self {
+        case .hokkaido:
+            return "Hokkaido"
+        case .tohoku:
+            return "Tohoku"
+        case .kanto:
+            return "Kanto"
+        case .chubu:
+            return "Chubu"
+        case .kansai:
+            return "Kansai"
+        case .chugoku:
+            return "Chugoku"
+        case .shikoku:
+            return "Shikoku"
+        case .kyushu:
+            return "Kyushu"
+        }
+    }
+    
+    var jpn: String {
+        switch self {
+        case .hokkaido:
+            return "北海道"
+        case .tohoku:
+            return "東北"
+        case .kanto:
+            return "関東"
+        case .chubu:
+            return "中部"
+        case .kansai:
+            return "関西"
+        case .chugoku:
+            return "中国"
+        case .shikoku:
+            return "四国"
+        case .kyushu:
+            return "九州"
+        }
+    }
 }
+
 
 

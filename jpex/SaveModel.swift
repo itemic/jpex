@@ -80,6 +80,25 @@ enum VisitStatus: CaseIterable, Identifiable, Codable {
     
     var id: Self { self }
     
+    var next: VisitStatus {
+        switch self {
+        case .never:
+            return .want
+        case .want:
+            return .passed
+        case .passed:
+            return .alighted
+        case .alighted:
+            return .visited
+        case .visited:
+            return .stayed
+        case .stayed:
+            return .lived
+        case .lived:
+            return .never
+        }
+    }
+    
     var color: Color {
         switch self {
         case .never:
