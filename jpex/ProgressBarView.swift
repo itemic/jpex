@@ -21,10 +21,9 @@ struct ProgressBarView: View {
             let group = spacing + width
             let count = Int(2 * long / group)
             HStack(spacing: spacing) {
-                ForEach(0..<count) { _ in
-                    Color.white.opacity(0.2)
-                        .frame(width: width, height: 2 * long)
-                }
+                
+                    color
+                     
                 
             }
             

@@ -70,7 +70,6 @@ import SwiftUI
 
 enum VisitStatus: CaseIterable, Identifiable, Codable {
     case never
-    case want
     case passed
     case alighted
     case visited
@@ -83,8 +82,6 @@ enum VisitStatus: CaseIterable, Identifiable, Codable {
     var next: VisitStatus {
         switch self {
         case .never:
-            return .want
-        case .want:
             return .passed
         case .passed:
             return .alighted
@@ -113,8 +110,6 @@ enum VisitStatus: CaseIterable, Identifiable, Codable {
             return .sdgOrange
         case .lived:
             return .sdgRed
-        case .want:
-            return .gray
         }
     
     }
@@ -124,7 +119,7 @@ enum VisitStatus: CaseIterable, Identifiable, Codable {
         case .never:
             return "Never been"
         case .passed:
-            return "Passed thru"
+            return "Passed"
         case .alighted:
             return "Alighted"
         case .visited:
@@ -133,8 +128,6 @@ enum VisitStatus: CaseIterable, Identifiable, Codable {
             return "Stayed"
         case .lived:
             return "Lived"
-        case .want:
-            return "Want to go"
         }
     }
     
@@ -152,8 +145,6 @@ enum VisitStatus: CaseIterable, Identifiable, Codable {
             return 4
         case .lived:
             return 5
-        case .want:
-            return 0
         }
     }
     

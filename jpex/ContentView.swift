@@ -13,46 +13,35 @@ struct ContentView: View {
     @Environment(\.modelContext) var modelContext
     @Query var saveModels: [SaveModel]
     @AppStorage("localLanguage") var localLanguage: Bool = false
-    
-    func getPrefectureColor(_ value: Int) -> Color {
-        switch(value) {
-        case 0: Color.secondary
-        case 1: Color.sdgBlue
-        case 2: Color.sdgGreen
-        case 3: Color.sdgYellow
-        case 4: Color.sdgOrange
-        case 5: Color.sdgRed
-        default: Color.secondary
-        }
-    }
+    @State var saveModel: [VisitStatus] = [VisitStatus](repeating: .never, count: 47)
     
     func maximumColorFrom(_ region: Region) -> Color {
         var max = 0
+        var maxStatus = VisitStatus.never
         let ids = Prefecture.prefecturesFrom(region).map({$0.id})
-        var counter = 0
-        if let saveModel = saveModels.first {
+        
             for id in ids {
-                let score = saveModel.visitStatus[id-1].score
+                let score = saveModel[id-1].score
                 if score > max {
                     max = score
+                    maxStatus = saveModel[id-1]
                 }
             }
             
-        }
-        return getPrefectureColor(max)
+        return maxStatus.color
     }
     
     func completionFrom(_ region: Region) -> Int {
         let ids = Prefecture.prefecturesFrom(region).map({$0.id})
         var counter = 0
-        if let saveModel = saveModels.first {
+        
             for id in ids {
-                if (saveModel.visitStatus[id-1].score > 0) {
+                if (saveModel.count > id && saveModel[id-1].score > 0) {
                     counter += 1
                 }
             }
             
-        }
+        
         
         return counter
     }
@@ -60,8 +49,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ScrollView {
+                
                 LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
-                    if let saveModel = saveModels.first {
+                    
                         ForEach(Region.allCases, id: \.self) { region in
                             Section(header: HStack {
                                 Text(localLanguage ? region.jpn : region.eng)
@@ -79,7 +69,7 @@ struct ContentView: View {
                             }
                                 .padding()
                                 .background(.thickMaterial)) {
-                                ForEach(Prefecture.prefecturesFrom(region)) { pref in
+                                    ForEach(Prefecture.prefecturesFrom(region)) { pref in
                                     
                                     HStack {
                                         VStack(alignment: .leading, spacing: -2) {
@@ -87,20 +77,28 @@ struct ContentView: View {
                                                 .font(.system(size: 32))
                                                 .fontWeight(.light)
                                                 .kerning(-0.5)
-                                                .foregroundStyle(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? .tertiary : .primary)
+                                                .foregroundStyle(saveModel[pref.id - 1] == .never  ? .tertiary : .primary)
                                             Text(localLanguage ? pref.name : pref.localName)
                                                 .font(.system(size: 18))
                                                 .fontWeight(.regular)
                                                 .kerning(-0.5)
-                                                .foregroundStyle(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? .quaternary : .secondary)
+                                                .foregroundStyle(saveModel[pref.id - 1] == .never  ? .quaternary : .secondary)
                                         }
                                         
                                         Spacer()
-                                        VisitPillView(text: "\(saveModel.visitStatus[pref.id - 1].text)".uppercased(), color: saveModel.visitStatus[pref.id - 1].color)
+                                        Button("ABC") {
+                                            print("BBBC")
+                                            saveModel[pref.id - 1] = saveModel[pref.id - 1].next
+                                        }
+                                        Button("DEF") {
+                                            print("ABD")
+                                        }
+                                        .buttonStyle(.borderedProminent)
+                                        VisitPillView(text: "\(saveModel[pref.id - 1].text)".uppercased(), color: saveModel[pref.id - 1].color)
                                             .onTapGesture {
                                                 print("BBB")
         //                                        var existingStatus = saveModel.visitStatus
-                                                saveModel.visitStatus[pref.id - 1] = saveModel.visitStatus[pref.id - 1].next
+                                                saveModel[pref.id - 1] = saveModel[pref.id - 1].next
         //                                        saveModel.visitStatus = existingStatus
                                             }
                                             
@@ -110,14 +108,14 @@ struct ContentView: View {
                                    
                                     .background(
                                         ZStack {
-                                            saveModel.visitStatus[pref.id - 1].color.opacity(0.2)
+                                            saveModel[pref.id - 1].color.opacity(0.2)
                                                 .mask(
                                                     LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(1)]), startPoint: .leading, endPoint: .trailing)
                                                 )
                                             
                                             HStack {
                                                 Image("jp_flag\(pref.id)").resizable().aspectRatio(contentMode: .fill).frame(width: 300)
-                                                    .grayscale(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? 1 : 0)
+                                                    .grayscale(saveModel[pref.id - 1] == .never ? 1 : 0)
                                                 
                                                     .mask(
                                                         LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.3), Color.black.opacity(0)]), startPoint: .leading, endPoint: .trailing)
@@ -135,7 +133,7 @@ struct ContentView: View {
                                                         }
                                 }
                             }
-                        }
+                        
                     }
                 }
             }
@@ -151,116 +149,13 @@ struct ContentView: View {
         }
     }
     
-    var boxdy: some View {
-
-        NavigationView {
-            List {
-                if let saveModel = saveModels.first {
-                    HStack {
-                        VStack {
-                            ForEach(Region.allCases, id: \.self) { region in
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Text(region.rawValue)
-                                        .font(.body.smallCaps()).bold()
-                                        .foregroundStyle(.secondary)
-                                    HStack {
-                                        ProgressBarView(percentage: Double(completionFrom(region)) / Double(Prefecture.prefecturesFrom(region).count), color: maximumColorFrom(region), animated: completionFrom(region) != Prefecture.prefecturesFrom(region).count)
-                                            .frame(height: 10)
-                                        Text("\(completionFrom(region)) / \(Prefecture.prefecturesFrom(region).count)").monospacedDigit()
-                                            .font(.body.smallCaps()).bold()
-                                            .foregroundStyle(maximumColorFrom(region))
-                                    }
-                                }
-                            }
-                        }
-                        
-//                        Spacer()
-                    }
-                    .listRowInsets(.none)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    
-                    ForEach(Region.allCases, id: \.self) { region in
-                        Section {
-                            ForEach(Prefecture.prefecturesFrom(region)) { pref in
-                                
-                               
-                                NavigationLink(destination: PrefectureView(prefecture: pref, saveModel: saveModel), label: {
-                                    
-                                    ZStack {
-                                        HStack {
-                                            VStack(alignment: .leading, spacing: -2) {
-                                                Text(localLanguage ? pref.localName : pref.name).bold()
-                                                    .font(.system(size: 32))
-                                                    .fontWeight(.light)
-                                                    .kerning(-0.5)
-                                                    .foregroundStyle(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? .tertiary : .primary)
-                                                Text(localLanguage ? pref.name : pref.localName).bold()
-                                                    .font(.system(size: 18))
-                                                    .fontWeight(.regular)
-                                                    .kerning(-0.5)
-                                                    .foregroundStyle(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? .quaternary : .secondary)
-                                            }
-                                            
-                                            Spacer()
-                                            VisitPillView(text: "\(saveModel.visitStatus[pref.id - 1].text)".uppercased(), color: saveModel.visitStatus[pref.id - 1].color)
-                                            
-                                        }
-                                    }
-                                    
-                                    .listRowSeparator(.hidden)
-                                    
-                                })
-                                .listRowBackground(
-                                    ZStack {
-                                        saveModel.visitStatus[pref.id - 1].color.opacity(0.2)
-                                            .mask(
-                                                LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(1)]), startPoint: .leading, endPoint: .trailing)
-                                            )
-                                            
-                                        HStack {
-                                            Image("jp_flag\(pref.id)").resizable().aspectRatio(contentMode: .fill).frame(width: 300, height: 80)
-                                                .grayscale(saveModel.visitStatus[pref.id - 1] == .never || saveModel.visitStatus[pref.id - 1] == .want ? 1 : 0)
-
-                                                .mask(
-                                                    LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.3), Color.black.opacity(0)]), startPoint: .leading, endPoint: .trailing)
-                                                )
-                                            Spacer()
-                                        }
-                                        
-                                    }
-                                        
-                                )
-                                
-                                
-                                .listRowSeparator(.hidden)
-
-                            }
-                        } header: {
-                            Text(region.rawValue)
-                        }
-                    }
-                }
-            }
-            .listStyle(.plain)
-            .onAppear(perform: load)
-            .navigationTitle("Prefectures")
-            .toolbar {
-                Button {
-                    localLanguage.toggle()
-                } label: {
-                    Text("toggle")
-                }
-            }
-            
-        }
-        
-    }
+    
     
     func load() {
         if saveModels.isEmpty {
             modelContext.insert(SaveModel())
         }
+        saveModel = saveModels.first?.visitStatus ?? [VisitStatus](repeating: .never, count: 47)
 
     }
     

@@ -108,7 +108,11 @@ struct Prefecture: Identifiable {
     ]
 }
 
-enum Region: String, CaseIterable {
+enum Region: String, CaseIterable, Identifiable {
+    
+    var id: Self {
+        return self
+    }
     case hokkaido,
     tohoku,
     kanto,
