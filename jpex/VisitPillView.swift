@@ -44,6 +44,7 @@ struct VisitPillView: View {
             
             .clipShape(Capsule())
             .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 1)
+            .contentShape(.rect())
     }
 }
 

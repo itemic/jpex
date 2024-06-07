@@ -14,6 +14,21 @@ struct ContentView: View {
     @Query var saveModels: [SaveModel]
     @AppStorage("localLanguage") var localLanguage: Bool = false
     @State var saveModel: [VisitStatus] = [VisitStatus](repeating: .never, count: 47)
+    @State var showSheet: Bool = false
+    @State var resetToggle: Bool = false
+    @Environment(\.openURL) var openURL
+
+    var code: String {
+        var a = String(saveModel[15].score) + "" + String(saveModel[13].score) + "" + String(saveModel[7].score ) + "" + String(saveModel[11].score) + "" + String(saveModel[12].score) + "" + String(saveModel[21].score) + "" + String(saveModel[25].score) + "" + String(saveModel[29].score) + "" + String(saveModel[30].score) + ""
+        
+        var b = String(saveModel[34].score) + "" + String(saveModel[33].score) + "" + String(saveModel[31].score) + "" + String(saveModel[22].score) + "" + String(saveModel[23].score) + "" + String(saveModel[27].score) + "" + String(saveModel[16].score) + "" + String(saveModel[18].score) + "" + String(saveModel[26].score) + "" + String(saveModel[37].score) + "" + String(saveModel[38].score) + "" + String(saveModel[35].score) + "" + String(saveModel[10].score) + ""
+        
+        var c = String(saveModel[8].score) + "" + String(saveModel[32].score) + "" + String(saveModel[43].score) + "" + String(saveModel[39].score) + "" + String(saveModel[41].score) + "" + String(saveModel[36].score) + "" + String(saveModel[17].score) + "" + String(saveModel[46].score) + "" + String(saveModel[44].score) + "" + String(saveModel[42].score) + "" + String(saveModel[40].score) + ""
+        
+        var d = String(saveModel[45].score) + "" + String(saveModel[28].score) + "" + String(saveModel[24].score) + "" + String(saveModel[9].score ) + "" + String(saveModel[19].score) + "" + String(saveModel[20].score) + "" + String(saveModel[6].score ) + "" + String(saveModel[14].score) + "" + String(saveModel[3].score ) + "" + String(saveModel[5].score ) + "" + String(saveModel[2].score ) + "" + String(saveModel[4].score ) + "" + String(saveModel[1].score ) + "" + String(saveModel[0].score )
+        
+        return a + b + c + d 
+    }
     
     func maximumColorFrom(_ region: Region) -> Color {
         var max = 0
@@ -69,6 +84,7 @@ struct ContentView: View {
                             }
                                 .padding()
                                 .background(.thickMaterial)) {
+                                    
                                     ForEach(Prefecture.prefecturesFrom(region)) { pref in
                                     
                                     HStack {
@@ -78,34 +94,25 @@ struct ContentView: View {
                                                 .fontWeight(.light)
                                                 .kerning(-0.5)
                                                 .foregroundStyle(saveModel[pref.id - 1] == .never  ? .tertiary : .primary)
-                                            Text(localLanguage ? pref.name : pref.localName)
-                                                .font(.system(size: 18))
-                                                .fontWeight(.regular)
-                                                .kerning(-0.5)
-                                                .foregroundStyle(saveModel[pref.id - 1] == .never  ? .quaternary : .secondary)
+//                                            Text(localLanguage ? pref.name : pref.localName)
+//                                                .font(.system(size: 18))
+//                                                .fontWeight(.regular)
+//                                                .kerning(-0.5)
+//                                                .foregroundStyle(saveModel[pref.id - 1] == .never  ? .quaternary : .secondary)
                                         }
                                         
                                         Spacer()
-                                        Button("ABC") {
-                                            print("BBBC")
-                                            saveModel[pref.id - 1] = saveModel[pref.id - 1].next
-                                        }
-                                        Button("DEF") {
-                                            print("ABD")
-                                        }
-                                        .buttonStyle(.borderedProminent)
+                                       
                                         VisitPillView(text: "\(saveModel[pref.id - 1].text)".uppercased(), color: saveModel[pref.id - 1].color)
                                             .onTapGesture {
-                                                print("BBB")
-        //                                        var existingStatus = saveModel.visitStatus
                                                 saveModel[pref.id - 1] = saveModel[pref.id - 1].next
-        //                                        saveModel.visitStatus = existingStatus
+                                                saveModels.first?.visitStatus = saveModel
                                             }
                                             
                                         
                                     }
                                     .padding()
-                                   
+                                    
                                     .background(
                                         ZStack {
                                             saveModel[pref.id - 1].color.opacity(0.2)
@@ -124,8 +131,10 @@ struct ContentView: View {
                                             }
                                             
                                         })
+                                   
                                     .clipped()
-                                    
+                                    .contentShape(.rect())
+                                   
                                     .scrollTransition { view, phase in
                                                             view.opacity(phase.isIdentity ? 1 : 0.3)
                                                             .scaleEffect(phase.isIdentity ? 1 : 0.75)
@@ -141,11 +150,27 @@ struct ContentView: View {
             .navigationTitle("Prefectures")
             .toolbar {
                 Button {
-                    localLanguage.toggle()
+                    
+                    var urlString = "https://zhung.com.tw/japanex/#" + code
+                    openURL(URL(string: urlString)!)
+                    
+
                 } label: {
-                    Text("toggle")
+                    Image(systemName: "globe.asia.australia.fill")
+                }
+                Button {
+                    showSheet.toggle()
+                } label: {
+                    Image(systemName: "gearshape.fill")
                 }
             }
+            .sheet(isPresented: $showSheet, content: {
+                SettingsView(resetToggle: $resetToggle)
+            })
+            .onChange(of: resetToggle) {
+                load()
+            }
+            
         }
     }
     
@@ -156,7 +181,6 @@ struct ContentView: View {
             modelContext.insert(SaveModel())
         }
         saveModel = saveModels.first?.visitStatus ?? [VisitStatus](repeating: .never, count: 47)
-
     }
     
 

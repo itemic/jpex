@@ -10,6 +10,9 @@
 		4552E7672B64CFD600EEB0F0 /* SaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552E7662B64CFD600EEB0F0 /* SaveModel.swift */; };
 		45B3358D2B71E0EE008C037B /* 01_flag_Hokkaido.png in Resources */ = {isa = PBXBuildFile; fileRef = 45B3358C2B71E0EE008C037B /* 01_flag_Hokkaido.png */; };
 		45B3358F2B71FA26008C037B /* VisitPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B3358E2B71FA26008C037B /* VisitPillView.swift */; };
+		45D5E76E2C12FC12007AB796 /* VisitButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5E76D2C12FC12007AB796 /* VisitButtonView.swift */; };
+		45D5E7702C1302DC007AB796 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5E76F2C1302DC007AB796 /* SettingsView.swift */; };
+		45D5E7722C131031007AB796 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5E7712C131031007AB796 /* PrivacyPolicyView.swift */; };
 		45F6B6A22B63D05A00931EEB /* jpexApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F6B6A12B63D05A00931EEB /* jpexApp.swift */; };
 		45F6B6A42B63D05A00931EEB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F6B6A32B63D05A00931EEB /* ContentView.swift */; };
 		45F6B6A62B63D05B00931EEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45F6B6A52B63D05B00931EEB /* Assets.xcassets */; };
@@ -26,6 +29,9 @@
 		4552E7662B64CFD600EEB0F0 /* SaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveModel.swift; sourceTree = "<group>"; };
 		45B3358C2B71E0EE008C037B /* 01_flag_Hokkaido.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 01_flag_Hokkaido.png; sourceTree = "<group>"; };
 		45B3358E2B71FA26008C037B /* VisitPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitPillView.swift; sourceTree = "<group>"; };
+		45D5E76D2C12FC12007AB796 /* VisitButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitButtonView.swift; sourceTree = "<group>"; };
+		45D5E76F2C1302DC007AB796 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		45D5E7712C131031007AB796 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		45F6B69E2B63D05A00931EEB /* jpex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jpex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45F6B6A12B63D05A00931EEB /* jpexApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = jpexApp.swift; sourceTree = "<group>"; };
 		45F6B6A32B63D05A00931EEB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -73,8 +79,11 @@
 				45F6B6A12B63D05A00931EEB /* jpexApp.swift */,
 				4552E7662B64CFD600EEB0F0 /* SaveModel.swift */,
 				45F6B6A32B63D05A00931EEB /* ContentView.swift */,
+				45D5E76F2C1302DC007AB796 /* SettingsView.swift */,
+				45D5E7712C131031007AB796 /* PrivacyPolicyView.swift */,
 				45FE34292B723518006BF802 /* ProgressBarView.swift */,
 				45B3358E2B71FA26008C037B /* VisitPillView.swift */,
+				45D5E76D2C12FC12007AB796 /* VisitButtonView.swift */,
 				45FB0A3A2B70C6EA00517EF0 /* HomeView.swift */,
 				45F6B6B22B63DAAC00931EEB /* Prefecture.swift */,
 				45F6B6B62B63E3C200931EEB /* VisitStatus.swift */,
@@ -177,12 +186,15 @@
 				45F6B6B32B63DAAC00931EEB /* Prefecture.swift in Sources */,
 				45FB0A3B2B70C6EA00517EF0 /* HomeView.swift in Sources */,
 				45F6B6A42B63D05A00931EEB /* ContentView.swift in Sources */,
+				45D5E7722C131031007AB796 /* PrivacyPolicyView.swift in Sources */,
 				45B3358F2B71FA26008C037B /* VisitPillView.swift in Sources */,
 				4552E7672B64CFD600EEB0F0 /* SaveModel.swift in Sources */,
 				45F6B6A22B63D05A00931EEB /* jpexApp.swift in Sources */,
+				45D5E76E2C12FC12007AB796 /* VisitButtonView.swift in Sources */,
 				45F6B6B52B63E0E500931EEB /* PrefectureView.swift in Sources */,
 				45F6B6B72B63E3C200931EEB /* VisitStatus.swift in Sources */,
 				45FE342A2B723518006BF802 /* ProgressBarView.swift in Sources */,
+				45D5E7702C1302DC007AB796 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +331,7 @@
 				DEVELOPMENT_TEAM = 58QL7E6Z98;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Prefectures;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -348,6 +361,7 @@
 				DEVELOPMENT_TEAM = 58QL7E6Z98;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Prefectures;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
