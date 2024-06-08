@@ -35,6 +35,14 @@ struct SettingsView: View {
                     NavigationLink("Privacy Policy", destination: PrivacyPolicyView())
                 }
                 
+                Section {
+                    Link("Dice Simulator", destination: URL(string: "https://apps.apple.com/au/app/dice-simulator/id6464281632")!)
+                    Link("Live Rail for HSR (Taiwan)", destination: URL(string: "https://apps.apple.com/au/app/live-rail-for-hsr/id1550589269")!)
+                    Link("Percent Grade Calculator", destination: URL(string: "https://apps.apple.com/au/app/percent-grade-calculator/id1672967259")!)
+                } header: {
+                    Text("Download my other apps :)")
+                }
+                
             }
             .navigationTitle("Settings")
         }
