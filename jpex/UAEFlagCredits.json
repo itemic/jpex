@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Abu Dhabi",
+    "author": "Madden",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Abu_Dhabi.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Ajman",
+    "author": "Madden",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Ajman.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Dubai and Ajman share this flag. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Dubai",
+    "author": "David Benbennick (Dbenbenn)",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Dubai.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Dubai and Ajman share this flag. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Ras Al Khaimah",
+    "author": "Madden",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Sharjah_and_Ras_Al_Khaimah.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Sharjah and Ras Al Khaimah share this flag. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Sharjah",
+    "author": "Madden",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Sharjah_and_Ras_Al_Khaimah.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Sharjah and Ras Al Khaimah share this flag. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Umm Al Quwain",
+    "author": "Madden",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Umm_al-Qaiwain.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  }
+]

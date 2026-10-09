@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Australia",
+    "author": "Original: Ivor Evans, Leslie John Hawkins, Egbert John Nuttall, Annie Dorrington and William Stevens. Vector: Ian Fieggen; Wikimedia Commons contributors.",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Australia.svg",
+    "license": "Public domain, expired Crown copyright",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "The national flag is shown for Jervis Bay Territory and the external territories without their own flag. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "New South Wales",
+    "author": "Denelson83, Greentubing and Wikimedia Commons contributors; based on the Xrmap flag collection",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_New_South_Wales.svg",
+    "license": "CC BY-SA 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Victoria",
+    "author": "Denelson83 and Wikimedia Commons contributors; based on the Xrmap flag collection",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Victoria_(Australia).svg",
+    "license": "CC BY-SA 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "note": "The source also provides a public-domain Xrmap release. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Queensland",
+    "author": "Government of Queensland; Denelson83 and Wikimedia Commons contributors; based on the Xrmap flag collection",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Queensland.svg",
+    "license": "Public-domain Xrmap release",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "South Australia",
+    "author": "Robert Craig (likely original designer); Denelson83 and Wikimedia Commons contributors; based on the Xrmap flag collection",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_South_Australia.svg",
+    "license": "Public-domain release",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Western Australia",
+    "author": "Original: Frederick Weld. Vector: Denelson83; Wikimedia Commons contributors.",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Western_Australia.svg",
+    "license": "Public domain, expired Crown copyright",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Tasmania",
+    "author": "Original designer unknown; proclaimed by Sir Frederick Weld. Composition by Denelson83; Wikimedia Commons contributors.",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Tasmania.svg",
+    "license": "CC0 1.0",
+    "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Australian Capital Territory",
+    "author": "Original: Ivo Ostyn. Vector based on artwork supplied by the ACT Government; Wikimedia Commons contributors.",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_the_Australian_Capital_Territory.svg",
+    "license": "CC0 1.0",
+    "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Northern Territory",
+    "author": "Original: Robert Ingpen; Wikimedia Commons contributors. Based on NT Government flag specifications.",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_the_Northern_Territory.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Christmas Island",
+    "author": "Tony Couch; Wikimedia Commons contributors; based on the Xrmap flag collection",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Christmas_Island.svg",
+    "license": "Public domain / copyright-ineligible",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Community flag; not formally adopted. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Norfolk Island",
+    "author": "Open Clip Art Library; Wikimedia Commons contributors. Original author not identified by source.",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Norfolk_Island.svg",
+    "license": "CC0 1.0",
+    "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  }
+]

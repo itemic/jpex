@@ -1,0 +1,272 @@
+{
+  "polities": {
+    "CZ": {
+      "name": "Czechia",
+      "flag": "asset:world_flag_cz",
+      "color": "CZ",
+      "kind": "state"
+    },
+    "MR": {
+      "name": "Mauritania",
+      "flag": "asset:world_flag_mr",
+      "color": "MR",
+      "kind": "state"
+    },
+    "SZ": {
+      "name": "Eswatini",
+      "flag": "asset:world_flag_sz",
+      "color": "SZ",
+      "kind": "state"
+    },
+    "MK": {
+      "name": "North Macedonia",
+      "flag": "asset:world_flag_mk",
+      "color": "MK",
+      "kind": "state"
+    },
+    "TR": {
+      "name": "Türkiye",
+      "flag": "asset:world_flag_tr",
+      "color": "TR",
+      "kind": "state"
+    },
+    "KG": {
+      "name": "Kyrgyzstan",
+      "flag": "asset:world_flag_kg",
+      "color": "KG",
+      "kind": "state"
+    },
+    "SY": {
+      "name": "Syria",
+      "flag": "asset:world_flag_sy",
+      "color": "SY",
+      "kind": "state"
+    },
+    "MR_1959": {
+      "name": "Mauritania",
+      "flag": "commons:Flag_of_Mauritania_(1959–2017).svg",
+      "color": "MR",
+      "kind": "state"
+    },
+    "KG_1992": {
+      "name": "Kyrgyzstan",
+      "flag": "commons:Flag_of_Kyrgyzstan_(1992–2023).svg",
+      "color": "KG",
+      "kind": "state"
+    },
+    "SY_1980": {
+      "name": "Syrian Arab Republic",
+      "flag": "commons:Flag_of_the_United_Arab_Republic_(1958–1971),_Flag_of_Syria_(1980–2024).svg",
+      "color": "SY",
+      "kind": "state"
+    },
+    "MW": {
+      "name": "Malawi",
+      "flag": "asset:world_flag_mw",
+      "color": "MW",
+      "kind": "state"
+    },
+    "SWAZILAND": {
+      "name": "Kingdom of Swaziland",
+      "flag": "asset:world_flag_sz",
+      "color": "SZ",
+      "kind": "state"
+    },
+    "MACEDONIA": {
+      "name": "Republic of Macedonia",
+      "flag": "asset:world_flag_mk",
+      "color": "MK",
+      "kind": "state"
+    },
+    "TURKEY": {
+      "name": "Turkey",
+      "flag": "asset:world_flag_tr",
+      "color": "TR",
+      "kind": "state"
+    },
+    "CZECH_REPUBLIC": {
+      "name": "Czech Republic",
+      "flag": "asset:world_flag_cz",
+      "color": "CZ",
+      "kind": "state"
+    },
+    "MW_2010": {
+      "name": "Malawi",
+      "flag": "commons:Flag_of_Malawi_(2010–2012).svg",
+      "color": "MW",
+      "kind": "state"
+    }
+  },
+  "era": {
+    "id": "today",
+    "year": 2026,
+    "title": "The World Today",
+    "summary": "Borders have barely moved since 2011. The changes are in names and flags, from Czechia and Eswatini to Türkiye and a new flag for Syria.",
+    "assign": {},
+    "events": [
+      {
+        "year": 2012,
+        "title": "Malawi's rising sun returns",
+        "detail": "Malawi brought back its original 1964 flag, with a red rising sun on the black band, two years after it was swapped for a flag with a full white sun.",
+        "at": [
+          34.3,
+          -13.25
+        ],
+        "units": [
+          "MW"
+        ],
+        "from": [
+          "MW_2010"
+        ],
+        "to": [
+          "MW"
+        ],
+        "kind": "flag"
+      },
+      {
+        "year": 2016,
+        "title": "Czechia as the short name",
+        "detail": "The Czech Republic registered Czechia as its official short name with the United Nations. The full name, Czech Republic, is still in use.",
+        "at": [
+          15.5,
+          49.8
+        ],
+        "units": [
+          "CZ"
+        ],
+        "from": [
+          "CZECH_REPUBLIC"
+        ],
+        "to": [
+          "CZ"
+        ],
+        "kind": "rename"
+      },
+      {
+        "year": 2017,
+        "title": "Mauritania's new flag",
+        "detail": "After a referendum, Mauritania added red bands to the top and bottom of its green flag, honouring those who gave their lives for independence.",
+        "at": [
+          -10.9,
+          20.3
+        ],
+        "units": [
+          "MR"
+        ],
+        "from": [
+          "MR_1959"
+        ],
+        "to": [
+          "MR"
+        ],
+        "kind": "flag"
+      },
+      {
+        "year": 2018,
+        "title": "Swaziland becomes Eswatini",
+        "detail": "Marking 50 years of independence, King Mswati III renamed the country Eswatini, its name in the siSwati language.",
+        "at": [
+          31.4,
+          -26.5
+        ],
+        "units": [
+          "SZ"
+        ],
+        "from": [
+          "SWAZILAND"
+        ],
+        "to": [
+          "SZ"
+        ],
+        "kind": "rename"
+      },
+      {
+        "year": 2019,
+        "title": "Macedonia becomes North Macedonia",
+        "detail": "The Prespa Agreement with Greece ended a long dispute over the name Macedonia. The country became the Republic of North Macedonia.",
+        "at": [
+          21.7,
+          41.6
+        ],
+        "units": [
+          "MK"
+        ],
+        "from": [
+          "MACEDONIA"
+        ],
+        "to": [
+          "MK"
+        ],
+        "kind": "rename"
+      },
+      {
+        "year": 2022,
+        "title": "Turkey becomes Türkiye",
+        "detail": "At Ankara's request, the United Nations began using Türkiye, the country's own name, in place of Turkey.",
+        "at": [
+          32.9,
+          39.9
+        ],
+        "units": [
+          "TR"
+        ],
+        "from": [
+          "TURKEY"
+        ],
+        "to": [
+          "TR"
+        ],
+        "kind": "rename"
+      },
+      {
+        "year": 2023,
+        "title": "Kyrgyzstan's sun rays",
+        "detail": "Kyrgyzstan redrew the sun on its flag with straight rays instead of wavy ones. The 40 rays and the yurt crown at its centre remain.",
+        "at": [
+          74.6,
+          41.5
+        ],
+        "units": [
+          "KG"
+        ],
+        "from": [
+          "KG_1992"
+        ],
+        "to": [
+          "KG"
+        ],
+        "kind": "flag"
+      },
+      {
+        "year": 2024,
+        "title": "Syria's new flag",
+        "detail": "After the fall of the Assad government in December 2024, Syria adopted the green, white and black independence flag with three red stars.",
+        "at": [
+          38.5,
+          35.0
+        ],
+        "units": [
+          "SY"
+        ],
+        "from": [
+          "SY_1980"
+        ],
+        "to": [
+          "SY"
+        ],
+        "kind": "flag"
+      }
+    ]
+  },
+  "notes": [
+    "assign is empty: every unit and piece is its modern self in 2026, using the app's world_flag assets (checked visually: AF tricolour, SY three-star flag, KG 2023 straight-ray flag, MR 2017 flag with red bands, MW 1964/2012 rising-sun flag). WorldCatalog already names CV Cabo Verde, CZ Czechia, SZ Eswatini, MK North Macedonia, TR Türkiye.",
+    "Modern target polities (CZ, MR, SZ, MK, TR, KG, SY, MW) are defined explicitly with asset flags so event 'to' chips resolve; they match the implicit unit-code polities and can be dropped if the merger resolves implicit ids.",
+    "Former-name/flag polity ids reuse exactly the ids and definitions the 2011 era assigns: SWAZILAND, MACEDONIA, TURKEY, CZECH_REPUBLIC, KG_1992, MR_1959, MW_2010, SY_1980. If the 2011 fragment renames them, update the 'from' lists here to match.",
+    "Malawi (2012 flag restoration) replaces Cabo Verde (2013, name only): 2011 assigns MW to MW_2010, so without this event Malawi's flag would change silently; Cabo Verde's flag never changed and 2011's CAPE_VERDE simply becomes CV.",
+    "Afghanistan: the Taliban's Islamic Emirate (2021) is not internationally recognised and the app keeps the tricolour, so AF is left implicit and no event is given.",
+    "Crimea (annexed by Russia 2014, unrecognised) is not a separate unit; left with UA. Somaliland (SO~somaliland), Northern Cyprus (XC), Kosovo (XK), Western Sahara (EH), Taiwan and Palestine are shown as the app shows them today.",
+    "Libya's 2011 flag change is an event of the 2011 era, so not repeated here.",
+    "Syria: flag adopted de facto in December 2024 and confirmed in the March 2025 constitutional declaration; year given as 2024.",
+    "Review (events/names/flags/copy): all four commons: flags exist, depict the pre-change flags, and are public domain. All event years, places and units check out; Cabo Verde (2013, name only) changes silently from 2011 CAPE_VERDE because the era is at the 8-event limit."
+  ]
+}

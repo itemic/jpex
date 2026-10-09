@@ -1,0 +1,631 @@
+{
+  "polities": {
+    "USSR": {
+      "name": "Soviet Union",
+      "flag": "commons:Flag_of_the_Soviet_Union.svg",
+      "color": "RU",
+      "kind": "state"
+    },
+    "YUGOSLAVIA": {
+      "name": "Yugoslavia",
+      "flag": "commons:Flag_of_Yugoslavia_(1946-1992).svg",
+      "color": "RS",
+      "kind": "state"
+    },
+    "CZECHOSLOVAKIA": {
+      "name": "Czechoslovakia",
+      "flag": "asset:world_flag_cz",
+      "color": "CZ",
+      "kind": "state"
+    },
+    "GB_EMPIRE": {
+      "name": "British Empire",
+      "flag": "asset:world_flag_gb",
+      "color": "GB",
+      "kind": "empire"
+    },
+    "PT_EMPIRE": {
+      "name": "Portuguese Empire",
+      "flag": "asset:world_flag_pt",
+      "color": "PT",
+      "kind": "empire"
+    },
+    "US_TTPI": {
+      "name": "Trust Territory of the Pacific Islands",
+      "flag": "commons:Flag_of_the_Trust_Territory_of_the_Pacific_Islands.svg",
+      "color": "US",
+      "kind": "empire"
+    },
+    "AN_1986": {
+      "name": "Netherlands Antilles",
+      "flag": "commons:Flag_of_the_Netherlands_Antilles_(1986–2010).svg",
+      "color": "CW",
+      "kind": "state"
+    },
+    "KW_OCCUPIED": {
+      "name": "Kuwait, occupied by Iraq",
+      "flag": "asset:world_flag_kw",
+      "color": "KW",
+      "kind": "contested"
+    },
+    "PS_OCCUPIED": {
+      "name": "Israeli-occupied territories",
+      "flag": "asset:world_flag_il",
+      "color": "PS",
+      "kind": "contested"
+    },
+    "FR": {
+      "name": "France",
+      "flag": "asset:world_flag_fr",
+      "color": "FR",
+      "kind": "state"
+    },
+    "TIMOR_OCCUPIED": {
+      "name": "East Timor, occupied by Indonesia",
+      "flag": "commons:Flag_of_Indonesia.svg",
+      "color": "ID",
+      "kind": "contested"
+    },
+    "SD": {
+      "name": "Sudan",
+      "flag": "asset:world_flag_sd",
+      "color": "SD",
+      "kind": "state"
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "flag": "asset:world_flag_nz",
+      "color": "NZ",
+      "kind": "state"
+    },
+    "SY_1980": {
+      "name": "Syria",
+      "flag": "commons:Flag_of_the_United_Arab_Republic_(1958–1971),_Flag_of_Syria_(1980–2024).svg",
+      "color": "SY",
+      "kind": "state"
+    },
+    "TURKEY": {
+      "name": "Turkey",
+      "flag": "asset:world_flag_tr",
+      "color": "TR",
+      "kind": "state"
+    },
+    "MR_1959": {
+      "name": "Mauritania",
+      "flag": "commons:Flag_of_Mauritania_(1959–2017).svg",
+      "color": "MR",
+      "kind": "state"
+    },
+    "SWAZILAND": {
+      "name": "Swaziland",
+      "flag": "asset:world_flag_sz",
+      "color": "SZ",
+      "kind": "state"
+    },
+    "CV_1975": {
+      "name": "Cape Verde",
+      "flag": "commons:Flag_of_Cape_Verde_(1975–1992).svg",
+      "color": "CV",
+      "kind": "state"
+    },
+    "ZAIRE": {
+      "name": "Zaire",
+      "flag": "commons:Flag_of_Zaire_(1971–1997).svg",
+      "color": "CD",
+      "kind": "state"
+    },
+    "CG_PR": {
+      "name": "People's Republic of the Congo",
+      "flag": "commons:Flag_of_the_People's_Republic_of_the_Congo.svg",
+      "color": "CG",
+      "kind": "state"
+    },
+    "ET_1987": {
+      "name": "People's Democratic Republic of Ethiopia",
+      "flag": "commons:Flag_of_Ethiopia_(1987–1991).svg",
+      "color": "ET",
+      "kind": "state"
+    },
+    "ZA_1928": {
+      "name": "South Africa",
+      "flag": "commons:Flag_of_South_Africa_(1928–1994,_dark_colors).svg",
+      "color": "ZA",
+      "kind": "state"
+    },
+    "LY_1977": {
+      "name": "Libyan Arab Jamahiriya",
+      "flag": "commons:Flag_of_Libya_(1977–2011).svg",
+      "color": "LY",
+      "kind": "state"
+    },
+    "RW_1961": {
+      "name": "Rwanda",
+      "flag": "commons:Flag_of_Rwanda_(1961–2001).svg",
+      "color": "RW",
+      "kind": "state"
+    },
+    "KM_1978": {
+      "name": "Comoros",
+      "flag": "commons:Flag_of_the_Comoros_(1978–1992).svg",
+      "color": "KM",
+      "kind": "state"
+    },
+    "SC_1977": {
+      "name": "Seychelles",
+      "flag": "commons:Flag_of_Seychelles_(1977–1996).svg",
+      "color": "SC",
+      "kind": "state"
+    },
+    "LS_1987": {
+      "name": "Lesotho",
+      "flag": "commons:Flag_of_Lesotho_(1987–2006).svg",
+      "color": "LS",
+      "kind": "state"
+    },
+    "ZM_1964": {
+      "name": "Zambia",
+      "flag": "commons:Flag_of_Zambia_(1964–1996).svg",
+      "color": "ZM",
+      "kind": "state"
+    },
+    "MM_1974": {
+      "name": "Union of Myanmar",
+      "flag": "commons:Flag_of_Myanmar_(1974–2010).svg",
+      "color": "MM",
+      "kind": "state"
+    },
+    "KH_1989": {
+      "name": "State of Cambodia",
+      "flag": "commons:Flag_of_the_State_of_Cambodia_(1989–1992).svg",
+      "color": "KH",
+      "kind": "state"
+    },
+    "AF_1987": {
+      "name": "Republic of Afghanistan",
+      "flag": "commons:Flag_of_Afghanistan_(1987–1992).svg",
+      "color": "AF",
+      "kind": "state"
+    },
+    "IQ_1963": {
+      "name": "Iraq",
+      "flag": "commons:Flag_of_Iraq_(1963–1991).svg",
+      "color": "IQ",
+      "kind": "state"
+    },
+    "MN_1945": {
+      "name": "Mongolian People's Republic",
+      "flag": "commons:Flag_of_the_Mongolian_People's_Republic_(1945–1992).svg",
+      "color": "MN",
+      "kind": "state"
+    },
+    "AL_1946": {
+      "name": "People's Socialist Republic of Albania",
+      "flag": "commons:Flag_of_Albania_(1946–1992).svg",
+      "color": "AL",
+      "kind": "state"
+    },
+    "BG_1971": {
+      "name": "People's Republic of Bulgaria",
+      "flag": "commons:Flag_of_Bulgaria_(1971–1990).svg",
+      "color": "BG",
+      "kind": "state"
+    },
+    "BH_1972": {
+      "name": "Bahrain",
+      "flag": "commons:Flag_of_Bahrain_(1972–2002).svg",
+      "color": "BH",
+      "kind": "state"
+    },
+    "OM_1970": {
+      "name": "Oman",
+      "flag": "commons:Flag_of_Oman_(1970–1995).svg",
+      "color": "OM",
+      "kind": "state"
+    },
+    "BR_1968": {
+      "name": "Brazil",
+      "flag": "commons:Flag_of_Brazil_(1968–1992).svg",
+      "color": "BR",
+      "kind": "state"
+    },
+    "VE_1930": {
+      "name": "Venezuela",
+      "flag": "commons:Flag_of_Venezuela_(1930–2006).svg",
+      "color": "VE",
+      "kind": "state"
+    },
+    "WESTERN_SAMOA": {
+      "name": "Western Samoa",
+      "flag": "asset:world_flag_ws",
+      "color": "WS",
+      "kind": "state"
+    },
+    "GDR": {
+      "name": "East Germany",
+      "flag": "commons:Flag_of_East_Germany.svg",
+      "color": "plum",
+      "kind": "state"
+    },
+    "FRG": {
+      "name": "West Germany",
+      "flag": "asset:world_flag_de",
+      "color": "DE",
+      "kind": "state"
+    },
+    "DE": {
+      "name": "Germany",
+      "flag": "asset:world_flag_de",
+      "color": "DE",
+      "kind": "state"
+    },
+    "YEMEN_NORTH": {
+      "name": "Yemen Arab Republic",
+      "flag": "commons:Flag_of_the_Yemen_Arab_Republic.svg",
+      "color": "YE",
+      "kind": "state"
+    },
+    "YEMEN_SOUTH": {
+      "name": "People's Democratic Republic of Yemen",
+      "flag": "commons:Flag_of_South_Yemen.svg",
+      "color": "teal",
+      "kind": "state"
+    },
+    "YE": {
+      "name": "Yemen",
+      "flag": "asset:world_flag_ye",
+      "color": "YE",
+      "kind": "state"
+    },
+    "NA": {
+      "name": "Namibia",
+      "flag": "asset:world_flag_na",
+      "color": "NA",
+      "kind": "state"
+    },
+    "RHODESIA": {
+      "name": "Rhodesia",
+      "flag": "commons:Flag_of_Rhodesia_(1968–1979).svg",
+      "color": "ZW",
+      "kind": "state"
+    },
+    "ZW": {
+      "name": "Zimbabwe",
+      "flag": "asset:world_flag_zw",
+      "color": "ZW",
+      "kind": "state"
+    },
+    "BZ": {
+      "name": "Belize",
+      "flag": "asset:world_flag_bz",
+      "color": "BZ",
+      "kind": "state"
+    },
+    "IR_1964": {
+      "name": "Imperial State of Iran",
+      "flag": "commons:State_flag_of_Iran_(1964–1980).svg",
+      "color": "IR",
+      "kind": "state"
+    },
+    "IR": {
+      "name": "Iran",
+      "flag": "asset:world_flag_ir",
+      "color": "IR",
+      "kind": "state"
+    },
+    "RO_1965": {
+      "name": "Socialist Republic of Romania",
+      "flag": "commons:Flag_of_Romania_(1965–1989).svg",
+      "color": "RO",
+      "kind": "state"
+    },
+    "RO": {
+      "name": "Romania",
+      "flag": "asset:world_flag_ro",
+      "color": "RO",
+      "kind": "state"
+    },
+    "KW": {
+      "name": "Kuwait",
+      "flag": "asset:world_flag_kw",
+      "color": "KW",
+      "kind": "state"
+    },
+    "FR_EMPIRE": {
+      "name": "French Republic and its territories",
+      "flag": "commons:Flag_of_France.svg",
+      "color": "FR",
+      "kind": "empire"
+    },
+    "DJ": {
+      "name": "Djibouti",
+      "flag": "asset:world_flag_dj",
+      "color": "DJ",
+      "kind": "state"
+    },
+    "VU": {
+      "name": "Vanuatu",
+      "flag": "asset:world_flag_vu",
+      "color": "VU",
+      "kind": "state"
+    },
+    "BN": {
+      "name": "Brunei",
+      "flag": "asset:world_flag_bn",
+      "color": "BN",
+      "kind": "state"
+    }
+  },
+  "era": {
+    "id": "1990",
+    "year": 1990,
+    "title": "Germany Reunites",
+    "summary": "The Cold War is ending. Germany and Yemen have reunited and Namibia is independent, but the Soviet Union and Yugoslavia still stand.",
+    "assign": {
+      "RU": "USSR|Russian SFSR",
+      "UA": "USSR|Ukrainian SSR",
+      "BY": "USSR|Byelorussian SSR",
+      "MD": "USSR|SSR of Moldova",
+      "LT": "USSR|Lithuania",
+      "LV": "USSR|Latvia",
+      "EE": "USSR|Estonia",
+      "GE": "USSR|Georgian SSR",
+      "AM": "USSR|Armenia",
+      "AZ": "USSR|Azerbaijan SSR",
+      "KZ": "USSR|Kazakh SSR",
+      "UZ": "USSR|Uzbek SSR",
+      "TM": "USSR|Turkmen SSR",
+      "KG": "USSR|Kirghiz SSR",
+      "TJ": "USSR|Tajik SSR",
+      "SI": "YUGOSLAVIA|Slovenia",
+      "HR": "YUGOSLAVIA|Croatia",
+      "BA": "YUGOSLAVIA|Bosnia and Herzegovina",
+      "RS": "YUGOSLAVIA|Serbia",
+      "RS~vojvodina": "YUGOSLAVIA|Vojvodina",
+      "XK": "YUGOSLAVIA|Kosovo",
+      "ME": "YUGOSLAVIA|Montenegro",
+      "MK": "YUGOSLAVIA|Macedonia",
+      "CZ": "CZECHOSLOVAKIA|Czech Republic",
+      "SK": "CZECHOSLOVAKIA|Slovak Republic",
+      "GB": "GB_EMPIRE|United Kingdom",
+      "GB-ENG": "GB_EMPIRE|England",
+      "GB-SCT": "GB_EMPIRE|Scotland",
+      "GB-WLS": "GB_EMPIRE|Wales",
+      "GB-NIR": "GB_EMPIRE|Northern Ireland",
+      "CN-HK": "GB_EMPIRE|Hong Kong",
+      "GS": "GB_EMPIRE|South Georgia and the South Sandwich Islands",
+      "PT": "PT_EMPIRE|Portugal",
+      "CN-MO": "PT_EMPIRE|Macau",
+      "PW": "US_TTPI|Palau",
+      "CW": "AN_1986|Curaçao",
+      "SX": "AN_1986|Sint Maarten",
+      "BQ": "AN_1986|Bonaire, Sint Eustatius and Saba",
+      "MF": "FR|Guadeloupe",
+      "BL": "FR|Guadeloupe",
+      "TL": "TIMOR_OCCUPIED|East Timor",
+      "SS": "SD",
+      "TK": "NZ|Tokelau",
+      "KW": "KW_OCCUPIED",
+      "PS": "PS_OCCUPIED|West Bank and Gaza",
+      "ET": "ET_1987",
+      "ER": "ET_1987|Eritrea",
+      "SY": "SY_1980",
+      "TR": "TURKEY",
+      "MR": "MR_1959",
+      "SZ": "SWAZILAND",
+      "CV": "CV_1975",
+      "CD": "ZAIRE",
+      "CG": "CG_PR",
+      "ZA": "ZA_1928",
+      "LY": "LY_1977",
+      "RW": "RW_1961",
+      "KM": "KM_1978",
+      "SC": "SC_1977",
+      "LS": "LS_1987",
+      "ZM": "ZM_1964",
+      "MM": "MM_1974",
+      "KH": "KH_1989",
+      "AF": "AF_1987",
+      "IQ": "IQ_1963",
+      "MN": "MN_1945",
+      "AL": "AL_1946",
+      "BG": "BG_1971",
+      "BH": "BH_1972",
+      "OM": "OM_1970",
+      "BR": "BR_1968",
+      "VE": "VE_1930",
+      "WS": "WESTERN_SAMOA"
+    },
+    "events": [
+      {
+        "year": 1979,
+        "title": "Revolution in Iran",
+        "detail": "The Islamic Revolution ended the Shah's monarchy in 1979. The new Islamic Republic adopted its present flag the following year.",
+        "at": [
+          51.4,
+          35.7
+        ],
+        "units": [
+          "IR"
+        ],
+        "from": [
+          "IR_1964"
+        ],
+        "to": [
+          "IR"
+        ],
+        "kind": "revolution"
+      },
+      {
+        "year": 1980,
+        "title": "Zimbabwe is born",
+        "detail": "After a long bush war and a brief return to British rule, Rhodesia became independent as Zimbabwe on 18 April 1980, under majority rule.",
+        "at": [
+          30.5,
+          -18.5
+        ],
+        "units": [
+          "ZW"
+        ],
+        "from": [
+          "RHODESIA"
+        ],
+        "to": [
+          "ZW"
+        ],
+        "kind": "independence"
+      },
+      {
+        "year": 1981,
+        "title": "A last wave of independence",
+        "detail": "From 1977 to 1984 Djibouti, the Solomon Islands, Vanuatu, Belize, Brunei and five Caribbean island states left British or French rule.",
+        "at": [
+          -88.7,
+          17.2
+        ],
+        "units": [
+          "BZ",
+          "DJ",
+          "SB",
+          "VU",
+          "BN",
+          "KI",
+          "TV",
+          "DM",
+          "LC",
+          "VC",
+          "AG",
+          "KN"
+        ],
+        "from": [
+          "GB_EMPIRE",
+          "FR_EMPIRE"
+        ],
+        "to": [
+          "BZ",
+          "DJ",
+          "VU",
+          "BN"
+        ],
+        "kind": "independence"
+      },
+      {
+        "year": 1989,
+        "title": "Revolutions of 1989",
+        "detail": "Communist rule collapsed across Eastern Europe. In Romania, crowds cut the socialist emblem out of the flag, leaving a hole at its centre.",
+        "at": [
+          25.0,
+          45.9
+        ],
+        "units": [
+          "PL",
+          "HU",
+          "CZ",
+          "SK",
+          "BG",
+          "RO"
+        ],
+        "from": [
+          "RO_1965"
+        ],
+        "to": [
+          "RO"
+        ],
+        "kind": "revolution"
+      },
+      {
+        "year": 1990,
+        "title": "Namibia's independence",
+        "detail": "After decades of South African rule and a long war, South West Africa became independent on 21 March 1990 as Namibia.",
+        "at": [
+          17.1,
+          -22.6
+        ],
+        "units": [
+          "NA"
+        ],
+        "from": [
+          "ZA_1928"
+        ],
+        "to": [
+          "NA"
+        ],
+        "kind": "independence"
+      },
+      {
+        "year": 1990,
+        "title": "Yemen unites",
+        "detail": "North Yemen and the socialist South joined on 22 May 1990 as the Republic of Yemen, with Sana'a as its capital.",
+        "at": [
+          44.2,
+          15.4
+        ],
+        "units": [
+          "YE"
+        ],
+        "from": [
+          "YEMEN_NORTH",
+          "YEMEN_SOUTH"
+        ],
+        "to": [
+          "YE"
+        ],
+        "kind": "unification"
+      },
+      {
+        "year": 1990,
+        "title": "Iraq invades Kuwait",
+        "detail": "Iraqi forces overran Kuwait on 2 August 1990 and Baghdad declared it a province. The United Nations rejected the annexation and demanded a withdrawal.",
+        "at": [
+          47.7,
+          29.3
+        ],
+        "units": [
+          "KW"
+        ],
+        "from": [
+          "KW"
+        ],
+        "to": [
+          "IQ_1963"
+        ],
+        "kind": "annexation"
+      },
+      {
+        "year": 1990,
+        "title": "Germany reunites",
+        "detail": "Less than a year after the Berlin Wall fell, East Germany joined the Federal Republic on 3 October 1990. Berlin became one city again.",
+        "at": [
+          13.4,
+          52.5
+        ],
+        "units": [
+          "DE"
+        ],
+        "from": [
+          "GDR",
+          "FRG"
+        ],
+        "to": [
+          "DE"
+        ],
+        "kind": "unification"
+      }
+    ]
+  },
+  "notes": [
+    "Snapshot taken as October 1990, just after German reunification: Bulgaria is still the People's Republic (renamed 15 Nov 1990) with the 1971–1990 flag; Mozambique (renamed 30 Nov 1990) keeps its implicit self since its flag was unchanged.",
+    "Lithuania, Latvia, Estonia (declared independence Mar-May 1990) and Armenia (renamed Republic of Armenia, Aug 1990) are labelled by plain name inside USSR; Moldova as 'SSR of Moldova' (renamed June 1990). Georgia renamed only on 14 Nov 1990 and Kirghizia on 15 Dec 1990, so they keep SSR labels.",
+    "Kuwait (Iraqi occupation Aug 1990–Feb 1991) is drawn as a contested polity (KW_OCCUPIED, Kuwait's flag) rather than as part of Iraq, since the annexation was never recognised. Alternative: 'IQ_1963|Kuwait Governorate'.",
+    "PS is drawn as contested 'Israeli-occupied territories' with Israel's flag (no Palestinian Authority until 1994).",
+    "Marshall Islands and Micronesia left as modern selves (free association since 1986; UN trusteeship formally ended 22 Dec 1990). Palau stays in the Trust Territory until 1994.",
+    "Walvis Bay (South African until 1994) and the South African homelands are not separate units and are left with Namibia/South Africa.",
+    "GB_EMPIRE / PT_EMPIRE names ('British Empire', 'Portuguese Empire') are anachronistic for 1990 but are reused per the canonical ids; labels carry Hong Kong / Macau.",
+    "Polity ids reconciled with the 1976/1993 fragments: TURKEY, SWAZILAND, ZAIRE, CG_PR, RW_1961, MM_1974, WESTERN_SAMOA, TIMOR_OCCUPIED, FR_EMPIRE; YEMEN_NORTH/YEMEN_SOUTH names match 1976.",
+    "Minor flag variants included where Commons has a distinct file (Zambia 1964–96 shades, Oman 1970–95, Bahrain 1972–2002); skipped very minor ones (Qatar, Tunisia, Paraguay, Dominica, Falklands, Honduras shade).",
+    "GS assigned to GB_EMPIRE because its own flag dates from 1999; TK assigned to NZ because Tokelau had no flag of its own until 2009.",
+    "Saint Martin and Saint-Barthélemy were communes of Guadeloupe until 2007, so they share FR|Guadeloupe with FR-971 (assumes FR-971's implicit label is 'Guadeloupe' and implicit FR polity id is 'FR').",
+    "Territory review: the metropoles of the two remaining colonial holdings (UK for Hong Kong and South Georgia, Portugal for Macau) are assigned to GB_EMPIRE / PT_EMPIRE with their own labels, as in the 1949 fragment, so colony and metropole share one polity; England, Scotland, Wales and Northern Ireland are assigned explicitly to keep their labels. Crown dependencies and other British/French/Dutch territories keep their implicit modern selves, as their status in 1990 matched today's.",
+    "ZA_1928 uses the dark-colours Commons file (1928-82 shade); the 1982-94 flag had a brighter blue (Flag_of_South_Africa_(1928–1994,_bright_colors).svg). Kept one id across eras as the difference is a shade only.",
+    "Upper Volta became Burkina Faso with a new flag in 1984 and Burma became Myanmar in 1989; both show only through assignments (no event card) to stay within 8 events."
+  ]
+}

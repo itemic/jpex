@@ -1,152 +1,191 @@
-//
-//  SaveModel.swift
-//  jpex
-//
-//  Created by Terran Kroft on 27/1/2.never24.
-//
-
 import Foundation
 import SwiftData
-import SwiftUI
 
-@Model class SaveModel {
-    
+@Model
+final class SaveModel {
+    // Keep this property and VisitStatus's Codable representation unchanged so
+    // SwiftData can migrate existing Japan-only stores without losing history.
     var visitStatus: [VisitStatus] = []
-    
+
+    // An optional addition allows lightweight migration of existing stores.
+    // Entries use permanent country-qualified IDs, never names or list indices.
+    var statusesData: Data?
+
+    // The person's levels, also optional for lightweight migration.
+    // Nil until they first change the default levels.
+    var levelsData: Data?
+
     init() {
-        visitStatus = [
-            .never, //VISIT_hokkaido,
-            .never, //VISIT_aomori,
-            .never, //VISIT_iwate,
-            .never, //VISIT_miyagi,
-            .never, //VISIT_akita,
-            .never, //VISIT_yamagata,
-            .never, //VISIT_fukushima,
-            .never, //VISIT_ibaraki,
-            .never, //VISIT_tochigi,
-            .never, //VISIT_gunma,
-            .never, //VISIT_saitama,
-            .never, //VISIT_chiba,
-            .never, //VISIT_tokyo,
-            .never, //VISIT_kanagawa,
-            .never, //VISIT_niigata,
-            .never, //VISIT_toyama,
-            .never, //VISIT_ishikawa,
-            .never, //VISIT_fukui,
-            .never, //VISIT_yamanashi,
-            .never, //VISIT_nagano,
-            .never, //VISIT_gifu,
-            .never, //VISIT_shizuoka,
-            .never, //VISIT_aichi,
-            .never, //VISIT_mie,
-            .never, //VISIT_shiga,
-            .never, //VISIT_kyoto,
-            .never, //VISIT_osaka,
-            .never, //VISIT_hyogo,
-            .never, //VISIT_nara,
-            .never, //VISIT_wakayama,
-            .never, //VISIT_tottori,
-            .never, //VISIT_shimane,
-            .never, //VISIT_okayama,
-            .never, //VISIT_hiroshima,
-            .never, //VISIT_yamaguchi,
-            .never, //VISIT_tokushima,
-            .never, //VISIT_kagawa,
-            .never, //VISIT_ehime,
-            .never, //VISIT_kochi,
-            .never, //VISIT_fukuoka,
-            .never, //VISIT_saga,
-            .never, //VISIT_nagano,
-            .never, //VISIT_kumamoto,
-            .never, //VISIT_oita,
-            .never, //VISIT_miyagi,
-            .never, //VISIT_kagoshima,
-            .never, //VISIT_okinawa
-        ]
+        visitStatus = Array(repeating: .never, count: 47)
     }
-    
-    
+
+    /// The person's levels, or the defaults until they change them.
+    var ladder: VisitLadder {
+        guard let ladder = try? decodedLadder(), ladder.isValid else { return .standard }
+        return ladder
+    }
+
+    /// The last snapshot decoded and the saved data it came from, so a screen drawn many times a
+    /// second, such as a list whose pinned map shrinks as it scrolls, doesn't decode it every time.
+    @Transient private var snapshotCache = SnapshotCache()
+
+    /// Decodes saved statuses once; use it to draw a whole screen. The same saved data gives back
+    /// the snapshot already decoded.
+    func snapshot() -> TravelSnapshot {
+        let key = SnapshotCache.Key(statuses: statusesData, levels: levelsData, legacyJapan: visitStatus)
+        if let cached = snapshotCache.snapshot, snapshotCache.key == key { return cached }
+        let snapshot = TravelSnapshot(stored: (try? decodedStatuses()) ?? [:], legacyJapan: visitStatus, ladder: ladder)
+        snapshotCache.key = key
+        snapshotCache.snapshot = snapshot
+        return snapshot
+    }
+
+    func status(for division: AdministrativeDivision) -> VisitLevel {
+        snapshot().status(for: division)
+    }
+
+    /// Updates both representations for Japan. The original data stays readable
+    /// throughout migration; Australia and later countries use only stable IDs.
+    /// Invalid new data is never silently replaced by an empty dictionary.
+    func setStatus(_ level: VisitLevel, for division: AdministrativeDivision) throws {
+        guard ladder.level(id: level.id) != nil else { throw LevelError.missingLevel }
+        var stored = try decodedStatuses()
+        stored[division.id] = level.id
+        let encoded = try JSONEncoder().encode(stored)
+
+        if let index = division.legacyJapanIndex, division.countryID == "JP", index >= 0 {
+            var legacy = visitStatus
+            if legacy.count <= index {
+                legacy.append(contentsOf: repeatElement(.never, count: index + 1 - legacy.count))
+            }
+            // The original history only knows the default levels; others leave it at never been.
+            legacy[index] = VisitStatus(storageKey: level.id) ?? .never
+            visitStatus = legacy
+        }
+        statusesData = encoded
+    }
+
+    /// Saves new levels. Places at a level that was removed move down to the closest
+    /// remaining level below it, or to never been, so no place points at a missing level.
+    /// Saved levels or statuses that can't be read are never overwritten.
+    func setLadder(_ newLadder: VisitLadder) throws {
+        guard newLadder.isValid else { throw LevelError.invalidLevels }
+        let replacements = try decodedLadder().replacements(becoming: newLadder)
+        let encodedLadder = try JSONEncoder().encode(newLadder)
+        guard !replacements.isEmpty else {
+            levelsData = encodedLadder
+            return
+        }
+        let original = try decodedStatuses()
+        var stored = original.mapValues { replacements[$0]?.id ?? $0 }
+        var legacy = visitStatus
+        for division in CountryCatalog.japan.divisions {
+            guard let index = division.legacyJapanIndex, legacy.indices.contains(index) else { continue }
+            // A place known only from the original history gets a record of its own.
+            if stored[division.id] == nil, let replacement = replacements[legacy[index].storageKey] {
+                stored[division.id] = replacement.id
+            }
+            if let id = stored[division.id], id != original[division.id] {
+                legacy[index] = VisitStatus(storageKey: id) ?? .never
+            }
+        }
+        let encodedStatuses = try JSONEncoder().encode(stored)
+        visitStatus = legacy
+        statusesData = encodedStatuses
+        levelsData = encodedLadder
+    }
+
+    /// Puts every place, in every collection, back to never been. The person's levels stay as they are.
+    /// Saved at once, and undo forgets the steps before it, which could otherwise bring back parts.
+    func resetPlaces() {
+        statusesData = nil
+        visitStatus = Array(repeating: .never, count: 47)
+        finishReset()
+    }
+
+    /// Puts every place back to never been and the levels back to the original five.
+    func resetEverything() {
+        statusesData = nil
+        visitStatus = Array(repeating: .never, count: 47)
+        levelsData = nil
+        finishReset()
+    }
+
+    private func finishReset() {
+        try? modelContext?.save()
+        NotificationCenter.default.post(name: .placesDidReset, object: self)
+    }
+
+    func statuses(for divisions: [AdministrativeDivision]) -> [VisitLevel] {
+        let snapshot = snapshot()
+        return divisions.map(snapshot.status(for:))
+    }
+
+    /// Places at any level, wherever counting starts.
+    func markedCount(in divisions: [AdministrativeDivision]) -> Int {
+        statuses(for: divisions).filter { $0 != .never }.count
+    }
+
+    func markedCount(in country: Country) -> Int {
+        markedCount(in: country.divisions)
+    }
+
+    func score(in divisions: [AdministrativeDivision]) -> Int {
+        let snapshot = snapshot()
+        return divisions.reduce(0) { $0 + snapshot.ladder.rank(of: snapshot.status(for: $1)) }
+    }
+
+    func score(in country: Country) -> Int {
+        score(in: country.divisions)
+    }
+
+    func strongestStatus(in divisions: [AdministrativeDivision]) -> VisitLevel {
+        snapshot().strongestStatus(in: divisions)
+    }
+
+    func strongestStatus(in country: Country) -> VisitLevel {
+        strongestStatus(in: country.divisions)
+    }
+
+    private func decodedStatuses() throws -> [String: String] {
+        guard let statusesData else { return [:] }
+        // Preserve unknown future IDs and status values when saving other entries.
+        return try JSONDecoder().decode([String: String].self, from: statusesData)
+    }
+
+    private func decodedLadder() throws -> VisitLadder {
+        guard let levelsData else { return .standard }
+        return try JSONDecoder().decode(VisitLadder.self, from: levelsData)
+    }
 }
 
-enum VisitStatus: CaseIterable, Identifiable, Codable {
-    case never
-    case passed
-    case alighted
-    case visited
-    case stayed
-    case lived
-    
-    
-    var id: Self { self }
-    
-    var next: VisitStatus {
+/// Why a change to levels or places was refused.
+enum LevelError: LocalizedError {
+    case missingLevel
+    case invalidLevels
+
+    var errorDescription: String? {
         switch self {
-        case .never:
-            return .passed
-        case .passed:
-            return .alighted
-        case .alighted:
-            return .visited
-        case .visited:
-            return .stayed
-        case .stayed:
-            return .lived
-        case .lived:
-            return .never
+        case .missingLevel: "That level no longer exists."
+        case .invalidLevels: "Every level needs its own name, and there must be at least one."
         }
     }
-    
-    var color: Color {
-        switch self {
-        case .never:
-            return .gray
-        case .passed:
-            return .sdgBlue
-        case .alighted:
-            return .sdgGreen
-        case .visited:
-            return .sdgYellow
-        case .stayed:
-            return .sdgOrange
-        case .lived:
-            return .sdgRed
-        }
-    
+}
+
+extension Notification.Name {
+    /// Every place went back to never been, so undo has nothing left to put back.
+    static let placesDidReset = Notification.Name("placesDidReset")
+}
+
+/// Holds the last decoded snapshot. A class, so filling it in while a view draws changes nothing
+/// that views watch.
+final class SnapshotCache {
+    struct Key: Equatable {
+        var statuses: Data?
+        var levels: Data?
+        var legacyJapan: [VisitStatus]
     }
-    
-    var text: String {
-        switch self {
-        case .never:
-            return "Never been"
-        case .passed:
-            return "Passed"
-        case .alighted:
-            return "Alighted"
-        case .visited:
-            return "Visited"
-        case .stayed:
-            return "Stayed"
-        case .lived:
-            return "Lived"
-        }
-    }
-    
-    var score: Int {
-        switch self {
-        case .never:
-            return 0
-        case .passed:
-            return 1
-        case .alighted:
-            return 2
-        case .visited:
-            return 3
-        case .stayed:
-            return 4
-        case .lived:
-            return 5
-        }
-    }
-    
-    
+
+    var key: Key?
+    var snapshot: TravelSnapshot?
 }

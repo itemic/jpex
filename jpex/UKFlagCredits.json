@@ -1,0 +1,34 @@
+[
+  {
+    "name": "England",
+    "author": "Wikimedia Commons contributors; distributed by Hampus Borgos and country-flags contributors",
+    "sourceURL": "https://github.com/hampusborgos/country-flags/blob/main/svg/gb-eng.svg",
+    "license": "Public domain flag artwork",
+    "licenseURL": "https://github.com/hampusborgos/country-flags#accurate-country-flags",
+    "note": "St George’s Cross. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Scotland",
+    "author": "Wikimedia Commons contributors; distributed by Hampus Borgos and country-flags contributors",
+    "sourceURL": "https://github.com/hampusborgos/country-flags/blob/main/svg/gb-sct.svg",
+    "license": "Public domain flag artwork",
+    "licenseURL": "https://github.com/hampusborgos/country-flags#accurate-country-flags",
+    "note": "The Saltire. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Wales",
+    "author": "Wikimedia Commons contributors; distributed by Hampus Borgos and country-flags contributors",
+    "sourceURL": "https://github.com/hampusborgos/country-flags/blob/main/svg/gb-wls.svg",
+    "license": "Public domain flag artwork",
+    "licenseURL": "https://github.com/hampusborgos/country-flags#accurate-country-flags",
+    "note": "The Red Dragon. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Northern Ireland",
+    "author": "Wikimedia Commons contributors; distributed by Hampus Borgos and country-flags contributors",
+    "sourceURL": "https://github.com/hampusborgos/country-flags/blob/main/svg/gb.svg",
+    "license": "Public domain flag artwork",
+    "licenseURL": "https://github.com/hampusborgos/country-flags#accurate-country-flags",
+    "note": "The Union Flag is used, reflecting its official status in Northern Ireland. PNG rendering of the source SVG; artwork unchanged."
+  }
+]

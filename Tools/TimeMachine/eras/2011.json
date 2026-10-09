@@ -1,0 +1,283 @@
+{
+  "polities": {
+    "SWAZILAND": {
+      "name": "Kingdom of Swaziland",
+      "flag": "asset:world_flag_sz",
+      "color": "SZ",
+      "kind": "state"
+    },
+    "MACEDONIA": {
+      "name": "Republic of Macedonia",
+      "flag": "asset:world_flag_mk",
+      "color": "MK",
+      "kind": "state"
+    },
+    "TURKEY": {
+      "name": "Turkey",
+      "flag": "asset:world_flag_tr",
+      "color": "TR",
+      "kind": "state"
+    },
+    "CZECH_REPUBLIC": {
+      "name": "Czech Republic",
+      "flag": "asset:world_flag_cz",
+      "color": "CZ",
+      "kind": "state"
+    },
+    "CAPE_VERDE": {
+      "name": "Cape Verde",
+      "flag": "asset:world_flag_cv",
+      "color": "CV",
+      "kind": "state"
+    },
+    "KG_1992": {
+      "name": "Kyrgyzstan",
+      "flag": "commons:Flag_of_Kyrgyzstan_(1992–2023).svg",
+      "color": "KG",
+      "kind": "state"
+    },
+    "MR_1959": {
+      "name": "Mauritania",
+      "flag": "commons:Flag_of_Mauritania_(1959–2017).svg",
+      "color": "MR",
+      "kind": "state"
+    },
+    "MW_2010": {
+      "name": "Malawi",
+      "flag": "commons:Flag_of_Malawi_(2010–2012).svg",
+      "color": "MW",
+      "kind": "state"
+    },
+    "SY_1980": {
+      "name": "Syrian Arab Republic",
+      "flag": "commons:Flag_of_the_United_Arab_Republic_(1958–1971),_Flag_of_Syria_(1980–2024).svg",
+      "color": "SY",
+      "kind": "state"
+    },
+    "FRY": {
+      "name": "Federal Republic of Yugoslavia",
+      "flag": "commons:Flag_of_Serbia_and_Montenegro_(1992–2006).svg",
+      "color": "RS",
+      "kind": "state"
+    },
+    "ZAIRE": {
+      "name": "Zaire",
+      "flag": "commons:Flag_of_Zaire_(1971–1997).svg",
+      "color": "CD",
+      "kind": "state"
+    },
+    "LY_1977": {
+      "name": "Libyan Arab Jamahiriya",
+      "flag": "commons:Flag_of_Libya_(1977–2011).svg",
+      "color": "LY",
+      "kind": "state"
+    },
+    "ZA_1928": {
+      "name": "South Africa",
+      "flag": "commons:Flag_of_South_Africa_(1928–1994,_bright_colors).svg",
+      "color": "ZA",
+      "kind": "state"
+    },
+    "GB_EMPIRE": {
+      "name": "British Empire",
+      "flag": "commons:Flag_of_the_United_Kingdom.svg",
+      "color": "GB",
+      "kind": "empire"
+    },
+    "PT_EMPIRE": {
+      "name": "Portuguese Empire",
+      "flag": "commons:Flag_of_Portugal.svg",
+      "color": "PT",
+      "kind": "empire"
+    }
+  },
+  "era": {
+    "id": "2011",
+    "year": 2011,
+    "title": "South Sudan Joins the Map",
+    "summary": "Africa gains its newest state as South Sudan breaks away, while Kosovo and Montenegro finish the long unravelling of Yugoslavia.",
+    "assign": {
+      "SZ": "SWAZILAND",
+      "MK": "MACEDONIA",
+      "TR": "TURKEY",
+      "CZ": "CZECH_REPUBLIC",
+      "CV": "CAPE_VERDE",
+      "KG": "KG_1992",
+      "MR": "MR_1959",
+      "MW": "MW_2010",
+      "SY": "SY_1980"
+    },
+    "events": [
+      {
+        "year": 2011,
+        "title": "South Sudan becomes independent",
+        "detail": "After decades of civil war and a referendum in January, South Sudan left Sudan on 9 July 2011, becoming Africa's newest country.",
+        "at": [
+          30.5,
+          7.0
+        ],
+        "units": [
+          "SS"
+        ],
+        "from": [
+          "SD"
+        ],
+        "to": [
+          "SS"
+        ],
+        "kind": "independence"
+      },
+      {
+        "year": 2011,
+        "title": "Libya's old flag returns",
+        "detail": "During the 2011 uprising, rebels raised the red, black and green flag of 1951 in place of Gaddafi's plain green one, and it became Libya's flag again.",
+        "at": [
+          20.1,
+          30.0
+        ],
+        "units": [
+          "LY"
+        ],
+        "from": [
+          "LY_1977"
+        ],
+        "to": [
+          "LY"
+        ],
+        "kind": "flag"
+      },
+      {
+        "year": 2008,
+        "title": "Kosovo declares independence",
+        "detail": "Under UN administration since the 1999 war, Kosovo declared independence from Serbia in February 2008. Serbia, Russia, China and others do not recognise it.",
+        "at": [
+          20.9,
+          42.6
+        ],
+        "units": [
+          "XK"
+        ],
+        "from": [
+          "RS"
+        ],
+        "to": [
+          "XK"
+        ],
+        "kind": "independence"
+      },
+      {
+        "year": 2006,
+        "title": "Montenegro goes its own way",
+        "detail": "The Federal Republic of Yugoslavia, renamed Serbia and Montenegro in 2003, came to an end when Montenegro voted for independence in May 2006.",
+        "at": [
+          19.3,
+          42.8
+        ],
+        "units": [
+          "ME",
+          "RS~main",
+          "RS~vojvodina"
+        ],
+        "from": [
+          "FRY"
+        ],
+        "to": [
+          "ME",
+          "RS"
+        ],
+        "kind": "dissolution"
+      },
+      {
+        "year": 2002,
+        "title": "East Timor becomes independent",
+        "detail": "Indonesian rule ended after a 1999 vote and a period of UN administration, and East Timor became independent as Timor-Leste in May 2002.",
+        "at": [
+          125.9,
+          -8.8
+        ],
+        "units": [
+          "TL"
+        ],
+        "from": [
+          "ID"
+        ],
+        "to": [
+          "TL"
+        ],
+        "kind": "independence"
+      },
+      {
+        "year": 1997,
+        "title": "Hong Kong and Macau handed over",
+        "detail": "Britain returned Hong Kong to China in 1997 and Portugal handed over Macau in 1999. Both keep their own laws as special administrative regions.",
+        "at": [
+          114.1,
+          22.4
+        ],
+        "units": [
+          "CN-HK",
+          "CN-MO"
+        ],
+        "from": [
+          "GB_EMPIRE",
+          "PT_EMPIRE"
+        ],
+        "to": [
+          "CN"
+        ],
+        "kind": "decolonization"
+      },
+      {
+        "year": 1997,
+        "title": "Zaire becomes DR Congo",
+        "detail": "Laurent-Désiré Kabila's rebels drove Mobutu from power in May 1997 and restored the name Democratic Republic of the Congo.",
+        "at": [
+          23.6,
+          -2.9
+        ],
+        "units": [
+          "CD"
+        ],
+        "from": [
+          "ZAIRE"
+        ],
+        "to": [
+          "CD"
+        ],
+        "kind": "rename"
+      },
+      {
+        "year": 1994,
+        "title": "Apartheid ends in South Africa",
+        "detail": "After its first election open to all races in April 1994, with Nelson Mandela elected president, South Africa raised a new six-colour flag.",
+        "at": [
+          24.7,
+          -29.0
+        ],
+        "units": [
+          "ZA"
+        ],
+        "from": [
+          "ZA_1928"
+        ],
+        "to": [
+          "ZA"
+        ],
+        "kind": "flag"
+      }
+    ]
+  },
+  "notes": [
+    "Libya is left as its modern self: by mid-2011 the National Transitional Council's 1951 flag (today's flag) was the recognised one, though Gaddafi held Tripoli until August 2011.",
+    "Afghanistan is left unassigned: the app's world_flag_af shows the Islamic Republic's tricolour, effectively the flag of 2011 (the 2013 emblem tweak is negligible).",
+    "Somaliland (SO~somaliland) left as Somalia, as today: de facto independent since 1991 but unrecognised.",
+    "Event units for Serbia use the pieces RS~main and RS~vojvodina in case bare codes are not expanded for glows.",
+    "Crimea is not a unit (it is a disputed overlay in geo_WORLD); in 2011 it was uncontested Ukrainian territory, so any disputed-area hatching for Crimea should not be drawn in this era.",
+    "Assignments are for name changes since 2011 (Swaziland/Eswatini 2018, Macedonia/North Macedonia 2019, Turkey/Türkiye 2022, Czech Republic/Czechia 2016, Cape Verde/Cabo Verde 2013) and flag changes (Malawi 2012, Mauritania 2017, Syria 2024 per the app asset, which shows the three-star flag; Kyrgyzstan 2023).",
+    "Former-name/flag polity ids and definitions match what eras/today.json expects in its 'from' lists: SWAZILAND, MACEDONIA, TURKEY, CZECH_REPUBLIC, CAPE_VERDE, KG_1992, MR_1959, MW_2010, SY_1980.",
+    "Montenegro event 'from' uses the canonical FRY (flag file is the 1992–2006 tricolour used by both the FRY and Serbia and Montenegro), so it links to the 1993 era's FRY. The 1993 era must define FRY identically.",
+    "South Africa 1994 (end of apartheid, new flag) replaces Myanmar's 2010 flag change as an event: the 1993 era must assign ZA to ZA_1928 (Flag_of_South_Africa_(1928–1994,_bright_colors).svg, the 1982–94 shade). ZAIRE and LY_1977 should likewise match the 1993 era's ids for DR Congo and Libya; Myanmar (MM_1974 in 1993 if so assigned) now changes to its 2010 flag without a card.",
+    "Implicit modern polity ids (SD, SS, RS, XK, ME, ID, TL, CN, CD, LY, ZA) are used in event from/to; the app must resolve them to the modern country.",
+    "Omitted from events for space: Myanmar's flag and name (2010), Palau independence (1994), Rwanda's flag (2001), Iraq's flag (2004/2008), Georgia's five-cross flag (2004), Venezuela's eight-star flag (2006), Afghanistan's Taliban emirate 1996–2001, dissolution of the Netherlands Antilles (2010), Mayotte becoming a French department (March 2011)."
+  ]
+}

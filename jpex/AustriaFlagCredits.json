@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Burgenland",
+    "author": "Jon Harald Søby and Wikimedia Commons contributors",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Burgenland.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Carinthia",
+    "author": "Jon Harald Søby and Wikimedia Commons contributors",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Carinthia.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Lower Austria",
+    "author": "Jon Harald Søby and Gryffindor; colours adjusted by Mevsfotw",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Lower_Austria.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Salzburg",
+    "author": "Jon Harald Søby; colours adjusted by Mevsfotw",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Salzburg,_Vienna,_Vorarlberg.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Civil state flag; the same red-white colours as Vienna and Vorarlberg. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Styria",
+    "author": "Jon Harald Søby; colours adjusted by Mevsfotw",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Styria.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Tyrol",
+    "author": "Nightstallion and Wikimedia Commons contributors",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Tirol_and_Upper_Austria.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Civil state flag; the same white-red colours as Upper Austria. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Upper Austria",
+    "author": "Nightstallion and Wikimedia Commons contributors",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Tirol_and_Upper_Austria.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Civil state flag; the same white-red colours as Tyrol. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Vienna",
+    "author": "Jon Harald Søby; colours adjusted by Mevsfotw",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Salzburg,_Vienna,_Vorarlberg.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Civil state flag; the same red-white colours as Salzburg and Vorarlberg. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Vorarlberg",
+    "author": "Jon Harald Søby; colours adjusted by Mevsfotw",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Salzburg,_Vienna,_Vorarlberg.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Civil state flag; the same red-white colours as Salzburg and Vienna. PNG rendering of the source SVG; artwork unchanged."
+  }
+]

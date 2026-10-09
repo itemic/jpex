@@ -1,0 +1,695 @@
+{
+ "polities": {
+  "RU_1991": {
+   "name": "Russia",
+   "flag": "commons:Flag_of_Russia_(1991–1993).svg",
+   "color": "RU",
+   "kind": "state"
+  },
+  "BY_1991": {
+   "name": "Belarus",
+   "flag": "commons:Flag_of_Belarus_(1918,_1991–1995).svg",
+   "color": "BY",
+   "kind": "state"
+  },
+  "GE_1990": {
+   "name": "Georgia",
+   "flag": "commons:Flag_of_Georgia_(1990–2004).svg",
+   "color": "GE",
+   "kind": "state"
+  },
+  "AZ_1991": {
+   "name": "Azerbaijan",
+   "flag": "commons:Flag_of_Azerbaijan_(1991–2013).svg",
+   "color": "AZ",
+   "kind": "state"
+  },
+  "TM_1992": {
+   "name": "Turkmenistan",
+   "flag": "commons:Flag_of_Turkmenistan_(1992–1997).svg",
+   "color": "TM",
+   "kind": "state"
+  },
+  "KG_1992": {
+   "name": "Kyrgyzstan",
+   "flag": "commons:Flag_of_Kyrgyzstan_(1992–2023).svg",
+   "color": "KG",
+   "kind": "state"
+  },
+  "LT_1988": {
+   "name": "Lithuania",
+   "flag": "commons:Flag_of_Lithuania_(1988–2004).svg",
+   "color": "LT",
+   "kind": "state"
+  },
+  "MN_1992": {
+   "name": "Mongolia",
+   "flag": "commons:Flag_of_Mongolia_(1992–2011).svg",
+   "color": "MN",
+   "kind": "state"
+  },
+  "BA_1992": {
+   "name": "Bosnia and Herzegovina",
+   "flag": "commons:Flag_of_Bosnia_and_Herzegovina_(1992–1998).svg",
+   "color": "BA",
+   "kind": "state"
+  },
+  "MK_1992": {
+   "name": "Republic of Macedonia",
+   "flag": "commons:Flag_of_Macedonia_(1992–1995).svg",
+   "color": "MK",
+   "kind": "state"
+  },
+  "FRY": {
+   "name": "Federal Republic of Yugoslavia",
+   "flag": "commons:Flag_of_Serbia_and_Montenegro_(1992–2006).svg",
+   "color": "RS",
+   "kind": "state"
+  },
+  "CZECH_REPUBLIC": {
+   "name": "Czech Republic",
+   "flag": "asset:world_flag_cz",
+   "color": "CZ",
+   "kind": "state"
+  },
+  "TURKEY": {
+   "name": "Turkey",
+   "flag": "asset:world_flag_tr",
+   "color": "TR",
+   "kind": "state"
+  },
+  "SWAZILAND": {
+   "name": "Kingdom of Swaziland",
+   "flag": "asset:world_flag_sz",
+   "color": "SZ",
+   "kind": "state"
+  },
+  "CAPE_VERDE": {
+   "name": "Cape Verde",
+   "flag": "asset:world_flag_cv",
+   "color": "CV",
+   "kind": "state"
+  },
+  "WS_1962": {
+   "name": "Western Samoa",
+   "flag": "asset:world_flag_ws",
+   "color": "WS",
+   "kind": "state"
+  },
+  "SY_1980": {
+   "name": "Syria",
+   "flag": "commons:Flag_of_the_United_Arab_Republic_(1958–1971),_Flag_of_Syria_(1980–2024).svg",
+   "color": "SY",
+   "kind": "state"
+  },
+  "ZA_1928": {
+   "name": "South Africa",
+   "flag": "commons:Flag_of_South_Africa_(1928–1994,_bright_colors).svg",
+   "color": "ZA",
+   "kind": "state"
+  },
+  "ZAIRE": {
+   "name": "Zaire",
+   "flag": "commons:Flag_of_Zaire_(1971–1997).svg",
+   "color": "CD",
+   "kind": "state"
+  },
+  "ET_1991": {
+   "name": "Ethiopia",
+   "flag": "commons:Flag_of_Ethiopia_(1991–1996).svg",
+   "color": "ET",
+   "kind": "state"
+  },
+  "RW_1962": {
+   "name": "Rwanda",
+   "flag": "commons:Flag_of_Rwanda_(1961–2001).svg",
+   "color": "RW",
+   "kind": "state"
+  },
+  "LY_1977": {
+   "name": "Libyan Arab Jamahiriya",
+   "flag": "commons:Flag_of_Libya_(1977–2011).svg",
+   "color": "LY",
+   "kind": "state"
+  },
+  "MR_1959": {
+   "name": "Mauritania",
+   "flag": "commons:Flag_of_Mauritania_(1959–2017).svg",
+   "color": "MR",
+   "kind": "state"
+  },
+  "LS_1987": {
+   "name": "Lesotho",
+   "flag": "commons:Flag_of_Lesotho_(1987–2006).svg",
+   "color": "LS",
+   "kind": "state"
+  },
+  "ZM_1964": {
+   "name": "Zambia",
+   "flag": "commons:Flag_of_Zambia_(1964–1996).svg",
+   "color": "ZM",
+   "kind": "state"
+  },
+  "SC_1977": {
+   "name": "Seychelles",
+   "flag": "commons:Flag_of_Seychelles_(1977–1996).svg",
+   "color": "SC",
+   "kind": "state"
+  },
+  "KM_1992": {
+   "name": "Comoros",
+   "flag": "commons:Flag_of_the_Comoros_(1992–1996).svg",
+   "color": "KM",
+   "kind": "state"
+  },
+  "IQ_1991": {
+   "name": "Iraq",
+   "flag": "commons:Flag_of_Iraq_(1991–2004).svg",
+   "color": "IQ",
+   "kind": "state"
+  },
+  "BH_1972": {
+   "name": "Bahrain",
+   "flag": "commons:Flag_of_Bahrain_(1972–2002).svg",
+   "color": "BH",
+   "kind": "state"
+  },
+  "OM_1970": {
+   "name": "Oman",
+   "flag": "commons:Flag_of_Oman_(1970–1995).svg",
+   "color": "OM",
+   "kind": "state"
+  },
+  "AF_1992": {
+   "name": "Islamic State of Afghanistan",
+   "flag": "commons:Flag_of_Afghanistan_(1992–2001).svg",
+   "color": "AF",
+   "kind": "state"
+  },
+  "KH_1992": {
+   "name": "Cambodia",
+   "flag": "commons:Flag_of_Cambodia_(1992–1993).svg",
+   "color": "KH",
+   "kind": "state"
+  },
+  "MM_1989": {
+   "name": "Myanmar",
+   "flag": "commons:Flag_of_Myanmar_(1974–2010).svg",
+   "color": "MM",
+   "kind": "state"
+  },
+  "PH_1936": {
+   "name": "Republic of the Philippines",
+   "flag": "commons:Flag_of_the_Philippines_(1936–1985,_1986–1998).svg",
+   "color": "PH",
+   "kind": "state"
+  },
+  "VE_1930": {
+   "name": "Venezuela",
+   "flag": "commons:Flag_of_Venezuela_(1930–2006).svg",
+   "color": "VE",
+   "kind": "state"
+  },
+  "LC_1979": {
+   "name": "Saint Lucia",
+   "flag": "commons:Flag_of_Saint_Lucia_(1979–2002).svg",
+   "color": "LC",
+   "kind": "state"
+  },
+  "BM_1910": {
+   "name": "Bermuda",
+   "flag": "commons:Flag_of_Bermuda_(1910–1999).svg",
+   "color": "BM",
+   "kind": "state"
+  },
+  "KY_1959": {
+   "name": "Cayman Islands",
+   "flag": "commons:Flag_of_the_Cayman_Islands_(1959—1999).svg",
+   "color": "KY",
+   "kind": "state"
+  },
+  "TC_1968": {
+   "name": "Turks and Caicos Islands",
+   "flag": "commons:Flag_of_the_Turks_and_Caicos_Islands_(1968–1999).svg",
+   "color": "TC",
+   "kind": "state"
+  },
+  "MS_1960": {
+   "name": "Montserrat",
+   "flag": "commons:Flag_of_Montserrat_(1960–1999).svg",
+   "color": "MS",
+   "kind": "state"
+  },
+  "VG_1960": {
+   "name": "British Virgin Islands",
+   "flag": "commons:Flag_of_the_British_Virgin_Islands_(1960–1999).svg",
+   "color": "VG",
+   "kind": "state"
+  },
+  "AI_1990": {
+   "name": "Anguilla",
+   "flag": "commons:Flag_of_Anguilla_(1990–1999).svg",
+   "color": "AI",
+   "kind": "state"
+  },
+  "FK_1948": {
+   "name": "Falkland Islands",
+   "flag": "commons:Flag_of_the_Falkland_Islands_(1948–1999).svg",
+   "color": "FK",
+   "kind": "state"
+  },
+  "IO_1990": {
+   "name": "British Indian Ocean Territory",
+   "flag": "commons:Flag_of_the_British_Indian_Ocean_Territory_1990.svg",
+   "color": "IO",
+   "kind": "state"
+  },
+  "AN_1986": {
+   "name": "Netherlands Antilles",
+   "flag": "commons:Flag_of_the_Netherlands_Antilles_(1986–2010).svg",
+   "color": "CW",
+   "kind": "state"
+  },
+  "GB_EMPIRE": {
+   "name": "British Empire",
+   "flag": "asset:world_flag_gb",
+   "color": "GB",
+   "kind": "empire"
+  },
+  "PT_EMPIRE": {
+   "name": "Portuguese Empire",
+   "flag": "asset:world_flag_pt",
+   "color": "PT",
+   "kind": "empire"
+  },
+  "TIMOR_OCCUPIED": {
+   "name": "East Timor, occupied by Indonesia",
+   "flag": "commons:Flag_of_Indonesia.svg",
+   "color": "ID",
+   "kind": "contested"
+  },
+  "PS_OCCUPIED": {
+   "name": "Israeli-occupied territories",
+   "flag": "asset:world_flag_il",
+   "color": "PS",
+   "kind": "contested"
+  },
+  "SD": {
+   "name": "Sudan",
+   "flag": "asset:world_flag_sd",
+   "color": "SD",
+   "kind": "state"
+  },
+  "FR": {
+   "name": "France",
+   "flag": "asset:world_flag_fr",
+   "color": "FR",
+   "kind": "state"
+  },
+  "US_TTPI": {
+   "name": "Trust Territory of the Pacific Islands",
+   "flag": "commons:Flag_of_the_Trust_Territory_of_the_Pacific_Islands.svg",
+   "color": "US",
+   "kind": "empire"
+  },
+  "NZ": {
+   "name": "New Zealand",
+   "flag": "asset:world_flag_nz",
+   "color": "NZ",
+   "kind": "state"
+  },
+  "USSR": {
+   "name": "Soviet Union",
+   "flag": "commons:Flag_of_the_Soviet_Union.svg",
+   "color": "RU",
+   "kind": "state"
+  },
+  "YUGOSLAVIA": {
+   "name": "Yugoslavia",
+   "flag": "commons:Flag_of_Yugoslavia_(1946-1992).svg",
+   "color": "RS",
+   "kind": "state"
+  },
+  "CZECHOSLOVAKIA": {
+   "name": "Czechoslovakia",
+   "flag": "asset:world_flag_cz",
+   "color": "CZ",
+   "kind": "state"
+  },
+  "AF_1987": {
+   "name": "Republic of Afghanistan",
+   "flag": "commons:Flag_of_Afghanistan_(1987–1992).svg",
+   "color": "AF",
+   "kind": "state"
+  },
+  "EE": {
+   "name": "Estonia",
+   "flag": "asset:world_flag_ee",
+   "color": "EE",
+   "kind": "state"
+  },
+  "LV": {
+   "name": "Latvia",
+   "flag": "asset:world_flag_lv",
+   "color": "LV",
+   "kind": "state"
+  },
+  "UA": {
+   "name": "Ukraine",
+   "flag": "asset:world_flag_ua",
+   "color": "UA",
+   "kind": "state"
+  },
+  "KZ": {
+   "name": "Kazakhstan",
+   "flag": "asset:world_flag_kz",
+   "color": "KZ",
+   "kind": "state"
+  },
+  "SI": {
+   "name": "Slovenia",
+   "flag": "asset:world_flag_si",
+   "color": "SI",
+   "kind": "state"
+  },
+  "HR": {
+   "name": "Croatia",
+   "flag": "asset:world_flag_hr",
+   "color": "HR",
+   "kind": "state"
+  },
+  "SK": {
+   "name": "Slovakia",
+   "flag": "asset:world_flag_sk",
+   "color": "SK",
+   "kind": "state"
+  },
+  "ER_1993": {
+   "name": "Eritrea",
+   "flag": "commons:Flag_of_Eritrea_(1993–1995).svg",
+   "color": "ER",
+   "kind": "state"
+  },
+  "GS_1992": {
+   "name": "South Georgia and the South Sandwich Islands",
+   "flag": "commons:Flag_of_South_Georgia_and_the_South_Sandwich_Islands_(1992–1999).svg",
+   "color": "GS",
+   "kind": "state"
+  },
+  "KW_OCCUPIED": {
+   "name": "Kuwait, occupied by Iraq",
+   "flag": "asset:world_flag_kw",
+   "color": "KW",
+   "kind": "contested"
+  },
+  "KW": {
+   "name": "Kuwait",
+   "flag": "asset:world_flag_kw",
+   "color": "KW",
+   "kind": "state"
+  }
+ },
+ "era": {
+  "id": "1993",
+  "year": 1993,
+  "title": "After the Soviet Union",
+  "summary": "The Soviet Union and Yugoslavia have broken into new states, Czechoslovakia has split in two and Eritrea has just won independence.",
+  "assign": {
+   "RU": "RU_1991",
+   "BY": "BY_1991",
+   "GE": "GE_1990",
+   "AZ": "AZ_1991",
+   "TM": "TM_1992",
+   "KG": "KG_1992",
+   "LT": "LT_1988",
+   "MN": "MN_1992",
+   "BA": "BA_1992",
+   "MK": "MK_1992",
+   "RS": "FRY|Serbia",
+   "RS~vojvodina": "FRY|Vojvodina",
+   "XK": "FRY|Kosovo",
+   "ME": "FRY|Montenegro",
+   "CZ": "CZECH_REPUBLIC",
+   "TR": "TURKEY",
+   "SZ": "SWAZILAND",
+   "CV": "CAPE_VERDE",
+   "WS": "WS_1962",
+   "SY": "SY_1980",
+   "ZA": "ZA_1928",
+   "CD": "ZAIRE",
+   "ET": "ET_1991",
+   "ER": "ER_1993",
+   "RW": "RW_1962",
+   "LY": "LY_1977",
+   "MR": "MR_1959",
+   "LS": "LS_1987",
+   "ZM": "ZM_1964",
+   "SC": "SC_1977",
+   "KM": "KM_1992",
+   "SD": "SD",
+   "SS": "SD",
+   "IQ": "IQ_1991",
+   "BH": "BH_1972",
+   "OM": "OM_1970",
+   "AF": "AF_1992",
+   "KH": "KH_1992",
+   "MM": "MM_1989",
+   "PH": "PH_1936",
+   "VE": "VE_1930",
+   "LC": "LC_1979",
+   "BM": "BM_1910",
+   "KY": "KY_1959",
+   "TC": "TC_1968",
+   "MS": "MS_1960",
+   "VG": "VG_1960",
+   "AI": "AI_1990",
+   "FK": "FK_1948",
+   "IO": "IO_1990",
+   "CW": "AN_1986|Curaçao",
+   "SX": "AN_1986|Sint Maarten",
+   "BQ": "AN_1986|Bonaire, Sint Eustatius and Saba",
+   "MF": "FR|Guadeloupe",
+   "BL": "FR|Guadeloupe",
+   "FR-971": "FR|Guadeloupe",
+   "NC": "FR|New Caledonia",
+   "PW": "US_TTPI|Palau",
+   "TK": "NZ|Tokelau",
+   "CN-HK": "GB_EMPIRE|Hong Kong",
+   "CN-MO": "PT_EMPIRE|Macau",
+   "TL": "TIMOR_OCCUPIED|East Timor",
+   "PS": "PS_OCCUPIED|West Bank and Gaza",
+   "GB": "GB_EMPIRE|United Kingdom",
+   "GB-ENG": "GB_EMPIRE|England",
+   "GB-SCT": "GB_EMPIRE|Scotland",
+   "GB-WLS": "GB_EMPIRE|Wales",
+   "GB-NIR": "GB_EMPIRE|Northern Ireland",
+   "PT": "PT_EMPIRE|Portugal",
+   "GS": "GS_1992"
+  },
+  "events": [
+   {
+    "year": 1991,
+    "title": "Kuwait is liberated",
+    "detail": "A US-led coalition drove Iraqi forces out of Kuwait in February 1991, ending a seven-month occupation and Iraq's claimed annexation.",
+    "at": [
+     47.7,
+     29.3
+    ],
+    "units": [
+     "KW"
+    ],
+    "from": [
+     "KW_OCCUPIED"
+    ],
+    "to": [
+     "KW"
+    ],
+    "kind": "independence"
+   },
+   {
+    "year": 1991,
+    "title": "The Baltic states break free",
+    "detail": "Estonia, Latvia and Lithuania restored the independence they had lost in 1940. Moscow recognised them in September 1991.",
+    "at": [
+     25.46,
+     57.07
+    ],
+    "units": [
+     "EE",
+     "LV",
+     "LT"
+    ],
+    "from": [
+     "USSR"
+    ],
+    "to": [
+     "EE",
+     "LV",
+     "LT_1988"
+    ],
+    "kind": "independence"
+   },
+   {
+    "year": 1991,
+    "title": "The Soviet Union dissolves",
+    "detail": "On 26 December 1991 the Soviet Union was dissolved, leaving its twelve remaining republics, from Ukraine to Kazakhstan, as independent states.",
+    "at": [
+     37.6,
+     55.75
+    ],
+    "units": [
+     "RU",
+     "UA",
+     "BY",
+     "MD",
+     "GE",
+     "AM",
+     "AZ",
+     "KZ",
+     "UZ",
+     "TM",
+     "KG",
+     "TJ"
+    ],
+    "from": [
+     "USSR"
+    ],
+    "to": [
+     "RU_1991",
+     "UA",
+     "KZ",
+     "BY_1991"
+    ],
+    "kind": "dissolution"
+   },
+   {
+    "year": 1991,
+    "title": "Yugoslavia breaks apart",
+    "detail": "Slovenia, Croatia and Macedonia declared independence in 1991, and Bosnia and Herzegovina in 1992. War followed in Croatia and Bosnia.",
+    "at": [
+     17.67,
+     43.79
+    ],
+    "units": [
+     "SI",
+     "HR",
+     "BA",
+     "MK"
+    ],
+    "from": [
+     "YUGOSLAVIA"
+    ],
+    "to": [
+     "SI",
+     "HR",
+     "BA_1992",
+     "MK_1992"
+    ],
+    "kind": "dissolution"
+   },
+   {
+    "year": 1992,
+    "title": "A smaller Yugoslavia",
+    "detail": "Serbia and Montenegro formed the Federal Republic of Yugoslavia in April 1992, with a new tricolour flag.",
+    "at": [
+     21.0,
+     43.6
+    ],
+    "units": [
+     "RS",
+     "ME",
+     "XK"
+    ],
+    "from": [
+     "YUGOSLAVIA"
+    ],
+    "to": [
+     "FRY"
+    ],
+    "kind": "rename"
+   },
+   {
+    "year": 1992,
+    "title": "Mujahideen take Kabul",
+    "detail": "The communist government fell in April 1992 and an Islamic State of Afghanistan was proclaimed. Rival factions soon fought over the capital.",
+    "at": [
+     69.17,
+     34.53
+    ],
+    "units": [
+     "AF"
+    ],
+    "from": [
+     "AF_1987"
+    ],
+    "to": [
+     "AF_1992"
+    ],
+    "kind": "revolution"
+   },
+   {
+    "year": 1993,
+    "title": "Czechoslovakia splits peacefully",
+    "detail": "On 1 January 1993 Czechoslovakia divided into the Czech Republic and Slovakia, without a shot fired.",
+    "at": [
+     17.2,
+     49.3
+    ],
+    "units": [
+     "CZ",
+     "SK"
+    ],
+    "from": [
+     "CZECHOSLOVAKIA"
+    ],
+    "to": [
+     "CZECH_REPUBLIC",
+     "SK"
+    ],
+    "kind": "dissolution"
+   },
+   {
+    "year": 1993,
+    "title": "Eritrea becomes independent",
+    "detail": "After thirty years of war and a referendum, Eritrea became independent on 24 May 1993. Ethiopia lost its whole coastline.",
+    "at": [
+     38.93,
+     15.33
+    ],
+    "units": [
+     "ER"
+    ],
+    "from": [
+     "ET_1991"
+    ],
+    "to": [
+     "ER_1993"
+    ],
+    "kind": "independence"
+   }
+  ]
+ },
+ "notes": [
+  "Snapshot taken around June 1993, after Eritrea's independence (24 May 1993).",
+  "Cambodia: shown with the UNTAC-period Supreme National Council flag. Sources differ on whether the 1948 flag was readopted in June or on 24 September 1993; if mid-1993 is read as July or later, KH could be left unassigned.",
+  "Bosnia and Herzegovina is drawn whole, though in mid-1993 Bosnian Serb forces held roughly 70% of it and Croat forces much of the rest. Likewise Croatia is drawn whole despite the Serb-held Krajina, Georgia includes Abkhazia (war ongoing), Azerbaijan includes Nagorno-Karabakh, Moldova includes Transnistria.",
+  "Kosovo and Vojvodina are given labels within FRY as Serbia's autonomous provinces (Kosovo's autonomy had been revoked in 1989-90 and an unrecognised Republic of Kosova ran a parallel administration).",
+  "FRY uses the spec's canonical id; the 2011 fragment uses SCG for the identical flag (Serbia and Montenegro, 2003-06). Reconcile if desired.",
+  "Saint Martin and Saint Barthelemy were communes of Guadeloupe until 2007, so they join FR-971 as FR|Guadeloupe. New Caledonia flew only the French tricolour in 1993. Tokelau used the New Zealand flag until 2009.",
+  "Palau (PW) was the last part of the UN Trust Territory of the Pacific Islands under US administration until October 1994; shown as US_TTPI|Palau, as in the 1990 era (it already flew its own 1981 flag locally).",
+  "East Timor and the Palestinian territories are contested polities (hatched) under the occupying states' flags and colours. Oslo I came in September 1993, after this snapshot.",
+  "South Sudan is joined to Sudan without a label; the 1972 Southern Region had been abolished in 1983 and civil war was ongoing.",
+  "Somaliland (SO~somaliland) left as Somalia (de facto independent since 1991, unrecognised), as in other eras. Western Sahara, Northern Cyprus and Taiwan left as their modern selves, matching their 1993 situation.",
+  "Walvis Bay (inside the NA unit) remained South African until March 1994; not representable.",
+  "Minor shade-only differences not assigned: Japan (pre-1999 Hinomaru), Paraguay, Ecuador, Guatemala, Nicaragua arms tweaks. Honduras' 1949 flag is current again in 2026 per Commons, so left unassigned.",
+  "Event-only polities USSR, YUGOSLAVIA, CZECHOSLOVAKIA, AF_1987 and the asset-flag modern ids (EE, LV, UA, KZ, SI, HR, SK) are defined so chips resolve; SD, FR, NZ are defined explicitly as parents of other units and match the implicit modern polities.",
+  "Eritrea is assigned ER_1993: its first flag (24 May 1993 to 5 Dec 1995) differed from today's in proportions and emblem.",
+  "Netherlands Antilles uses AN_1986 (5-star flag, as in the 1990 era); NL_ANTILLES is the 1976 era's id for the 1959-86 6-star flag.",
+  "Inside other units and not representable: South Africa's four nominally independent homelands (Transkei, Bophuthatswana, Venda, Ciskei) until April 1994; de facto Chechen Republic of Ichkeria; Armenian-held Nagorno-Karabakh and surrounding districts (Kelbajar April 1993).",
+  "Metropoles UK (with England, Scotland, Wales, Northern Ireland) and Portugal join GB_EMPIRE / PT_EMPIRE with their own labels, as in the 1990 era, since Hong Kong and Macau are still colonies. Names 'British Empire'/'Portuguese Empire' read anachronistically for 1993.",
+  "Other British dependent territories (Bermuda, Cayman, Turks and Caicos, Montserrat, BVI, Anguilla, Falklands, BIOT) keep their own polities with the pre-1999 flags; South Georgia (GS_1992) flew its first Blue Ensign of 1992-99 (arms granted Feb 1992). Gibraltar, Saint Helena and Pitcairn flags were already today's. The 1990 era leaves most of these implicit, so they change flag 1990->1993->2011.",
+  "Kuwait (KW_OCCUPIED in 1990) is free again: Iraqi forces expelled 26-28 Feb 1991. KW and KW_OCCUPIED are defined here only for the event chips.",
+  "Ids aligned with the 1990/1949/1960 fragments: RW_1962, MM_1989, WS_1962, PH_1936. ZA_1928 uses the 1982-94 bright-blue file (matches 2011); 1939/1990 use the dark file under the same id and 1976 the redirect to it, so the merger must pick one per id.",
+  "Moldova's 1990-2010 flag (slightly different arms) is not assigned, as a minor variant."
+ ]
+}

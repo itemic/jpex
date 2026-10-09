@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Country flag artwork",
+    "author": "Hampus Borgos and country-flags contributors; artwork sourced from Wikimedia Commons.",
+    "sourceURL": "https://github.com/hampusborgos/country-flags",
+    "license": "Public domain flag artwork",
+    "licenseURL": "https://github.com/hampusborgos/country-flags#accurate-country-flags",
+    "note": "PNG renderings of the source SVGs; artwork and proportions unchanged. Includes 249 ISO countries and territories, plus Kosovo (XK). The Antarctic flag is an unofficial design."
+  },
+  {
+    "name": "Country names and grouping",
+    "author": "Panayiotis Lipiridis and flag-icons contributors",
+    "sourceURL": "https://github.com/lipis/flag-icons/blob/main/country.json",
+    "license": "MIT License",
+    "licenseURL": "https://github.com/lipis/flag-icons/blob/main/LICENSE",
+    "note": "The MIT License (MIT)\n\nCopyright (c) 2013 Panayiotis Lipiridis\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\nof the Software, and to permit persons to whom the Software is furnished to do\nso, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  },
+  {
+    "name": "New Caledonia flag",
+    "author": "User:WarX",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_FLNKS.svg",
+    "license": "Public domain",
+    "licenseURL": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "note": "Kanak flag (FLNKS), flown officially alongside the French tricolour since 2010. Rendered by Wikimedia as PNG and scaled to 768 pixels wide."
+  },
+  {
+    "name": "Saint Pierre and Miquelon flag",
+    "author": "André Paturel",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Saint-Pierre_and_Miquelon.svg",
+    "license": "Public domain",
+    "licenseURL": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "note": "Local flag. Rendered by Wikimedia as PNG and scaled to 768 pixels wide."
+  },
+  {
+    "name": "Saint Helena, Ascension and Tristan da Cunha flag",
+    "author": "Patricia Fidi",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Saint_Helena.svg",
+    "license": "Public domain",
+    "licenseURL": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "note": "Flag of Saint Helena. Rendered by Wikimedia as PNG and scaled to 768 pixels wide."
+  },
+  {
+    "name": "Réunion flag",
+    "author": "Ch1902",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Proposed_flag_of_R%C3%A9union_(VAR).svg",
+    "license": "Public domain",
+    "licenseURL": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "note": "Lo Mahavéli, a widely flown unofficial flag; the French tricolour is the official flag. Rendered by Wikimedia as PNG and scaled to 768 pixels wide."
+  },
+  {
+    "name": "Saint Martin flag",
+    "author": "Government of the Collectivity of Saint-Martin, vectorised by Flagvisioner",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Local_flag_of_the_Collectivity_of_Saint_Martin.svg",
+    "license": "Licence Ouverte",
+    "licenseURL": "https://www.etalab.gouv.fr/licence-ouverte-open-licence/",
+    "note": "Local flag of the Collectivity of Saint Martin; the French tricolour is the official flag. Rendered by Wikimedia as PNG and scaled to 768 pixels wide."
+  },
+  {
+    "name": "Saint Barthélemy flag",
+    "author": "Germenfer",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Saint_Barth%C3%A9lemy_(Local).svg",
+    "license": "CC0 1.0",
+    "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "note": "Local flag; the French tricolour is the official flag. Rendered by Wikimedia as PNG and scaled to 768 pixels wide."
+  },
+  {
+    "name": "Guadeloupe, Martinique, French Guiana and Mayotte flag",
+    "author": "Wikimedia Commons contributors",
+    "sourceURL": "https://commons.wikimedia.org/wiki/Category:Flags_of_the_overseas_departments_and_regions_of_France",
+    "license": "Public domain",
+    "licenseURL": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "note": "Local flags shared with the France collection; see France in Acknowledgements for each source. Rendered by Wikimedia as PNG and scaled to 768 pixels wide."
+  },
+  {
+    "name": "Northern Cyprus flag",
+    "author": "Wikimedia Commons contributors",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_the_Turkish_Republic_of_Northern_Cyprus.svg",
+    "license": "Public domain",
+    "licenseURL": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "note": "Flag of the Turkish Republic of Northern Cyprus. Rendered by Wikimedia as PNG and scaled to 768 pixels wide."
+  }
+]

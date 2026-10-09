@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Heredia",
+    "author": "Keepscases",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Bandera_de_la_Provincia_de_Heredia.svg",
+    "license": "CC BY-SA 3.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Guanacaste",
+    "author": "Jaume Ollé",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Bandera_de_la_Provincia_de_Guanacaste.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Puntarenas",
+    "author": "Jaume Ollé (drawing); Magasjukur2 (vector)",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Bandera_de_la_Provincia_de_Puntarenas.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Limón",
+    "author": "AndSalx95",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Lim%C3%B3n,_Costa_Rica_-_Flag.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "Stripes in the order given by the Municipality of Limón: white, light blue, green. PNG rendering of the source SVG; artwork unchanged."
+  }
+]

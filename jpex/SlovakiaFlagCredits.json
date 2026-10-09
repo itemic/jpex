@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Banská Bystrica",
+    "author": "Zirland",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Banskobystricky_vlajka.svg",
+    "license": "CC BY-SA 2.5",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/2.5/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Bratislava",
+    "author": "Zirland",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Bratislavsky_vlajka.svg",
+    "license": "CC BY-SA 2.5",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/2.5/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Košice",
+    "author": "Zirland",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Kosicky_vlajka.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/Commons:Public_domain",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Nitra",
+    "author": "Zirland",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Nitriansky_vlajka.svg",
+    "license": "CC BY-SA 2.5",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/2.5/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Prešov",
+    "author": "Zirland",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Presovsky_vlajka.svg",
+    "license": "CC BY-SA 2.5",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/2.5/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Trenčín",
+    "author": "Zirland",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Trenciansky_vlajka.svg",
+    "license": "CC BY-SA 2.5",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/2.5/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Trnava",
+    "author": "Zirland",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Trnavsky_vlajka.svg",
+    "license": "CC BY-SA 2.5",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/2.5/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Žilina",
+    "author": "Zirland",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Zilinsky_vlajka.svg",
+    "license": "CC BY-SA 2.5",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/2.5/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  }
+]

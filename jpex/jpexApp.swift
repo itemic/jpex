@@ -11,14 +11,18 @@ import SwiftData
 
 @main
 struct jpexApp: App {
-    
+    @State private var countingPreferences = CountingPreferences()
+
+    init() {
+        ScreenTitleStyle.apply()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(countingPreferences)
+                .appliesMotionPreference()
         }
         .modelContainer(for: [SaveModel.self])
     }
-    
-    
 }
-

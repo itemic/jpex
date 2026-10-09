@@ -1,0 +1,859 @@
+{
+ "polities": {
+  "GB_EMPIRE": {
+   "name": "British Empire",
+   "flag": "commons:Flag of the United Kingdom (3-5).svg",
+   "color": "GB",
+   "kind": "empire"
+  },
+  "FR_EMPIRE": {
+   "name": "French colonial empire",
+   "flag": "commons:Flag of France.svg",
+   "color": "FR",
+   "kind": "empire"
+  },
+  "ES_EMPIRE": {
+   "name": "Kingdom of Spain",
+   "flag": "commons:Flag of Spain (1785–1873, 1875–1931).svg",
+   "color": "ES",
+   "kind": "empire"
+  },
+  "PT_EMPIRE": {
+   "name": "Portuguese Republic",
+   "flag": "commons:Flag of Portugal.svg",
+   "color": "PT",
+   "kind": "empire"
+  },
+  "NL_EMPIRE": {
+   "name": "Kingdom of the Netherlands",
+   "flag": "commons:Flag of the Netherlands.svg",
+   "color": "NL",
+   "kind": "empire"
+  },
+  "BE_EMPIRE": {
+   "name": "Kingdom of Belgium",
+   "flag": "commons:Flag of Belgium.svg",
+   "color": "BE",
+   "kind": "empire"
+  },
+  "DE_EMPIRE": {
+   "name": "German Empire",
+   "flag": "commons:Flag of Germany (1867–1918).svg",
+   "color": "DE",
+   "kind": "empire"
+  },
+  "IT_KINGDOM": {
+   "name": "Kingdom of Italy",
+   "flag": "commons:Flag of Italy (1861–1946).svg",
+   "color": "IT",
+   "kind": "empire"
+  },
+  "RU_EMPIRE": {
+   "name": "Russian Empire",
+   "flag": "commons:Flag of Russia.svg",
+   "color": "RU",
+   "kind": "empire"
+  },
+  "OTTOMAN": {
+   "name": "Ottoman Empire",
+   "flag": "commons:Flag of the Ottoman Empire (1844–1922).svg",
+   "color": "TR",
+   "kind": "empire"
+  },
+  "AT_HU": {
+   "name": "Austria-Hungary",
+   "flag": "commons:Ensign of Austro-Hungarian civil fleet (1869-1918).svg",
+   "color": "AT",
+   "kind": "empire"
+  },
+  "ROC": {
+   "name": "Republic of China",
+   "flag": "commons:Flag of China (1912–1928).svg",
+   "color": "CN",
+   "kind": "state"
+  },
+  "QING_1889": {
+   "name": "Qing China",
+   "flag": "commons:Flag of China (1889–1912).svg",
+   "color": "CN",
+   "kind": "empire"
+  },
+  "JP_EMPIRE": {
+   "name": "Empire of Japan",
+   "flag": "commons:Flag of Japan (1870–1999).svg",
+   "color": "JP",
+   "kind": "empire"
+  },
+  "KOREA_EMPIRE": {
+   "name": "Korean Empire",
+   "flag": "commons:Flag of Korea (1899).svg",
+   "color": "KR",
+   "kind": "state"
+  },
+  "US_1912": {
+   "name": "United States",
+   "flag": "commons:Flag of the United States (1912-1959).svg",
+   "color": "US",
+   "kind": "state"
+  },
+  "DK": {
+   "name": "Kingdom of Denmark",
+   "flag": "asset:world_flag_dk",
+   "color": "DK",
+   "kind": "state"
+  },
+  "AU": {
+   "name": "Commonwealth of Australia",
+   "flag": "asset:world_flag_au",
+   "color": "AU",
+   "kind": "state"
+  },
+  "NZ": {
+   "name": "Dominion of New Zealand",
+   "flag": "asset:world_flag_nz",
+   "color": "NZ",
+   "kind": "state"
+  },
+  "CA_1868": {
+   "name": "Dominion of Canada",
+   "flag": "commons:Flag of Canada (1868–1921).svg",
+   "color": "CA",
+   "kind": "state"
+  },
+  "ZA_1912": {
+   "name": "Union of South Africa",
+   "flag": "commons:Red Ensign of South Africa (1912–1951).svg",
+   "color": "ZA",
+   "kind": "state"
+  },
+  "TRANSVAAL": {
+   "name": "South African Republic (Transvaal)",
+   "flag": "commons:Flag of Transvaal.svg",
+   "color": "olive",
+   "kind": "state"
+  },
+  "ORANGE_FREE_STATE": {
+   "name": "Orange Free State",
+   "flag": "commons:Flag of the Orange Free State.svg",
+   "color": "amber",
+   "kind": "state"
+  },
+  "PERSIA": {
+   "name": "Persia",
+   "flag": "commons:State flag of Persia (1907–1933).svg",
+   "color": "IR",
+   "kind": "state"
+  },
+  "SIAM": {
+   "name": "Siam",
+   "flag": "commons:Flag of Siam (1855).svg",
+   "color": "TH",
+   "kind": "state"
+  },
+  "ETHIOPIA_EMPIRE": {
+   "name": "Ethiopian Empire",
+   "flag": "commons:Flag of Ethiopia (1897–1974).svg",
+   "color": "ET",
+   "kind": "state"
+  },
+  "EG_KHEDIVATE": {
+   "name": "Khedivate of Egypt",
+   "flag": "commons:Flag of Egypt (1882–1922).svg",
+   "color": "EG",
+   "kind": "state"
+  },
+  "AF_EMIRATE": {
+   "name": "Emirate of Afghanistan",
+   "flag": "commons:Flag of Afghanistan (1901–1919).svg",
+   "color": "AF",
+   "kind": "state"
+  },
+  "MN_BOGD": {
+   "name": "Bogd Khanate of Mongolia",
+   "flag": "commons:Flag of Bogd Khaanate Mongolia.svg",
+   "color": "MN",
+   "kind": "state"
+  },
+  "TIBET": {
+   "name": "Tibet",
+   "flag": "commons:Flag of Tibet.svg",
+   "color": "sand",
+   "kind": "state"
+  },
+  "NEJD_HASA": {
+   "name": "Emirate of Nejd and Hasa",
+   "flag": "commons:Flag of the Third Saudi State-01.svg",
+   "color": "SA",
+   "kind": "state"
+  },
+  "MUSCAT_OMAN": {
+   "name": "Sultanate of Muscat and Oman",
+   "flag": "commons:Flag of Muscat.svg",
+   "color": "OM",
+   "kind": "state"
+  },
+  "NP_1856": {
+   "name": "Kingdom of Nepal",
+   "flag": "commons:Flag of Nepal (1856-c.1930).svg",
+   "color": "NP",
+   "kind": "state"
+  },
+  "SERBIA_KINGDOM": {
+   "name": "Kingdom of Serbia",
+   "flag": "commons:Flag of Serbia (1882–1918).svg",
+   "color": "RS",
+   "kind": "state"
+  },
+  "MONTENEGRO_KINGDOM": {
+   "name": "Kingdom of Montenegro",
+   "flag": "commons:Flag of Montenegro (1905–1918).svg",
+   "color": "ME",
+   "kind": "state"
+  },
+  "ALBANIA_PRINCIPALITY": {
+   "name": "Principality of Albania",
+   "flag": "commons:Flag of Albania (1914–1920).svg",
+   "color": "AL",
+   "kind": "state"
+  },
+  "GREECE_KINGDOM": {
+   "name": "Kingdom of Greece",
+   "flag": "commons:Flag of Greece (1822-1978).svg",
+   "color": "GR",
+   "kind": "state"
+  },
+  "RO_KINGDOM": {
+   "name": "Kingdom of Romania",
+   "flag": "asset:world_flag_ro",
+   "color": "RO",
+   "kind": "state"
+  },
+  "BG_KINGDOM": {
+   "name": "Tsardom of Bulgaria",
+   "flag": "asset:world_flag_bg",
+   "color": "BG",
+   "kind": "state"
+  },
+  "LI_1852": {
+   "name": "Principality of Liechtenstein",
+   "flag": "commons:Flag of Liechtenstein (1852–1921).svg",
+   "color": "LI",
+   "kind": "state"
+  },
+  "MX_1893": {
+   "name": "Mexico",
+   "flag": "commons:Flag of Mexico (1893–1916).svg",
+   "color": "MX",
+   "kind": "state"
+  },
+  "GT_1871": {
+   "name": "Guatemala",
+   "flag": "commons:Flag of Guatemala (1871–1968).svg",
+   "color": "GT",
+   "kind": "state"
+  },
+  "HN_1866": {
+   "name": "Honduras",
+   "flag": "commons:Flag of Honduras (1866–1949).svg",
+   "color": "HN",
+   "kind": "state"
+  },
+  "SV_1912": {
+   "name": "El Salvador",
+   "flag": "commons:Flag of El Salvador (1912–1916).svg",
+   "color": "SV",
+   "kind": "state"
+  },
+  "NI_1908": {
+   "name": "Nicaragua",
+   "flag": "commons:Flag of Nicaragua (1908–1971).svg",
+   "color": "NI",
+   "kind": "state"
+  },
+  "CR_1906": {
+   "name": "Costa Rica",
+   "flag": "commons:State flag of Costa Rica (1906–1964).svg",
+   "color": "CR",
+   "kind": "state"
+  },
+  "HT_1859": {
+   "name": "Haiti",
+   "flag": "commons:Flag of Haiti (1820–1849, 1859–1964).svg",
+   "color": "HT",
+   "kind": "state"
+  },
+  "VE_1905": {
+   "name": "United States of Venezuela",
+   "flag": "commons:Flag of Venezuela (1905–1930).svg",
+   "color": "VE",
+   "kind": "state"
+  },
+  "EC_1900": {
+   "name": "Ecuador",
+   "flag": "commons:Flag of Ecuador (1900–2009).svg",
+   "color": "EC",
+   "kind": "state"
+  },
+  "PE_1884": {
+   "name": "Peru",
+   "flag": "commons:Flag of Peru (1884–1950).svg",
+   "color": "PE",
+   "kind": "state"
+  },
+  "PY_1842": {
+   "name": "Paraguay",
+   "flag": "commons:Flag of Paraguay (1842–1954).svg",
+   "color": "PY",
+   "kind": "state"
+  },
+  "BR_1889": {
+   "name": "United States of Brazil",
+   "flag": "commons:Flag of Brazil (1889–1960).svg",
+   "color": "BR",
+   "kind": "state"
+  },
+  "UNCLAIMED": {
+   "name": "Unclaimed",
+   "flag": null,
+   "color": "slate",
+   "kind": "unclaimed"
+  }
+ },
+ "era": {
+  "id": "1914",
+  "year": 1914,
+  "title": "The Eve of the Great War",
+  "summary": "Europe's empires rule most of the world, Africa is almost entirely partitioned, and a new republic replaces China's last dynasty.",
+  "assign": {
+   "GB": "GB_EMPIRE|United Kingdom",
+   "GB-ENG": "GB_EMPIRE|England",
+   "GB-SCT": "GB_EMPIRE|Scotland",
+   "GB-WLS": "GB_EMPIRE|Wales",
+   "GB-NIR": "GB_EMPIRE|Ireland",
+   "IE": "GB_EMPIRE|Ireland",
+   "IM": "GB_EMPIRE|Isle of Man",
+   "JE": "GB_EMPIRE|Jersey",
+   "GG": "GB_EMPIRE|Guernsey",
+   "GI": "GB_EMPIRE|Gibraltar",
+   "MT": "GB_EMPIRE|Malta",
+   "CY": "GB_EMPIRE|Cyprus",
+   "XC": "GB_EMPIRE|Cyprus",
+   "IN": "GB_EMPIRE|British India",
+   "PK": "GB_EMPIRE|British India",
+   "BD": "GB_EMPIRE|British India",
+   "MM": "GB_EMPIRE|British India",
+   "LK": "GB_EMPIRE|Ceylon",
+   "MV": "GB_EMPIRE|Maldive Islands",
+   "MY": "GB_EMPIRE|British Malaya",
+   "SG": "GB_EMPIRE|Straits Settlements",
+   "AU-CX": "GB_EMPIRE|Straits Settlements",
+   "AU-CC": "GB_EMPIRE|Straits Settlements",
+   "BN": "GB_EMPIRE|Brunei",
+   "CN-HK": "GB_EMPIRE|Hong Kong",
+   "YE~south": "GB_EMPIRE|Aden",
+   "AE": "GB_EMPIRE|Trucial States",
+   "BH": "GB_EMPIRE|Bahrain",
+   "KW": "GB_EMPIRE|Kuwait",
+   "SD": "GB_EMPIRE|Anglo-Egyptian Sudan",
+   "SS": "GB_EMPIRE|Anglo-Egyptian Sudan",
+   "KE": "GB_EMPIRE|British East Africa",
+   "UG": "GB_EMPIRE|Uganda",
+   "SO~somaliland": "GB_EMPIRE|British Somaliland",
+   "MW": "GB_EMPIRE|Nyasaland",
+   "ZM": "GB_EMPIRE|Northern Rhodesia",
+   "ZW": "GB_EMPIRE|Southern Rhodesia",
+   "BW": "GB_EMPIRE|Bechuanaland",
+   "LS": "GB_EMPIRE|Basutoland",
+   "SZ": "GB_EMPIRE|Swaziland",
+   "NG": "GB_EMPIRE|Nigeria",
+   "GH~main": "GB_EMPIRE|Gold Coast",
+   "SL": "GB_EMPIRE|Sierra Leone",
+   "GM": "GB_EMPIRE|Gambia",
+   "MU": "GB_EMPIRE|Mauritius",
+   "IO": "GB_EMPIRE|Mauritius",
+   "SC": "GB_EMPIRE|Seychelles",
+   "SH": "GB_EMPIRE|Saint Helena",
+   "FK": "GB_EMPIRE|Falkland Islands",
+   "GS": "GB_EMPIRE|Falkland Islands Dependencies",
+   "AU-HM": "GB_EMPIRE|Heard Island",
+   "GY": "GB_EMPIRE|British Guiana",
+   "BZ": "GB_EMPIRE|British Honduras",
+   "BM": "GB_EMPIRE|Bermuda",
+   "BS": "GB_EMPIRE|Bahamas",
+   "JM": "GB_EMPIRE|Jamaica",
+   "KY": "GB_EMPIRE|Cayman Islands",
+   "TC": "GB_EMPIRE|Turks and Caicos Islands",
+   "VG": "GB_EMPIRE|Leeward Islands",
+   "AI": "GB_EMPIRE|Leeward Islands",
+   "KN": "GB_EMPIRE|Leeward Islands",
+   "AG": "GB_EMPIRE|Leeward Islands",
+   "MS": "GB_EMPIRE|Leeward Islands",
+   "DM": "GB_EMPIRE|Leeward Islands",
+   "GD": "GB_EMPIRE|Windward Islands",
+   "VC": "GB_EMPIRE|Windward Islands",
+   "LC": "GB_EMPIRE|Windward Islands",
+   "BB": "GB_EMPIRE|Barbados",
+   "TT": "GB_EMPIRE|Trinidad and Tobago",
+   "FJ": "GB_EMPIRE|Fiji",
+   "SB": "GB_EMPIRE|British Solomon Islands",
+   "KI": "GB_EMPIRE|Gilbert and Ellice Islands",
+   "TV": "GB_EMPIRE|Gilbert and Ellice Islands",
+   "TK": "GB_EMPIRE|Union Islands",
+   "PN": "GB_EMPIRE|Pitcairn Islands",
+   "TO": "GB_EMPIRE|Tonga",
+   "VU": "GB_EMPIRE|New Hebrides",
+   "CA": "CA_1868",
+   "ZA": "ZA_1912",
+   "AU": "AU|Australia",
+   "NZ": "NZ|New Zealand",
+   "CK": "NZ|Cook Islands",
+   "NU": "NZ|Niue",
+   "FR": "FR_EMPIRE|France",
+   "FR~alsacelorraine": "DE_EMPIRE|Alsace-Lorraine",
+   "FR-973": "FR_EMPIRE|French Guiana",
+   "FR-971": "FR_EMPIRE|Guadeloupe",
+   "MF": "FR_EMPIRE|Guadeloupe",
+   "BL": "FR_EMPIRE|Guadeloupe",
+   "FR-972": "FR_EMPIRE|Martinique",
+   "PM": "FR_EMPIRE|Saint-Pierre and Miquelon",
+   "FR-974": "FR_EMPIRE|Réunion",
+   "DZ": "FR_EMPIRE|Algeria",
+   "TN": "FR_EMPIRE|Tunisia",
+   "MA": "FR_EMPIRE|French Morocco",
+   "SN": "FR_EMPIRE|French West Africa",
+   "ML": "FR_EMPIRE|French West Africa",
+   "MR": "FR_EMPIRE|French West Africa",
+   "GN": "FR_EMPIRE|French West Africa",
+   "CI": "FR_EMPIRE|French West Africa",
+   "BF": "FR_EMPIRE|French West Africa",
+   "BJ": "FR_EMPIRE|French West Africa",
+   "NE": "FR_EMPIRE|French West Africa",
+   "GA": "FR_EMPIRE|French Equatorial Africa",
+   "CG": "FR_EMPIRE|French Equatorial Africa",
+   "CF": "FR_EMPIRE|French Equatorial Africa",
+   "TD": "FR_EMPIRE|French Equatorial Africa",
+   "DJ": "FR_EMPIRE|French Somaliland",
+   "MG": "FR_EMPIRE|Madagascar",
+   "KM": "FR_EMPIRE|Comoros",
+   "FR-976": "FR_EMPIRE|Comoros",
+   "TF": "FR_EMPIRE|Kerguelen Islands",
+   "VN": "FR_EMPIRE|French Indochina",
+   "LA": "FR_EMPIRE|French Indochina",
+   "KH": "FR_EMPIRE|French Indochina",
+   "NC": "FR_EMPIRE|New Caledonia",
+   "PF": "FR_EMPIRE|French Oceania",
+   "WF": "FR_EMPIRE|Wallis and Futuna",
+   "ES": "ES_EMPIRE|Spain",
+   "MA~spanish": "ES_EMPIRE|Spanish Morocco",
+   "EH": "ES_EMPIRE|Río de Oro",
+   "GQ": "ES_EMPIRE|Spanish Guinea",
+   "PT": "PT_EMPIRE|Portugal",
+   "AO": "PT_EMPIRE|Angola",
+   "MZ": "PT_EMPIRE|Portuguese East Africa",
+   "GW": "PT_EMPIRE|Portuguese Guinea",
+   "CV": "PT_EMPIRE|Cape Verde",
+   "ST": "PT_EMPIRE|São Tomé and Príncipe",
+   "TL": "PT_EMPIRE|Portuguese Timor",
+   "CN-MO": "PT_EMPIRE|Macau",
+   "NL": "NL_EMPIRE|Netherlands",
+   "ID": "NL_EMPIRE|Dutch East Indies",
+   "SR": "NL_EMPIRE|Surinam",
+   "CW": "NL_EMPIRE|Curaçao",
+   "AW": "NL_EMPIRE|Curaçao",
+   "BQ": "NL_EMPIRE|Curaçao",
+   "SX": "NL_EMPIRE|Curaçao",
+   "BE": "BE_EMPIRE|Belgium",
+   "CD": "BE_EMPIRE|Belgian Congo",
+   "DE": "DE_EMPIRE|Prussia",
+   "DE~brandenburg": "DE_EMPIRE|Prussia",
+   "DE~saxonyanhalt": "DE_EMPIRE|Prussia",
+   "DE~rhineland": "DE_EMPIRE|Prussia",
+   "DE~palatinate": "DE_EMPIRE|Prussia",
+   "DE~lowersaxony": "DE_EMPIRE|Prussia",
+   "DE~holstein": "DE_EMPIRE|Prussia",
+   "PL~west": "DE_EMPIRE|Prussia",
+   "PL~posen": "DE_EMPIRE|Prussia",
+   "RU~kaliningrad": "DE_EMPIRE|Prussia",
+   "LT~klaipeda": "DE_EMPIRE|Prussia",
+   "DE~mecklenburg": "DE_EMPIRE|Mecklenburg",
+   "DE~saxony": "DE_EMPIRE|Saxony",
+   "DE~thuringia": "DE_EMPIRE|Thuringian states",
+   "DE~bavaria": "DE_EMPIRE|Bavaria",
+   "DE~badenwurttemberg": "DE_EMPIRE|Württemberg and Baden",
+   "DE~hesse": "DE_EMPIRE|Hesse",
+   "CM": "DE_EMPIRE|Kamerun",
+   "TG": "DE_EMPIRE|Togoland",
+   "GH~togoland": "DE_EMPIRE|Togoland",
+   "TZ": "DE_EMPIRE|German East Africa",
+   "RW": "DE_EMPIRE|German East Africa",
+   "BI": "DE_EMPIRE|German East Africa",
+   "NA": "DE_EMPIRE|German South West Africa",
+   "PG": "DE_EMPIRE|German New Guinea",
+   "NR": "DE_EMPIRE|Nauru",
+   "MH": "DE_EMPIRE|Marshall Islands",
+   "FM": "DE_EMPIRE|Caroline Islands",
+   "PW": "DE_EMPIRE|Caroline Islands",
+   "US-MP": "DE_EMPIRE|Mariana Islands",
+   "WS": "DE_EMPIRE|German Samoa",
+   "IT": "IT_KINGDOM|Italy",
+   "VA": "IT_KINGDOM|Italy",
+   "IT~trentino": "AT_HU|Tyrol",
+   "LY": "IT_KINGDOM|Tripolitania and Cyrenaica",
+   "ER": "IT_KINGDOM|Eritrea",
+   "SO": "IT_KINGDOM|Italian Somaliland",
+   "SO~italian": "IT_KINGDOM|Italian Somaliland",
+   "AT": "AT_HU|Austria",
+   "CZ": "AT_HU|Bohemia and Moravia",
+   "SI": "AT_HU|Carniola",
+   "PL~galicia": "AT_HU|Galicia",
+   "UA~galicia": "AT_HU|Galicia",
+   "UA~bukovina": "AT_HU|Bukovina",
+   "RO~bukovina": "AT_HU|Bukovina",
+   "HU": "AT_HU|Hungary",
+   "SK": "AT_HU|Hungary",
+   "UA~transcarpathia": "AT_HU|Hungary",
+   "RS~vojvodina": "AT_HU|Hungary",
+   "RO~transylvania": "AT_HU|Transylvania",
+   "HR": "AT_HU|Croatia-Slavonia and Dalmatia",
+   "BA": "AT_HU|Bosnia and Herzegovina",
+   "RU": "RU_EMPIRE|Russia",
+   "RU~main": "RU_EMPIRE|Russia",
+   "RU~amur": "RU_EMPIRE|Russia",
+   "BY": "RU_EMPIRE|Russia",
+   "BY~main": "RU_EMPIRE|Russia",
+   "BY~west": "RU_EMPIRE|Russia",
+   "UA": "RU_EMPIRE|Russia",
+   "UA~main": "RU_EMPIRE|Russia",
+   "UA~volhynia": "RU_EMPIRE|Russia",
+   "RU~tuva": "RU_EMPIRE|Uryankhay Krai",
+   "RU~sakhalin": "JP_EMPIRE|Karafuto",
+   "FI": "RU_EMPIRE|Grand Duchy of Finland",
+   "FI-01": "RU_EMPIRE|Grand Duchy of Finland",
+   "PL": "RU_EMPIRE|Congress Poland",
+   "PL~congress": "RU_EMPIRE|Congress Poland",
+   "EE": "RU_EMPIRE|Estonia",
+   "LV": "RU_EMPIRE|Livonia and Courland",
+   "LT": "RU_EMPIRE|Lithuania",
+   "LT~main": "RU_EMPIRE|Lithuania",
+   "LT~vilnius": "RU_EMPIRE|Lithuania",
+   "MD": "RU_EMPIRE|Bessarabia",
+   "GE": "RU_EMPIRE|Caucasus",
+   "AM": "RU_EMPIRE|Caucasus",
+   "AZ": "RU_EMPIRE|Caucasus",
+   "KZ": "RU_EMPIRE|Steppe Krai",
+   "UZ": "RU_EMPIRE|Turkestan",
+   "TM": "RU_EMPIRE|Turkestan",
+   "TJ": "RU_EMPIRE|Turkestan",
+   "KG": "RU_EMPIRE|Turkestan",
+   "RS": "SERBIA_KINGDOM|Serbia",
+   "RS~main": "SERBIA_KINGDOM|Serbia",
+   "XK": "SERBIA_KINGDOM|Serbia",
+   "MK": "SERBIA_KINGDOM|Serbia",
+   "ME": "MONTENEGRO_KINGDOM",
+   "AL": "ALBANIA_PRINCIPALITY",
+   "GR": "GREECE_KINGDOM",
+   "RO": "RO_KINGDOM|Romania",
+   "RO~main": "RO_KINGDOM|Romania",
+   "BG~dobruja": "RO_KINGDOM|Southern Dobruja",
+   "LI": "LI_1852",
+   "TR": "OTTOMAN|Anatolia",
+   "SY": "OTTOMAN|Syria",
+   "JO": "OTTOMAN|Syria",
+   "LB": "OTTOMAN|Mount Lebanon",
+   "IL": "OTTOMAN|Palestine",
+   "PS": "OTTOMAN|Palestine",
+   "IQ": "OTTOMAN|Mesopotamia",
+   "SA~hejaz": "OTTOMAN|Hejaz",
+   "YE": "OTTOMAN|Yemen",
+   "YE~north": "OTTOMAN|Yemen",
+   "QA": "OTTOMAN|Qatar",
+   "SA": "NEJD_HASA|Nejd",
+   "SA~nejd": "NEJD_HASA|Nejd",
+   "SA~hasa": "NEJD_HASA|al-Hasa",
+   "OM": "MUSCAT_OMAN",
+   "EG": "EG_KHEDIVATE",
+   "IR": "PERSIA",
+   "AF": "AF_EMIRATE",
+   "NP": "NP_1856",
+   "TH": "SIAM",
+   "CN": "ROC",
+   "CN~main": "ROC",
+   "CN~manchuria": "ROC",
+   "CN~tibet": "TIBET",
+   "MN": "MN_BOGD",
+   "JP": "JP_EMPIRE|Japan",
+   "KR": "JP_EMPIRE|Chōsen",
+   "KP": "JP_EMPIRE|Chōsen",
+   "TW": "JP_EMPIRE|Taiwan",
+   "US": "US_1912|United States",
+   "US~alaska": "US_1912|Alaska",
+   "US~hawaii": "US_1912|Hawaii",
+   "PH": "US_1912|Philippine Islands",
+   "US-PR": "US_1912|Porto Rico",
+   "US-GU": "US_1912|Guam",
+   "US-AS": "US_1912|American Samoa",
+   "UM": "US_1912|Pacific islands",
+   "DK": "DK|Denmark",
+   "IS": "DK|Iceland",
+   "FO": "DK|Faroe Islands",
+   "GL": "DK|Greenland",
+   "US-VI": "DK|Danish West Indies",
+   "ET": "ETHIOPIA_EMPIRE",
+   "MX": "MX_1893",
+   "GT": "GT_1871",
+   "HN": "HN_1866",
+   "SV": "SV_1912",
+   "NI": "NI_1908",
+   "CR": "CR_1906",
+   "HT": "HT_1859",
+   "VE": "VE_1905",
+   "EC": "EC_1900",
+   "PE": "PE_1884",
+   "PY": "PY_1842",
+   "BR": "BR_1889",
+   "AQ": "UNCLAIMED|Antarctica",
+   "SJ": "UNCLAIMED|Spitsbergen and Jan Mayen",
+   "BV": "UNCLAIMED|Bouvet Island",
+   "BG": "BG_KINGDOM",
+   "BG~main": "BG_KINGDOM"
+  },
+  "events": [
+   {
+    "year": 1878,
+    "title": "The Congress of Berlin",
+    "detail": "Serbia, Montenegro and Romania win full independence and Bulgaria gains autonomy. Austria-Hungary occupies Bosnia, then annexes it in 1908.",
+    "at": [
+     20.5,
+     44.0
+    ],
+    "units": [
+     "RS~main",
+     "ME",
+     "RO~main",
+     "BG~main",
+     "BA"
+    ],
+    "from": [
+     "OTTOMAN"
+    ],
+    "to": [
+     "SERBIA_KINGDOM",
+     "MONTENEGRO_KINGDOM",
+     "RO_KINGDOM",
+     "BG_KINGDOM",
+     "AT_HU"
+    ],
+    "kind": "treaty"
+   },
+   {
+    "year": 1885,
+    "title": "The Scramble for Africa",
+    "detail": "European powers carve up almost the whole continent within thirty years. Only Ethiopia, which defeated Italy at Adwa in 1896, and Liberia stay independent.",
+    "at": [
+     22.0,
+     2.0
+    ],
+    "units": [
+     "CD",
+     "TZ",
+     "NA",
+     "CM",
+     "NG",
+     "AO",
+     "MZ",
+     "KE",
+     "ZM",
+     "ZW",
+     "TD",
+     "ML",
+     "NE",
+     "SD",
+     "SS"
+    ],
+    "from": [],
+    "to": [
+     "GB_EMPIRE",
+     "FR_EMPIRE",
+     "DE_EMPIRE",
+     "BE_EMPIRE",
+     "PT_EMPIRE",
+     "IT_KINGDOM"
+    ],
+    "kind": "colonization"
+   },
+   {
+    "year": 1898,
+    "title": "The Spanish–American War",
+    "detail": "After a short war in 1898, the United States takes the Philippines, Puerto Rico and Guam from Spain. Cuba becomes independent in 1902.",
+    "at": [
+     121.0,
+     15.5
+    ],
+    "units": [
+     "PH",
+     "US-PR",
+     "US-GU",
+     "CU"
+    ],
+    "from": [
+     "ES_EMPIRE"
+    ],
+    "to": [
+     "US_1912"
+    ],
+    "kind": "annexation"
+   },
+   {
+    "year": 1910,
+    "title": "South Africa unites",
+    "detail": "Britain conquers the Boer republics of the Transvaal and Orange Free State in 1899–1902. In 1910 they join the Cape and Natal as the Union of South Africa.",
+    "at": [
+     26.5,
+     -28.0
+    ],
+    "units": [
+     "ZA"
+    ],
+    "from": [
+     "TRANSVAAL",
+     "ORANGE_FREE_STATE",
+     "GB_EMPIRE"
+    ],
+    "to": [
+     "ZA_1912"
+    ],
+    "kind": "unification"
+   },
+   {
+    "year": 1910,
+    "title": "Japan annexes Korea",
+    "detail": "Japan, which took Taiwan in 1895 and southern Sakhalin in 1905, formally annexes Korea as Chōsen.",
+    "at": [
+     127.8,
+     37.5
+    ],
+    "units": [
+     "KR",
+     "KP",
+     "TW",
+     "RU~sakhalin"
+    ],
+    "from": [
+     "KOREA_EMPIRE"
+    ],
+    "to": [
+     "JP_EMPIRE"
+    ],
+    "kind": "annexation"
+   },
+   {
+    "year": 1912,
+    "title": "Italy takes Libya",
+    "detail": "Italy seizes Tripolitania and Cyrenaica from the Ottoman Empire in the Italo-Turkish War of 1911–12.",
+    "at": [
+     17.0,
+     27.0
+    ],
+    "units": [
+     "LY"
+    ],
+    "from": [
+     "OTTOMAN"
+    ],
+    "to": [
+     "IT_KINGDOM"
+    ],
+    "kind": "annexation"
+   },
+   {
+    "year": 1912,
+    "title": "China becomes a republic",
+    "detail": "The Qing dynasty falls after more than 260 years and the Republic of China is proclaimed. Mongolia and Tibet break away and govern themselves.",
+    "at": [
+     112.0,
+     33.0
+    ],
+    "units": [
+     "CN~main",
+     "CN~manchuria",
+     "MN",
+     "CN~tibet"
+    ],
+    "from": [
+     "QING_1889"
+    ],
+    "to": [
+     "ROC",
+     "MN_BOGD",
+     "TIBET"
+    ],
+    "kind": "revolution"
+   },
+   {
+    "year": 1913,
+    "title": "The Balkan Wars",
+    "detail": "The Ottomans lose nearly all their European lands. Serbia, Greece, Montenegro and Romania grow, and Albania is born as a new state.",
+    "at": [
+     21.5,
+     41.5
+    ],
+    "units": [
+     "MK",
+     "XK",
+     "AL",
+     "GR~north",
+     "GR~crete",
+     "BG~dobruja"
+    ],
+    "from": [
+     "OTTOMAN"
+    ],
+    "to": [
+     "SERBIA_KINGDOM",
+     "GREECE_KINGDOM",
+     "MONTENEGRO_KINGDOM",
+     "RO_KINGDOM",
+     "ALBANIA_PRINCIPALITY"
+    ],
+    "kind": "partition"
+   }
+  ]
+ },
+ "notes": [
+  "DK is not cut: North Schleswig (German until 1920) is drawn as Danish.",
+  "TR is not cut: Kars, Ardahan and Batumi area were Russian until 1918; drawn as Ottoman.",
+  "XK split 1913 between Serbia (most) and Montenegro (Metohija west: Peć, Đakovica); whole unit assigned to Serbia.",
+  "GR~north includes Western Thrace (GR-A), which was Bulgarian 1913–1919; drawn as Greek. GR~old includes the Dodecanese (Italian from 1912); drawn as Greek. Northern Epirus disputed with Albania in 1914.",
+  "Kamerun included Neukamerun (1911 strips of today's Gabon, Congo, CAR and Chad) — not drawable; those units stay French Equatorial Africa. CM~british also German.",
+  "PG not cut: whole unit assigned German New Guinea; the southern half was the Australian Territory of Papua.",
+  "SB: Bougainville (in PG today) was German; the rest British Solomon Islands — fine at this granularity.",
+  "TZ not cut: Zanzibar (British protectorate) drawn as German East Africa.",
+  "NA not cut: Walvis Bay (British, part of the Cape) drawn as German South West Africa.",
+  "SO~italian includes Jubaland, which was part of British East Africa until 1925.",
+  "CA not cut: Newfoundland and Labrador was the separate Dominion of Newfoundland in 1914; drawn as Canada.",
+  "CN not cut: leased territories (Kiautschou German, Weihaiwei British, Kwantung Japanese, Kwangchowan French) drawn as ROC.",
+  "IN not cut: French India and Portuguese Goa drawn as British India; princely states not distinguished. Burma was a province of British India, hence the same label.",
+  "MY: Sarawak (Brooke Raj) and North Borneo (chartered company) are included in British Malaya.",
+  "UZ/TJ/TM: the protectorates of Bukhara and Khiva are folded into Turkestan.",
+  "SA~nejd includes the Rashidi Emirate of Jabal Shammar (Ha'il) and the Idrisid Emirate of Asir, both separate in 1914.",
+  "SD: Darfur Sultanate was independent until 1916; drawn as Anglo-Egyptian Sudan.",
+  "KW: Ottoman claim vs British protection (1899); drawn as British. QA: Ottoman garrison remained until 1915; drawn as Ottoman.",
+  "CY/XC: Ottoman sovereignty, British administration since 1878 (annexed Nov 1914); drawn as British. EG: nominally Ottoman, British-occupied; drawn as the Khedivate with its own flag.",
+  "VU New Hebrides was an Anglo-French condominium; assigned to the British Empire.",
+  "AU-HM: British claim (1910) assumed; AU-NF transferred to the Commonwealth of Australia on 1 July 1914, left as Australia.",
+  "TF: Kerguelen (French since 1893); Adélie Land not yet claimed. AQ: British 1908 Falklands Dependencies claim covered part of the peninsula; whole continent drawn unclaimed.",
+  "LI flag 1852–1921 (blue-red, no crown) per Commons file name; Ethiopia flag uses the 1897–1974 file (pennant order may have differed before 1914).",
+  "RU_EMPIRE flag uses the white-blue-red tricolour (national flag from 1896), which equals today's; other eras may need a separate id for the 1858–1896 black-yellow-white flag.",
+  "UNCLAIMED polity has flag null.",
+  "DE~palatinate labelled Prussia though the Palatinate itself was Bavarian; DE~lowersaxony includes Oldenburg, Brunswick and Bremen; DE~saxonyanhalt includes Anhalt.",
+  "VA: the Vatican City state did not exist until 1929; drawn as Italy.",
+  "SJ and BV: terra nullius in 1914.",
+  "HR not cut: Dalmatia and Istria were Austrian crown lands (Cisleithania), Croatia-Slavonia Hungarian; one label covers both.",
+  "TO: Kingdom of Tonga, a British protected state since 1900 (same treatment as 1949).",
+  "BT left as itself: Bhutan had no national flag in 1914 (first flag 1949), so today's flag is anachronistic.",
+  "Balkan Wars event also glows BG~dobruja (Southern Dobruja taken by Romania from Bulgaria in 1913).",
+  "NEJD_HASA (not NEJD): the 1871 era's NEJD is the Second Saudi State with a different flag. QING_1889 (not QING): 1871's QING uses the 1862–1889 triangular flag.",
+  "AT_HU flag is the 1869–1918 civil ensign (the only flag common to both halves), matching 1871; 1923 uses the black-yellow Habsburg flag under the same id.",
+  "BG_KINGDOM: Tsardom of Bulgaria (independent 1908); its white-green-red flag dates from 1879, as today."
+ ]
+}

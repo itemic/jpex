@@ -1,36 +1,11 @@
-//
-//  HomeView.swift
-//  jpex
-//
-//  Created by Terran Kroft on 5/2/2024.
-//
-
 import SwiftUI
 
+/// Kept as a lightweight entry point for callers of the original home screen.
 struct HomeView: View {
-    var body: some View {
-        VStack {
-            HStack {
-                Text("Kanagawa")
-                Spacer()
-                Text("Visited")
-                    .foregroundStyle(.secondary)
-            }
-            HStack {
-                Text("Tohoku")
-                Spacer()
-                Text("Visited")
-                    .foregroundStyle(.secondary)
-            }
-               
-        }
-        .padding()
-        .font(.system(size: 32))
-        .fontWeight(.semibold)
-        .kerning(-0.5)
-    }
-}
+    @State private var countingPreferences = CountingPreferences()
 
-#Preview {
-    HomeView()
+    var body: some View {
+        ContentView()
+            .environment(countingPreferences)
+    }
 }

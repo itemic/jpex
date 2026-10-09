@@ -1,0 +1,881 @@
+{
+ "polities": {
+  "GB_EMPIRE": {
+   "name": "British Empire",
+   "flag": "commons:Flag of the United Kingdom (3-5).svg",
+   "color": "GB",
+   "kind": "empire"
+  },
+  "FR_BOURBON": {
+   "name": "Kingdom of France",
+   "flag": "commons:Flag of France (1814–1830).svg",
+   "color": "FR",
+   "kind": "empire"
+  },
+  "ES_EMPIRE": {
+   "name": "Spanish Empire",
+   "flag": "commons:Flag of Spain (1785–1873, 1875–1931).svg",
+   "color": "ES",
+   "kind": "empire"
+  },
+  "PT_EMPIRE_1815": {
+   "name": "United Kingdom of Portugal, Brazil and the Algarves",
+   "flag": "commons:Flag of the United Kingdom of Portugal, Brazil, and the Algarves (1815-1825).svg",
+   "color": "PT",
+   "kind": "empire"
+  },
+  "NL_EMPIRE": {
+   "name": "Kingdom of the Netherlands",
+   "flag": "commons:Flag of the Netherlands.svg",
+   "color": "NL",
+   "kind": "empire"
+  },
+  "DK_EMPIRE": {
+   "name": "Danish Realm",
+   "flag": "commons:Flag of Denmark.svg",
+   "color": "DK",
+   "kind": "empire"
+  },
+  "SE_NO": {
+   "name": "Sweden–Norway",
+   "flag": "commons:Flag of Sweden (1818-1844).svg",
+   "color": "SE",
+   "kind": "state"
+  },
+  "RU_EMPIRE": {
+   "name": "Russian Empire",
+   "flag": "commons:Flag of Russia.svg",
+   "color": "RU",
+   "kind": "empire"
+  },
+  "AT_EMPIRE": {
+   "name": "Austrian Empire",
+   "flag": "commons:Flag of the Habsburg Monarchy.svg",
+   "color": "AT",
+   "kind": "empire"
+  },
+  "PRUSSIA": {
+   "name": "Kingdom of Prussia",
+   "flag": "commons:Flag of the Kingdom of Prussia (1803-1892).svg",
+   "color": "DE",
+   "kind": "state"
+  },
+  "BAVARIA": {
+   "name": "Kingdom of Bavaria",
+   "flag": "commons:Flag of Bavaria (lozengy).svg",
+   "color": "sky",
+   "kind": "state"
+  },
+  "WURTTEMBERG": {
+   "name": "Kingdom of Württemberg",
+   "flag": "commons:Flag of the Kingdom of Württemberg (1806 - 1816).png",
+   "color": "amber",
+   "kind": "state"
+  },
+  "SAXONY_KINGDOM": {
+   "name": "Kingdom of Saxony",
+   "flag": "commons:Flag of Saxony.svg",
+   "color": "sage",
+   "kind": "state"
+  },
+  "HANOVER": {
+   "name": "Kingdom of Hanover",
+   "flag": "commons:Flag of Hanover (1692).svg",
+   "color": "rose",
+   "kind": "state"
+  },
+  "HESSE": {
+   "name": "Hessian states",
+   "flag": "commons:Flag of Hesse.svg",
+   "color": "coral",
+   "kind": "state"
+  },
+  "MECKLENBURG": {
+   "name": "Grand Duchies of Mecklenburg",
+   "flag": "commons:19th Century Flag of Mecklenburg-Schwerin.png",
+   "color": "indigo",
+   "kind": "state"
+  },
+  "THURINGIA_STATES": {
+   "name": "Saxon duchies and Thuringian states",
+   "flag": "commons:Flagge Großherzogtum Sachsen-Weimar-Eisenach (1813-1897).svg",
+   "color": "olive",
+   "kind": "state"
+  },
+  "SARDINIA": {
+   "name": "Kingdom of Sardinia",
+   "flag": "commons:State Flag and War Ensign of the Kingdom of Sardinia (1816-1848).svg",
+   "color": "IT",
+   "kind": "state"
+  },
+  "TUSCANY": {
+   "name": "Grand Duchy of Tuscany",
+   "flag": "commons:Flag of the Grand Duchy of Tuscany.svg",
+   "color": "rust",
+   "kind": "state"
+  },
+  "ANDORRA_1815": {
+   "name": "Principality of Andorra",
+   "flag": "commons:Flag of Andorra (1806–1866).svg",
+   "color": "AD",
+   "kind": "state"
+  },
+  "LIECHTENSTEIN_1815": {
+   "name": "Principality of Liechtenstein",
+   "flag": "commons:Flag of Liechtenstein (1719–1852).svg",
+   "color": "LI",
+   "kind": "state"
+  },
+  "MONTENEGRO_1815": {
+   "name": "Prince-Bishopric of Montenegro",
+   "flag": "commons:Flag of Montenegro (1516–1852).svg",
+   "color": "ME",
+   "kind": "state"
+  },
+  "OTTOMAN_1815": {
+   "name": "Ottoman Empire",
+   "flag": "commons:Flag of the Ottoman Empire (also used in Egypt).svg",
+   "color": "TR",
+   "kind": "empire"
+  },
+  "PERSIA_1815": {
+   "name": "Qajar Persia",
+   "flag": "commons:Fath Ali Shah Flag.svg",
+   "color": "IR",
+   "kind": "state"
+  },
+  "DURRANI": {
+   "name": "Durrani Empire",
+   "flag": "commons:Flag of the Durrani Kingdom.svg",
+   "color": "AF",
+   "kind": "state"
+  },
+  "BUKHARA": {
+   "name": "Emirate of Bukhara",
+   "flag": "commons:Flag of the Emirate of Bukhara.svg",
+   "color": "UZ",
+   "kind": "state"
+  },
+  "KHIVA": {
+   "name": "Khanate of Khiva",
+   "flag": null,
+   "color": "TM",
+   "kind": "state"
+  },
+  "KOKAND": {
+   "name": "Khanate of Kokand",
+   "flag": null,
+   "color": "KG",
+   "kind": "state"
+  },
+  "KAZAKH_HORDES": {
+   "name": "Kazakh hordes",
+   "flag": null,
+   "color": "KZ",
+   "kind": "indigenous"
+  },
+  "DIRIYAH": {
+   "name": "Emirate of Diriyah (First Saudi State)",
+   "flag": "commons:Flag of the First and Second Saudi State (1744-1891).svg",
+   "color": "SA",
+   "kind": "state"
+  },
+  "OMAN_MUSCAT": {
+   "name": "Sultanate of Muscat and Oman",
+   "flag": "commons:Flag of Muscat.svg",
+   "color": "OM",
+   "kind": "state"
+  },
+  "ARABIA_INDEPENDENT": {
+   "name": "Independent Arabian sheikhdoms and tribes",
+   "flag": null,
+   "color": "amber",
+   "kind": "indigenous"
+  },
+  "MOROCCO_1815": {
+   "name": "Sultanate of Morocco",
+   "flag": "commons:Flag of Morocco (1666–1915).svg",
+   "color": "MA",
+   "kind": "state"
+  },
+  "AFRICA_INDEPENDENT": {
+   "name": "Independent African kingdoms and peoples",
+   "flag": null,
+   "color": "sand",
+   "kind": "indigenous"
+  },
+  "NEPAL_KINGDOM": {
+   "name": "Kingdom of Nepal",
+   "flag": "commons:Flag of Nepal (1743–1962).svg",
+   "color": "NP",
+   "kind": "state"
+  },
+  "BHUTAN_1815": {
+   "name": "Bhutan",
+   "flag": null,
+   "color": "BT",
+   "kind": "state"
+  },
+  "MALDIVES_SULTANATE": {
+   "name": "Sultanate of the Maldives",
+   "flag": "commons:Flag of the Maldives until 1903.svg",
+   "color": "MV",
+   "kind": "state"
+  },
+  "QING": {
+   "name": "Qing China",
+   "flag": "commons:Flag of China (1862–1889).svg",
+   "color": "CN",
+   "kind": "empire"
+  },
+  "JP_TOKUGAWA": {
+   "name": "Tokugawa Japan",
+   "flag": "commons:Flag of Japan (1870–1999).svg",
+   "color": "JP",
+   "kind": "state"
+  },
+  "JOSEON": {
+   "name": "Joseon Korea",
+   "flag": "commons:Flag of the king of Joseon.svg",
+   "color": "KR",
+   "kind": "state"
+  },
+  "VN_NGUYEN": {
+   "name": "Việt Nam (Nguyễn dynasty)",
+   "flag": "commons:Flag of the Nguyễn Dynasty Army (Musée de l'Armée, Paris; simplified version).svg",
+   "color": "VN",
+   "kind": "state"
+  },
+  "CAMBODIA_1815": {
+   "name": "Kingdom of Cambodia",
+   "flag": "commons:Flag of Cambodia (pre-1863).svg",
+   "color": "KH",
+   "kind": "state"
+  },
+  "KONBAUNG": {
+   "name": "Konbaung Burma",
+   "flag": "commons:National flag of the Konbaung dynasty.svg",
+   "color": "MM",
+   "kind": "state"
+  },
+  "BRUNEI_1815": {
+   "name": "Sultanate of Brunei",
+   "flag": "commons:Old Flag of Brunei.svg",
+   "color": "BN",
+   "kind": "state"
+  },
+  "MALAY_STATES": {
+   "name": "Malay sultanates",
+   "flag": null,
+   "color": "olive",
+   "kind": "indigenous"
+  },
+  "OCEANIA_INDIGENOUS": {
+   "name": "Pacific Island peoples",
+   "flag": null,
+   "color": "sage",
+   "kind": "indigenous"
+  },
+  "US_1815": {
+   "name": "United States",
+   "flag": "commons:Flag of the United States (1795–1818).svg",
+   "color": "US",
+   "kind": "state"
+  },
+  "OREGON_COUNTRY": {
+   "name": "Oregon Country (disputed)",
+   "flag": null,
+   "color": "sage",
+   "kind": "contested"
+  },
+  "HAWAII_KINGDOM": {
+   "name": "Kingdom of Hawaii",
+   "flag": "commons:Flag of Kingdom of Hawaii (1816–1845).svg",
+   "color": "teal",
+   "kind": "state"
+  },
+  "HAITI_1815": {
+   "name": "Haiti",
+   "flag": "commons:Flag of Haiti (1807–1849).svg",
+   "color": "HT",
+   "kind": "state"
+  },
+  "RIO_DE_LA_PLATA": {
+   "name": "United Provinces of the Río de la Plata",
+   "flag": "commons:Flag of Argentina (civil).svg",
+   "color": "AR",
+   "kind": "state"
+  },
+  "LIGA_FEDERAL": {
+   "name": "Federal League (Artigas)",
+   "flag": "commons:Flag of Artigas.svg",
+   "color": "UY",
+   "kind": "state"
+  },
+  "PY_1815": {
+   "name": "Paraguay",
+   "flag": "commons:Flag of Paraguay (1812-1826).svg",
+   "color": "PY",
+   "kind": "state"
+  },
+  "UNCLAIMED": {
+   "name": "Unclaimed",
+   "flag": null,
+   "color": "slate",
+   "kind": "unclaimed"
+  },
+  "NAPLES_SICILY": {
+   "name": "Kingdoms of Naples and Sicily",
+   "flag": "commons:Flag of Kingdom of Naples (1759-1806; 1815-1816).png",
+   "color": "teal",
+   "kind": "state"
+  },
+  "SIAM_1815": {
+   "name": "Siam",
+   "flag": "commons:Flag of Thailand (1782).svg",
+   "color": "TH",
+   "kind": "state"
+  },
+  "PAPAL_STATES_1815": {
+   "name": "Papal States",
+   "flag": "commons:Flag of the Papal States (1808-1870).svg",
+   "color": "gold",
+   "kind": "state"
+  }
+ },
+ "era": {
+  "id": "1815",
+  "year": 1815,
+  "title": "The World After Napoleon",
+  "summary": "Napoleon is gone and Vienna has redrawn Europe. Britain rules the seas, and Spain's American empire is beginning to crack.",
+  "assign": {
+   "GB": "GB_EMPIRE|Great Britain",
+   "GB-ENG": "GB_EMPIRE|England",
+   "GB-SCT": "GB_EMPIRE|Scotland",
+   "GB-WLS": "GB_EMPIRE|Wales",
+   "GB-NIR": "GB_EMPIRE|Ireland",
+   "IE": "GB_EMPIRE|Ireland",
+   "IM": "GB_EMPIRE|Isle of Man",
+   "JE": "GB_EMPIRE|Jersey",
+   "GG": "GB_EMPIRE|Guernsey",
+   "GI": "GB_EMPIRE|Gibraltar",
+   "MT": "GB_EMPIRE|Malta",
+   "GR~ionian": "GB_EMPIRE|United States of the Ionian Islands",
+   "FR": "FR_BOURBON|France",
+   "FR~main": "FR_BOURBON|France",
+   "FR~alsacelorraine": "FR_BOURBON|France",
+   "FR~savoynice": "SARDINIA|Savoy and Nice",
+   "ES": "ES_EMPIRE|Spain",
+   "PT": "PT_EMPIRE_1815|Portugal",
+   "AD": "ANDORRA_1815",
+   "MC": "SARDINIA|Monaco (Sardinian protectorate)",
+   "IT~piedmont": "SARDINIA|Piedmont and Genoa",
+   "IT~sardinia": "SARDINIA|Sardinia",
+   "IT~lombardy": "AT_EMPIRE|Lombardy–Venetia",
+   "IT~venetia": "AT_EMPIRE|Lombardy–Venetia",
+   "IT~friuli": "AT_EMPIRE|Lombardy–Venetia",
+   "IT~trentino": "AT_EMPIRE|Tyrol",
+   "IT~papal": "PAPAL_STATES_1815|Rome and the Patrimony",
+   "VA": "PAPAL_STATES_1815|Rome and the Patrimony",
+   "IT~emilia": "PAPAL_STATES_1815|Legations (with Parma and Modena)",
+   "IT~tuscany": "TUSCANY",
+   "IT~sicilies": "NAPLES_SICILY",
+   "NL": "NL_EMPIRE|Netherlands",
+   "BE": "NL_EMPIRE|Southern Netherlands",
+   "LU": "NL_EMPIRE|Grand Duchy of Luxembourg",
+   "DK": "DK_EMPIRE|Denmark",
+   "DE~holstein": "DK_EMPIRE|Duchies of Schleswig and Holstein",
+   "IS": "DK_EMPIRE|Iceland",
+   "FO": "DK_EMPIRE|Faroe Islands",
+   "GL": "DK_EMPIRE|Greenland",
+   "SE": "SE_NO|Sweden",
+   "NO": "SE_NO|Norway",
+   "SJ": "UNCLAIMED|Spitsbergen",
+   "DE~brandenburg": "PRUSSIA|Brandenburg",
+   "DE~saxonyanhalt": "PRUSSIA|Province of Saxony",
+   "DE~rhineland": "PRUSSIA|Westphalia and the Rhineland",
+   "DE~palatinate": "PRUSSIA|Lower Rhine",
+   "PL~west": "PRUSSIA|Silesia and Pomerania",
+   "PL~posen": "PRUSSIA|Posen and West Prussia",
+   "RU~kaliningrad": "PRUSSIA|East Prussia",
+   "LT~klaipeda": "PRUSSIA|East Prussia",
+   "DE~bavaria": "BAVARIA",
+   "DE~badenwurttemberg": "WURTTEMBERG|Württemberg and Baden",
+   "DE~saxony": "SAXONY_KINGDOM",
+   "DE~lowersaxony": "HANOVER|Hanover, Oldenburg and Brunswick",
+   "DE~hesse": "HESSE|Hesse-Kassel, Hesse-Darmstadt and Nassau",
+   "DE~mecklenburg": "MECKLENBURG",
+   "DE~thuringia": "THURINGIA_STATES|Thuringian states",
+   "LI": "LIECHTENSTEIN_1815",
+   "AT": "AT_EMPIRE|Austria",
+   "CZ": "AT_EMPIRE|Bohemia and Moravia",
+   "HU": "AT_EMPIRE|Kingdom of Hungary",
+   "SK": "AT_EMPIRE|Kingdom of Hungary",
+   "UA~transcarpathia": "AT_EMPIRE|Kingdom of Hungary",
+   "RS~vojvodina": "AT_EMPIRE|Kingdom of Hungary",
+   "RO~transylvania": "AT_EMPIRE|Transylvania",
+   "PL~galicia": "AT_EMPIRE|Galicia",
+   "UA~galicia": "AT_EMPIRE|Galicia",
+   "UA~bukovina": "AT_EMPIRE|Bukovina",
+   "RO~bukovina": "AT_EMPIRE|Bukovina",
+   "HR": "AT_EMPIRE|Croatia and Dalmatia",
+   "SI": "AT_EMPIRE|Illyria",
+   "RU": "RU_EMPIRE|Russia",
+   "RU~main": "RU_EMPIRE|Russia",
+   "FI": "RU_EMPIRE|Grand Duchy of Finland",
+   "FI-01": "RU_EMPIRE|Grand Duchy of Finland",
+   "EE": "RU_EMPIRE|Estonia",
+   "LV": "RU_EMPIRE|Livonia and Courland",
+   "LT": "RU_EMPIRE|Lithuania",
+   "LT~main": "RU_EMPIRE|Lithuania",
+   "LT~vilnius": "RU_EMPIRE|Lithuania",
+   "BY": "RU_EMPIRE|White Russia",
+   "PL~congress": "RU_EMPIRE|Congress Poland",
+   "UA": "RU_EMPIRE|Little Russia and New Russia",
+   "UA~main": "RU_EMPIRE|Little Russia and New Russia",
+   "UA~volhynia": "RU_EMPIRE|Volhynia",
+   "MD": "RU_EMPIRE|Bessarabia",
+   "GE": "RU_EMPIRE|Georgia",
+   "AZ": "RU_EMPIRE|Caucasian khanates",
+   "US~alaska": "RU_EMPIRE|Russian America",
+   "ME": "MONTENEGRO_1815",
+   "TR": "OTTOMAN_1815|Anatolia",
+   "BG": "OTTOMAN_1815|Rumelia",
+   "BG~main": "OTTOMAN_1815|Rumelia",
+   "BG~dobruja": "OTTOMAN_1815|Rumelia",
+   "MK": "OTTOMAN_1815|Rumelia",
+   "XK": "OTTOMAN_1815|Rumelia",
+   "AL": "OTTOMAN_1815|Rumelia",
+   "GR~north": "OTTOMAN_1815|Rumelia",
+   "GR~thessaly": "OTTOMAN_1815|Rumelia",
+   "GR": "OTTOMAN_1815|Morea",
+   "GR~old": "OTTOMAN_1815|Morea",
+   "GR~crete": "OTTOMAN_1815|Crete",
+   "CY": "OTTOMAN_1815|Cyprus",
+   "XC": "OTTOMAN_1815|Cyprus",
+   "BA": "OTTOMAN_1815|Bosnia",
+   "RS": "OTTOMAN_1815|Serbia (Pashalik of Belgrade)",
+   "RS~main": "OTTOMAN_1815|Serbia (Pashalik of Belgrade)",
+   "RO": "OTTOMAN_1815|Wallachia and Moldavia",
+   "RO~main": "OTTOMAN_1815|Wallachia and Moldavia",
+   "SY": "OTTOMAN_1815|Syria",
+   "JO": "OTTOMAN_1815|Syria",
+   "LB": "OTTOMAN_1815|Mount Lebanon",
+   "IL": "OTTOMAN_1815|Palestine",
+   "PS": "OTTOMAN_1815|Palestine",
+   "IQ": "OTTOMAN_1815|Baghdad and Basra",
+   "SA~hejaz": "OTTOMAN_1815|Hejaz",
+   "EG": "OTTOMAN_1815|Egypt",
+   "LY": "OTTOMAN_1815|Regency of Tripoli",
+   "TN": "OTTOMAN_1815|Regency of Tunis",
+   "DZ": "OTTOMAN_1815|Regency of Algiers",
+   "SA": "DIRIYAH|Nejd",
+   "SA~nejd": "DIRIYAH|Nejd",
+   "SA~hasa": "DIRIYAH|al-Hasa",
+   "OM": "OMAN_MUSCAT",
+   "KW": "ARABIA_INDEPENDENT|Kuwait",
+   "BH": "ARABIA_INDEPENDENT|Bahrain",
+   "QA": "ARABIA_INDEPENDENT|Qatar",
+   "AE": "ARABIA_INDEPENDENT|Sheikhdoms of the Gulf coast",
+   "YE": "ARABIA_INDEPENDENT|Zaidi Imamate of Yemen",
+   "YE~north": "ARABIA_INDEPENDENT|Zaidi Imamate of Yemen",
+   "YE~south": "ARABIA_INDEPENDENT|South Arabian sultanates",
+   "IR": "PERSIA_1815|Persia",
+   "AM": "PERSIA_1815|Erivan Khanate",
+   "AF": "DURRANI|Afghanistan",
+   "PK": "DURRANI|Peshawar, Multan, Sindh and Kalat",
+   "UZ": "BUKHARA",
+   "TJ": "BUKHARA",
+   "TM": "KHIVA|Turkmen lands",
+   "KG": "KOKAND",
+   "KZ": "KAZAKH_HORDES|Kazakh hordes",
+   "IN": "GB_EMPIRE|India (East India Company)",
+   "BD": "GB_EMPIRE|India (East India Company)",
+   "LK": "GB_EMPIRE|Ceylon",
+   "NP": "NEPAL_KINGDOM",
+   "BT": "BHUTAN_1815",
+   "MV": "MALDIVES_SULTANATE",
+   "CN": "QING|China",
+   "CN~main": "QING|China",
+   "CN-HK": "QING|China",
+   "CN~manchuria": "QING|Manchuria",
+   "RU~amur": "QING|Manchuria",
+   "CN~tibet": "QING|Tibet",
+   "TW": "QING|Taiwan",
+   "MN": "QING|Outer Mongolia",
+   "RU~tuva": "QING|Uriankhai",
+   "CN-MO": "PT_EMPIRE_1815|Macau",
+   "JP": "JP_TOKUGAWA",
+   "RU~sakhalin": "JP_TOKUGAWA|Karafuto and the Kurils",
+   "KR": "JOSEON",
+   "KP": "JOSEON",
+   "VN": "VN_NGUYEN",
+   "VN~north": "VN_NGUYEN",
+   "VN~south": "VN_NGUYEN",
+   "KH": "CAMBODIA_1815",
+   "TH": "SIAM_1815",
+   "LA": "SIAM_1815|Lao kingdoms",
+   "MM": "KONBAUNG",
+   "MY": "MALAY_STATES|Malay sultanates",
+   "SG": "MALAY_STATES|Johor",
+   "BN": "BRUNEI_1815",
+   "ID": "NL_EMPIRE|Dutch East Indies",
+   "TL": "PT_EMPIRE_1815|Timor",
+   "PH": "ES_EMPIRE|Philippines",
+   "AU": "GB_EMPIRE|New South Wales",
+   "AU-NF": "GB_EMPIRE|Norfolk Island",
+   "AU-CX": "UNCLAIMED|Christmas Island",
+   "AU-CC": "UNCLAIMED|Cocos (Keeling) Islands",
+   "AU-HM": "UNCLAIMED|Heard Island (not yet sighted)",
+   "US-GU": "ES_EMPIRE|Mariana Islands",
+   "US-MP": "ES_EMPIRE|Mariana Islands",
+   "NZ": "OCEANIA_INDIGENOUS|Māori iwi",
+   "PG": "OCEANIA_INDIGENOUS|Papuan peoples",
+   "SB": "OCEANIA_INDIGENOUS|Solomon Islands peoples",
+   "VU": "OCEANIA_INDIGENOUS|New Hebrides peoples",
+   "NC": "OCEANIA_INDIGENOUS|Kanak chiefdoms",
+   "FJ": "OCEANIA_INDIGENOUS|Fijian chiefdoms",
+   "TO": "OCEANIA_INDIGENOUS|Tongan chiefdoms",
+   "WS": "OCEANIA_INDIGENOUS|Samoan chiefdoms",
+   "US-AS": "OCEANIA_INDIGENOUS|Samoan chiefdoms",
+   "PF": "OCEANIA_INDIGENOUS|Tahiti and the Society Islands",
+   "CK": "OCEANIA_INDIGENOUS|Cook Islands",
+   "NU": "OCEANIA_INDIGENOUS|Niue",
+   "TK": "OCEANIA_INDIGENOUS|Tokelau",
+   "WF": "OCEANIA_INDIGENOUS|Uvea and Futuna",
+   "KI": "OCEANIA_INDIGENOUS|Gilbert Islands",
+   "TV": "OCEANIA_INDIGENOUS|Ellice Islands",
+   "NR": "OCEANIA_INDIGENOUS|Nauru",
+   "MH": "OCEANIA_INDIGENOUS|Marshall Islands",
+   "FM": "OCEANIA_INDIGENOUS|Caroline Islands",
+   "PW": "OCEANIA_INDIGENOUS|Palau",
+   "PN": "OCEANIA_INDIGENOUS|Pitcairn (Bounty settlers)",
+   "US~hawaii": "HAWAII_KINGDOM",
+   "UM": "UNCLAIMED|Pacific atolls",
+   "US": "US_1815",
+   "US~east": "US_1815",
+   "US~louisiana": "US_1815|Missouri Territory",
+   "US~florida": "ES_EMPIRE|Florida",
+   "US~texas": "ES_EMPIRE|New Spain",
+   "US~southwest": "ES_EMPIRE|New Spain",
+   "MX": "ES_EMPIRE|New Spain",
+   "US~oregon": "OREGON_COUNTRY|Oregon Country",
+   "CA": "GB_EMPIRE|British North America",
+   "PM": "FR_BOURBON|Saint-Pierre and Miquelon",
+   "BM": "GB_EMPIRE|Bermuda",
+   "GT": "ES_EMPIRE|Guatemala",
+   "SV": "ES_EMPIRE|Guatemala",
+   "HN": "ES_EMPIRE|Guatemala",
+   "NI": "ES_EMPIRE|Guatemala",
+   "CR": "ES_EMPIRE|Guatemala",
+   "BZ": "GB_EMPIRE|Belize settlement",
+   "CU": "ES_EMPIRE|Cuba",
+   "US-PR": "ES_EMPIRE|Puerto Rico",
+   "DO": "ES_EMPIRE|Santo Domingo",
+   "HT": "HAITI_1815",
+   "JM": "GB_EMPIRE|Jamaica",
+   "KY": "GB_EMPIRE|Cayman Islands",
+   "BS": "GB_EMPIRE|Bahamas",
+   "TC": "GB_EMPIRE|Turks and Caicos",
+   "VG": "GB_EMPIRE|Virgin Islands",
+   "AI": "GB_EMPIRE|Anguilla",
+   "KN": "GB_EMPIRE|St Kitts and Nevis",
+   "AG": "GB_EMPIRE|Antigua",
+   "MS": "GB_EMPIRE|Montserrat",
+   "DM": "GB_EMPIRE|Dominica",
+   "LC": "GB_EMPIRE|St Lucia",
+   "VC": "GB_EMPIRE|St Vincent",
+   "GD": "GB_EMPIRE|Grenada",
+   "BB": "GB_EMPIRE|Barbados",
+   "TT": "GB_EMPIRE|Trinidad and Tobago",
+   "US-VI": "DK_EMPIRE|Danish West Indies",
+   "BL": "SE_NO|Saint-Barthélemy",
+   "FR-971": "FR_BOURBON|Guadeloupe",
+   "FR-972": "FR_BOURBON|Martinique",
+   "MF": "FR_BOURBON|Saint-Martin",
+   "FR-973": "FR_BOURBON|Guiana",
+   "SX": "NL_EMPIRE|Sint Maarten",
+   "CW": "NL_EMPIRE|Curaçao",
+   "AW": "NL_EMPIRE|Aruba",
+   "BQ": "NL_EMPIRE|Bonaire, Sint Eustatius and Saba",
+   "PA": "ES_EMPIRE|New Granada",
+   "CO": "ES_EMPIRE|New Granada",
+   "EC": "ES_EMPIRE|New Granada",
+   "VE": "ES_EMPIRE|Venezuela",
+   "PE": "ES_EMPIRE|Peru",
+   "BO": "ES_EMPIRE|Upper Peru",
+   "CL": "ES_EMPIRE|Chile",
+   "AR": "RIO_DE_LA_PLATA",
+   "UY": "LIGA_FEDERAL|Banda Oriental",
+   "PY": "PY_1815",
+   "BR": "PT_EMPIRE_1815|Kingdom of Brazil",
+   "GY": "GB_EMPIRE|Demerara, Essequibo and Berbice",
+   "SR": "NL_EMPIRE|Surinam",
+   "FK": "UNCLAIMED|Falkland Islands (abandoned)",
+   "GS": "UNCLAIMED|South Georgia",
+   "MA": "MOROCCO_1815",
+   "MA~main": "MOROCCO_1815",
+   "MA~spanish": "MOROCCO_1815",
+   "EH": "AFRICA_INDEPENDENT|Sahrawi tribes",
+   "MR": "AFRICA_INDEPENDENT|Moorish emirates",
+   "SN": "AFRICA_INDEPENDENT|Wolof kingdoms and Futa Toro",
+   "GM": "AFRICA_INDEPENDENT|Gambia River kingdoms",
+   "GN": "AFRICA_INDEPENDENT|Imamate of Futa Jallon",
+   "LR": "AFRICA_INDEPENDENT|Grain Coast peoples",
+   "CI": "AFRICA_INDEPENDENT|Kong and Baoulé lands",
+   "GH": "AFRICA_INDEPENDENT|Ashanti Empire",
+   "GH~main": "AFRICA_INDEPENDENT|Ashanti Empire",
+   "GH~togoland": "AFRICA_INDEPENDENT|Ashanti Empire",
+   "TG": "AFRICA_INDEPENDENT|Ewe lands",
+   "BJ": "AFRICA_INDEPENDENT|Kingdom of Dahomey",
+   "NG": "AFRICA_INDEPENDENT|Sokoto Caliphate and Oyo",
+   "NE": "AFRICA_INDEPENDENT|Tuareg confederations",
+   "ML": "AFRICA_INDEPENDENT|Bamana Empire of Ségou",
+   "BF": "AFRICA_INDEPENDENT|Mossi kingdoms",
+   "TD": "AFRICA_INDEPENDENT|Bornu, Bagirmi and Wadai",
+   "CF": "AFRICA_INDEPENDENT|Peoples of the Ubangi",
+   "CM": "AFRICA_INDEPENDENT|Adamawa and Duala lands",
+   "CM~main": "AFRICA_INDEPENDENT|Adamawa and Duala lands",
+   "CM~british": "AFRICA_INDEPENDENT|Adamawa and Duala lands",
+   "GQ": "AFRICA_INDEPENDENT|Bubi and Fang peoples",
+   "GA": "AFRICA_INDEPENDENT|Orungu and Mpongwe kingdoms",
+   "CG": "AFRICA_INDEPENDENT|Loango and Tio kingdoms",
+   "CD": "AFRICA_INDEPENDENT|Kongo, Luba, Lunda and Kuba",
+   "RW": "AFRICA_INDEPENDENT|Kingdom of Rwanda",
+   "BI": "AFRICA_INDEPENDENT|Kingdom of Burundi",
+   "UG": "AFRICA_INDEPENDENT|Buganda and Bunyoro",
+   "KE": "AFRICA_INDEPENDENT|Swahili coast and inland peoples",
+   "TZ": "AFRICA_INDEPENDENT|Swahili coast and inland peoples",
+   "SS": "AFRICA_INDEPENDENT|Shilluk, Dinka and Nuer lands",
+   "SD": "AFRICA_INDEPENDENT|Sennar and Darfur sultanates",
+   "ET": "AFRICA_INDEPENDENT|Ethiopia (Era of the Princes)",
+   "ER": "AFRICA_INDEPENDENT|Medri Bahri",
+   "DJ": "AFRICA_INDEPENDENT|Afar sultanates",
+   "SO": "AFRICA_INDEPENDENT|Somali sultanates",
+   "SO~somaliland": "AFRICA_INDEPENDENT|Somali sultanates",
+   "SO~italian": "AFRICA_INDEPENDENT|Somali sultanates",
+   "ZM": "AFRICA_INDEPENDENT|Lozi and Lunda kingdoms",
+   "MW": "AFRICA_INDEPENDENT|Maravi peoples",
+   "ZW": "AFRICA_INDEPENDENT|Rozvi Empire",
+   "BW": "AFRICA_INDEPENDENT|Tswana chiefdoms",
+   "NA": "AFRICA_INDEPENDENT|Nama, Herero and Ovambo",
+   "LS": "AFRICA_INDEPENDENT|Sotho chiefdoms",
+   "SZ": "AFRICA_INDEPENDENT|Ngwane (Swazi) kingdom",
+   "MG": "AFRICA_INDEPENDENT|Merina and Sakalava kingdoms",
+   "KM": "AFRICA_INDEPENDENT|Comoro sultanates",
+   "FR-976": "AFRICA_INDEPENDENT|Comoro sultanates",
+   "SL": "GB_EMPIRE|Sierra Leone",
+   "ZA": "GB_EMPIRE|Cape Colony",
+   "MU": "GB_EMPIRE|Mauritius",
+   "SC": "GB_EMPIRE|Seychelles",
+   "IO": "GB_EMPIRE|Chagos Islands",
+   "SH": "GB_EMPIRE|Saint Helena",
+   "FR-974": "FR_BOURBON|Île Bourbon",
+   "CV": "PT_EMPIRE_1815|Cape Verde",
+   "GW": "PT_EMPIRE_1815|Guinea (Cacheu and Bissau)",
+   "ST": "PT_EMPIRE_1815|São Tomé and Príncipe",
+   "AO": "PT_EMPIRE_1815|Angola",
+   "MZ": "PT_EMPIRE_1815|Mozambique",
+   "TF": "UNCLAIMED|Kerguelen and Crozet",
+   "BV": "UNCLAIMED|Bouvet Island",
+   "AQ": "UNCLAIMED|Antarctica (not yet sighted)"
+  },
+  "events": [
+   {
+    "year": 1815,
+    "title": "The Congress of Vienna",
+    "detail": "Europe's powers redrew the map at Vienna, signing days before Waterloo. A German Confederation of 39 states took the place of the Holy Roman Empire, and Austria gained Lombardy–Venetia.",
+    "at": [
+     16.37,
+     48.21
+    ],
+    "units": [
+     "DE~bavaria",
+     "DE~badenwurttemberg",
+     "DE~saxony",
+     "DE~lowersaxony",
+     "DE~hesse",
+     "DE~mecklenburg",
+     "DE~thuringia",
+     "IT~lombardy",
+     "IT~venetia",
+     "IT~friuli"
+    ],
+    "from": [],
+    "to": [
+     "AT_EMPIRE"
+    ],
+    "kind": "treaty"
+   },
+   {
+    "year": 1815,
+    "title": "Prussia reaches the Rhine",
+    "detail": "Prussia gained the Rhineland, Westphalia and the northern half of Saxony, stretching the kingdom across northern Germany from the Memel to the Saar.",
+    "at": [
+     7.1,
+     50.9
+    ],
+    "units": [
+     "DE~rhineland",
+     "DE~palatinate",
+     "DE~saxonyanhalt"
+    ],
+    "from": [
+     "SAXONY_KINGDOM"
+    ],
+    "to": [
+     "PRUSSIA"
+    ],
+    "kind": "annexation"
+   },
+   {
+    "year": 1815,
+    "title": "A united Netherlands",
+    "detail": "The former Austrian Netherlands were joined to the Dutch provinces as a single kingdom under William I, a buffer against France. He also became Grand Duke of Luxembourg.",
+    "at": [
+     4.35,
+     50.85
+    ],
+    "units": [
+     "NL",
+     "BE",
+     "LU"
+    ],
+    "from": [],
+    "to": [
+     "NL_EMPIRE"
+    ],
+    "kind": "unification"
+   },
+   {
+    "year": 1815,
+    "title": "Congress Poland",
+    "detail": "Napoleon's Duchy of Warsaw was divided again. Its heart became the Kingdom of Poland, with the Russian tsar as king, while Prussia took back Posen and Kraków became a free city.",
+    "at": [
+     21.01,
+     52.23
+    ],
+    "units": [
+     "PL~congress"
+    ],
+    "from": [],
+    "to": [
+     "RU_EMPIRE"
+    ],
+    "kind": "partition"
+   },
+   {
+    "year": 1814,
+    "title": "Sweden loses Finland, gains Norway",
+    "detail": "Russia took Finland from Sweden in 1809. In 1814 Denmark, on the losing side, gave Norway to Sweden; Norway kept its own constitution and parliament under the Swedish king.",
+    "at": [
+     10.75,
+     59.91
+    ],
+    "units": [
+     "NO",
+     "FI",
+     "FI-01"
+    ],
+    "from": [
+     "DK_EMPIRE"
+    ],
+    "to": [
+     "SE_NO",
+     "RU_EMPIRE"
+    ],
+    "kind": "treaty"
+   },
+   {
+    "year": 1814,
+    "title": "Britain keeps the Cape",
+    "detail": "By the 1814 peace, Britain kept the Cape and Demerara from the Dutch, and Mauritius, the Seychelles, Tobago and St Lucia from France. Malta stayed British too.",
+    "at": [
+     18.42,
+     -33.92
+    ],
+    "units": [
+     "ZA",
+     "GY",
+     "MU",
+     "SC",
+     "TT",
+     "LC",
+     "MT"
+    ],
+    "from": [
+     "NL_EMPIRE",
+     "FR_BOURBON"
+    ],
+    "to": [
+     "GB_EMPIRE"
+    ],
+    "kind": "treaty"
+   },
+   {
+    "year": 1803,
+    "title": "The Louisiana Purchase",
+    "detail": "France sold its vast Louisiana territory to the United States, roughly doubling the young country and carrying it west to the Rocky Mountains.",
+    "at": [
+     -97.0,
+     41.5
+    ],
+    "units": [
+     "US~louisiana"
+    ],
+    "from": [],
+    "to": [
+     "US_1815"
+    ],
+    "kind": "annexation"
+   },
+   {
+    "year": 1810,
+    "title": "Río de la Plata breaks away",
+    "detail": "Buenos Aires deposed the Spanish viceroy in 1810, and Paraguay and Artigas's Banda Oriental went their own ways. Elsewhere, royalists had the upper hand again by 1815.",
+    "at": [
+     -58.38,
+     -34.6
+    ],
+    "units": [
+     "AR",
+     "PY",
+     "UY"
+    ],
+    "from": [
+     "ES_EMPIRE"
+    ],
+    "to": [
+     "RIO_DE_LA_PLATA",
+     "PY_1815",
+     "LIGA_FEDERAL"
+    ],
+    "kind": "independence"
+   }
+  ]
+ },
+ "notes": [
+  "Era date taken as late 1815, after the Final Act of Vienna (June) and the Second Treaty of Paris (November).",
+  "Colonies occupied by Britain in the war but restored by the 1814 treaties are shown with their restored owners: Java/Dutch East Indies (handed back Aug 1816), Surinam, Curaçao, Aruba, Sint Maarten (1816), Guadeloupe and Martinique (re-occupied by Britain 1815–16). French Guiana was still held by Portugal–Brazil until 1817 but is shown French. Saint-Louis and Gorée (Senegal) were British-held until 1817; SN is shown as Wolof/Futa Toro lands since the posts are tiny.",
+  "DE~palatinate: mostly Prussian (Lower Rhine, Saar); the Bavarian Palatinate (assigned 1816), Rheinhessen (Hesse-Darmstadt) and Oldenburg's Birkenfeld are folded in.",
+  "DE~badenwurttemberg: Württemberg and the Grand Duchy of Baden share one piece; given to Württemberg with a combined label.",
+  "DE~lowersaxony: Hanover, with Oldenburg, Brunswick and Bremen folded in. DE~hesse: Hesse-Kassel, Hesse-Darmstadt, Nassau and Frankfurt grouped as 'Hessian states'. DE~thuringia: Saxon duchies, Schwarzburg, Reuss and Prussian Erfurt grouped. DE~mecklenburg includes Western Pomerania, which went to Prussia in 1815. DE~holstein includes the free cities of Hamburg and Lübeck.",
+  "IT~emilia given to the Papal States (Legations of Bologna, Ferrara, Ravenna, Forlì, the largest share); the Duchies of Parma and Modena are folded in. Free City of Kraków (1815–46) is inside PL~galicia.",
+  "RS~main: Second Serbian Uprising (1815) won de facto autonomy only by late 1815; shown Ottoman. Ali Pasha of Yanina's semi-independent realm (Albania, Epirus, Thessaly) is shown as Ottoman Rumelia.",
+  "CO: Morillo's reconquest took Cartagena in December 1815, but Bogotá stayed with the patriots until May 1816; shown Spanish (New Granada) per the brief. UY: Artigas's Federal League held the Banda Oriental until the Portuguese invasion of 1816.",
+  "PK given to the Durrani Empire by area: in 1815 Kabul still held or claimed Peshawar, Multan, the Derajat and Kashmir, and the Talpur amirs of Sindh and the Khan of Kalat were (nominal) Durrani tributaries. Ranjit Singh's Sikh Empire held only the central Punjab around Lahore and Amritsar (roughly a tenth of today's Pakistan), so it is not drawn; it takes Multan in 1818, Kashmir in 1819 and Peshawar in 1834.",
+  "IN/BD: East India Company rule mixed with the Maratha states, Rajput states and subsidiary allies (Hyderabad, Mysore); shown as Company India. Nepal is at the end of the Anglo-Nepalese War (Sugauli, Dec 1815/Mar 1816) and keeps its whole modern extent.",
+  "AO, MZ shown Portuguese although real control was coastal and along the Zambezi; ZA shown as Cape Colony although the colony covered roughly its western and southern third. AU shown as New South Wales.",
+  "RU~sakhalin given to Tokugawa Japan (Matsumae posts in southern Sakhalin, Kunashir and Iturup); the northern Kurils were Russian and Sakhalin was largely Ainu and Nivkh land claimed by the Qing.",
+  "KZ shown as indigenous 'Kazakh hordes' (khans still reigned, under nominal Russian suzerainty since the 1730s–40s). TJ given to Bukhara; the mountain begs were largely autonomous. West Uzbekistan (Khorezm) was Khiva's.",
+  "KH: Cambodia was a vassal of both Vietnam and Siam (Vietnamese garrison in Phnom Penh from 1813; Siam held Battambang). LA: Vientiane, Luang Prabang and Champasak were Siamese vassals.",
+  "AZ shown Russian (Gulistan 1813); Nakhchivan and Talysh stayed Persian. AM shown as the Persian Erivan Khanate.",
+  "Polities with \"flag\": null had no flag the map can show (indigenous, unclaimed, contested, Bhutan before 1949). The app should show a neutral chip for them.",
+  "Polity ids with a year suffix (FR_BOURBON, PT_EMPIRE_1815, OTTOMAN_1815, PERSIA_1815, etc.) are used because the flag differs from the canonical id's later flag; they share the canonical colour code.",
+  "Unclaimed: Spitsbergen, Falklands (abandoned by Spain in 1811), South Georgia (Cook's 1775 claim never followed up), Kerguelen/Crozet (French discoveries, annexed 1893), Bouvet, Heard, Christmas and Cocos Islands, the US Pacific atolls, Antarctica (first sighted in 1820).",
+  "Monaco shown under Sardinia (a Sardinian protectorate from 1815). Switzerland and San Marino are left as themselves.",
+  "Haiti was split between Christophe's Kingdom (north) and Pétion's Republic (south); shown as one Haiti with the Republic's flag.",
+  "Flags with no contemporary national flag use the closest available Commons file: Qing (1862–89 dragon flag), Tokugawa Japan (Hinomaru, used on ships from 1854), Nguyễn Vietnam (army flag captured 1885), Konbaung and Durrani flags are later or reconstructed; Bukhara's and Cambodia's are reconstructions of uncertain date. Kokand (Commons file marked fictional) and Khiva (file shows the 1917–20 flag) are null. Hawaii's flag dates from c.1816 (the Union Jack flew before); the Portugal–Brazil–Algarves flag from 1816; Sweden's union-canton flag from 1815/1818.",
+  "Southern Italy: shown as the Kingdoms of Naples and Sicily under Ferdinand IV/III (restored to Naples May 1815); they were merged as the Two Sicilies only in December 1816. SIAM_1815 and PAPAL_STATES_1815 have their own ids because later eras use SIAM and PAPAL_STATES with different flags."
+ ]
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "China",
+    "author": "Zeng Liansong; Wikimedia Commons contributors",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_the_People%27s_Republic_of_China.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/File:Flag_of_the_People%27s_Republic_of_China.svg#Licensing",
+    "note": "The national flag is used for the mainland provincial-level entries. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Hong Kong",
+    "author": "Tao Ho; Open Clip Art, Alkari, Mike Rohsopht and Wikimedia Commons contributors",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Hong_Kong.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Hong_Kong.svg#Licensing",
+    "note": "Official regional flag. PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Macao",
+    "author": "Wikimedia Commons contributors; individual contributors are listed in the linked file history",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Macau.svg",
+    "license": "Public domain",
+    "licenseURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Macau.svg#Licensing",
+    "note": "Official regional flag. PNG rendering of the source SVG; artwork unchanged."
+  }
+]

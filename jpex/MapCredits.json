@@ -1,0 +1,258 @@
+[
+  {
+    "name": "Natural Earth",
+    "author": "Natural Earth contributors",
+    "sourceURL": "https://www.naturalearthdata.com/",
+    "license": "Public domain",
+    "licenseURL": "https://www.naturalearthdata.com/about/terms-of-use/",
+    "note": "1:10m Admin 0 map subunits, Admin 1 states and provinces (including the version without large lakes), lakes, Admin 0 disputed areas, land and disputed-area boundary lines, and minor islands, versions 4.1–5.1.1. Used for both world maps and the maps of Japan, Australia, Canada, China (including Taiwan), France, Germany, Italy, Spain, Switzerland, the United Kingdom, the United States, South Korea, Austria, the Netherlands, Belgium, Poland, Portugal, Brazil, Argentina, Mexico, Malaysia, Thailand, India, Ireland, Sweden, Denmark, Czechia, Croatia, Greece, Hungary, Chile, Colombia, Türkiye, the United Arab Emirates, Sri Lanka, New Zealand and South Africa; for the coastlines of Norway, Finland and Peru and for Åland; for lakes in Indonesia, the Philippines, Finland and Peru; and for the disputed areas and lines. Reprojected, merged and simplified for this app."
+  },
+  {
+    "name": "Indonesia regency boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by BPS – Statistics Indonesia, the World Food Programme and OCHA ROAP",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbOpen IDN ADM2 (2020 boundaries). Regencies were merged into Indonesia's 38 provinces, including Kalimantan Utara and the Papua provinces created in 2022, then reprojected and simplified. Citation: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Philippines province and municipality boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by NAMRIA, the Philippine Statistics Authority and OCHA Philippines",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbOpen PHL ADM2 and ADM3 (2020 boundaries). The Metro Manila districts were merged into one region and Maguindanao was divided into Maguindanao del Norte and Maguindanao del Sur (Republic Act 11550) using municipal boundaries; reprojected and simplified. Citation: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Norway county boundaries",
+    "author": "© Kartverket (Norwegian Mapping Authority)",
+    "sourceURL": "https://kartkatalog.geonorge.no/metadata/administrative-enheter-fylker/6093c8a8-fa80-11e6-bc64-92361f002671",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "Administrative enheter – fylker, downloaded from Geonorge: the 15 counties in force since 1 January 2024. Clipped to the Natural Earth coastline, reprojected and simplified."
+  },
+  {
+    "name": "Taiwan municipality, county and city boundaries",
+    "author": "National Land Surveying and Mapping Center, Ministry of the Interior (Taiwan)",
+    "sourceURL": "https://data.gov.tw/dataset/7442",
+    "license": "Open Government Data License, version 1.0",
+    "licenseURL": "https://data.gov.tw/license",
+    "note": "直轄市、縣市界線 (TWD97), version 1140318, covering all 22 municipalities, counties and cities, including Kinmen and Lienchiang (Matsu). Reprojected and simplified; some remote islets omitted."
+  },
+  {
+    "name": "Finland region boundaries",
+    "author": "Statistics Finland (Tilastokeskus)",
+    "sourceURL": "https://stat.fi/en/services/statistical-data-services/geographic-data/statistical-areas/municipality-based-statistical-units",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "Regions 2026 (Maakunnat 2026, 1:1 000 000) from Statistics Finland's statistical areas interface service: the 18 mainland regions as they have been since the 2021 changes. They were fitted to the Natural Earth coastline and lakes; Åland comes from Natural Earth. Reprojected and simplified. Source: Statistics Finland."
+  },
+  {
+    "name": "Peru province boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by Instituto Geográfico Nacional (IGN) and OCHA ROLAC",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbOpen PER ADM2 (2020 boundaries). The 196 provinces were grouped into Peru's regions, with Lima Province and Callao on their own, then fitted to the Natural Earth coastline, reprojected and simplified. Citation: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Colombia municipality boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by DANE (Departamento Administrativo Nacional de Estadística)",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "geoBoundaries gbOpen COL ADM2 (2020 boundaries), used for the islands of San Andrés, Providencia and Santa Catalina. Reprojected and simplified. Citation: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Estonia county boundaries",
+    "author": "Maa- ja Ruumiamet (Estonian Land and Spatial Development Board)",
+    "sourceURL": "https://geoportaal.maaamet.ee/est/Ruumiandmed/Haldus-ja-asustusjaotus-p119.html",
+    "license": "Open data (attribution required)",
+    "licenseURL": "https://geoportaal.maaamet.ee/est/Ruumiandmed/Haldus-ja-asustusjaotus-p119.html",
+    "note": "Haldus- ja asustusjaotus: Maa- ja Ruumiamet 02.09.2026. Municipalities merged into the 15 counties as drawn since 2017, clipped to Natural Earth's outline of Estonia."
+  },
+  {
+    "name": "Kenya county boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by RCMRD",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "Public domain",
+    "licenseURL": "https://www.geoboundaries.org/",
+    "note": "geoBoundaries gbOpen KEN ADM1, clipped to Natural Earth's outline of Kenya. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Nepal province boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by the Survey Department of Nepal and OCHA",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbOpen NPL ADM1, clipped to Natural Earth's outline of Nepal. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Romania county boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by the World Bank",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "geoBoundaries gbOpen ROU ADM1, clipped to Natural Earth's outline of Romania. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Bulgaria province boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by UNICEF",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian BGR ADM1, clipped to Natural Earth's outline of Bulgaria. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Ukraine oblast boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by Kartographia",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian UKR ADM1; Crimea and Sevastopol from Natural Earth. Clipped to Natural Earth's outline of Ukraine. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Egypt governorate boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by CAPMAS",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian EGY ADM1 and gbOpen EGY ADM2, clipped to Natural Earth's outline of Egypt. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Mongolia province boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by the National Statistical Office of Mongolia",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian MNG ADM1, clipped to Natural Earth's outline of Mongolia. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "World Bank Official Boundaries",
+    "author": "© The World Bank",
+    "sourceURL": "https://datacatalog.worldbank.org/search/dataset/0038272/world-bank-official-boundaries",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "Global Administrative Divisions, Admin 1, version 3 (10 September 2026). Used for Ecuador and Saudi Arabia, and for one internal border each in Iceland and Cuba, clipped to Natural Earth's country outlines. Also used for Jordan, Oman, Kuwait and Iran. Also used for the regions of Venezuela, Paraguay, Guatemala, Costa Rica, the Dominican Republic, Jamaica, Honduras, El Salvador, Nigeria, Tanzania, Ghana, Senegal, Rwanda, Namibia, Tunisia and Algeria. Also used for Serbia, Albania, Armenia, Kazakhstan and Uzbekistan, and (Admin 2) Malta's local councils and coastline."
+  },
+  {
+    "name": "Iraq governorate boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by the Central Statistical Organization of Iraq",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian IRQ ADM1 (from HDX COD-AB), clipped to Natural Earth's outline of Iraq. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866. Halabja's border with Sulaymaniyah follows the IRQ ADM3 sub-districts."
+  },
+  {
+    "name": "Cambodia province boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by Cambodia's national agencies via OCHA",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian KHM ADM1 (from HDX COD-AB), clipped to Natural Earth's outline of Cambodia. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Laos province boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by Laos's national agencies via OCHA",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian LAO ADM1 (from HDX COD-AB), clipped to Natural Earth's outline of Laos. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Bangladesh division boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by the Bangladesh Bureau of Statistics",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian BGD ADM1 (from HDX COD-AB), clipped to Natural Earth's outline of Bangladesh. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Bhutan district boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by OCHA",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian BTN ADM1 (from HDX COD-AB), clipped to Natural Earth's outline of Bhutan. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Papua New Guinea province boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by the PNG National Statistical Office",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian PNG ADM1 (from HDX COD-AB), clipped to Natural Earth's outline of Papua New Guinea. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Qatar municipality boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data from the Qatar Open Data Portal",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "geoBoundaries gbOpen QAT ADM1, clipped to Natural Earth's outline of Qatar. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Bahrain governorate boundaries",
+    "author": "Who's On First; geometry from the US Department of State Humanitarian Information Unit",
+    "sourceURL": "https://whosonfirst.org/",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "whosonfirst-data-admin-bh regions, clipped to Natural Earth's outline of Bahrain."
+  },
+  {
+    "name": "Panama province and comarca boundaries",
+    "author": "OCHA / HDX COD-AB Panama v01; original data by INEC (2020 boundaries)",
+    "sourceURL": "https://data.humdata.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "Provinces and comarcas, clipped to Natural Earth's outline of Panama. Naso Tjër Di is approximated by its Teribe core, as no official shape exists yet."
+  },
+  {
+    "name": "Algeria commune boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by UNHCR via HDX",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian DZA ADM2, used to cut the ten 2019 wilayas from their parents. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866. Also used for the eleven wilayas created in 2026 (Law 26-06, Decree 26-206), each the union of its communes."
+  },
+  {
+    "name": "Bosnia and Herzegovina canton boundaries",
+    "author": "geoBoundaries (William & Mary geoLab)",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "Public domain",
+    "licenseURL": "https://www.geoboundaries.org/",
+    "note": "geoBoundaries gbOpen BIH ADM2, dissolved into cantons and entities. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Latvia municipality boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data from the Geoportal of Latvia (VZD)",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "geoBoundaries gbOpen LVA ADM1 (2021 boundaries). Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Kyrgyzstan region boundaries",
+    "author": "geoBoundaries (William & Mary geoLab); original data by the Ministry of Emergency Situations of Kyrgyzstan via OCHA",
+    "sourceURL": "https://www.geoboundaries.org/",
+    "license": "CC BY 3.0 IGO",
+    "licenseURL": "https://creativecommons.org/licenses/by/3.0/igo/",
+    "note": "geoBoundaries gbHumanitarian KGZ ADM1. Cite: Runfola et al. 2020, PLoS ONE 15(4): e0231866."
+  },
+  {
+    "name": "Luxembourg canton boundaries",
+    "author": "Administration du cadastre et de la topographie (ACT), Luxembourg",
+    "sourceURL": "https://data.public.lu/",
+    "license": "CC0 1.0",
+    "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "note": "Cantons, 5 October 2026."
+  },
+  {
+    "name": "GeoNames",
+    "author": "GeoNames",
+    "sourceURL": "https://www.geonames.org/",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "Settlement points used, with Wikidata (CC0), to approximate Montenegro's four newest municipalities (Gusinje, Petnjica, Tuzi, Zeta)."
+  }
+]

@@ -7,11 +7,12 @@
 
 import Foundation
 
-struct Prefecture: Identifiable {
+/// Original Japan catalog, retained to keep its established ordering and names.
+struct Prefecture: Identifiable, Hashable, Sendable {
     let id: Int
-    let name: String
-    let localName: String
-    let region: Region
+    var name: String
+    var localName: String
+    var region: Region
     
     static var hokkaidoPrefectures: [Prefecture] {
         allPrefectures.filter {$0.region == .hokkaido}
@@ -49,7 +50,7 @@ struct Prefecture: Identifiable {
         return allPrefectures.filter {$0.region == region}
     }
     
-    static var allPrefectures: [Prefecture] = [
+    static let allPrefectures: [Prefecture] = [
         Prefecture(id: 1, name: "Hokkaido", localName: "北海道",region: .hokkaido),
         
         Prefecture(id: 2, name: "Aomori", localName: "青森県", region: .tohoku),
@@ -108,7 +109,7 @@ struct Prefecture: Identifiable {
     ]
 }
 
-enum Region: String, CaseIterable, Identifiable {
+enum Region: String, CaseIterable, Identifiable, Sendable {
     
     var id: Self {
         return self
@@ -164,6 +165,5 @@ enum Region: String, CaseIterable, Identifiable {
         }
     }
 }
-
 
 

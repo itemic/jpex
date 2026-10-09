@@ -1,0 +1,712 @@
+{
+ "polities": {
+  "GB_EMPIRE": {
+   "name": "British Empire",
+   "flag": "commons:Flag_of_the_United_Kingdom.svg",
+   "color": "GB",
+   "kind": "empire"
+  },
+  "FR_EMPIRE": {
+   "name": "French colonial empire",
+   "flag": "commons:Flag_of_France.svg",
+   "color": "FR",
+   "kind": "empire"
+  },
+  "ES_1938": {
+   "name": "Spanish State",
+   "flag": "commons:Flag_of_Spain_(1938–1945).svg",
+   "color": "ES",
+   "kind": "empire"
+  },
+  "PT_EMPIRE": {
+   "name": "Portuguese Empire",
+   "flag": "commons:Flag_of_Portugal.svg",
+   "color": "PT",
+   "kind": "empire"
+  },
+  "NL_EMPIRE": {
+   "name": "Dutch colonial empire",
+   "flag": "commons:Flag_of_the_Netherlands.svg",
+   "color": "NL",
+   "kind": "empire"
+  },
+  "BE_EMPIRE": {
+   "name": "Belgian colonial empire",
+   "flag": "commons:Flag_of_Belgium.svg",
+   "color": "BE",
+   "kind": "empire"
+  },
+  "IT_KINGDOM": {
+   "name": "Kingdom of Italy",
+   "flag": "commons:Flag_of_Italy_(1861–1946).svg",
+   "color": "IT",
+   "kind": "empire"
+  },
+  "JP_EMPIRE": {
+   "name": "Empire of Japan",
+   "flag": "commons:Flag_of_Japan_(1870–1999).svg",
+   "color": "JP",
+   "kind": "empire"
+  },
+  "NAZI_GERMANY": {
+   "name": "German Reich",
+   "flag": "commons:Flag_of_Germany_(1935–1945).svg",
+   "color": "DE",
+   "kind": "state"
+  },
+  "USSR": {
+   "name": "Soviet Union",
+   "flag": "commons:Flag_of_the_Soviet_Union_(1936_–_1955).svg",
+   "color": "RU",
+   "kind": "state"
+  },
+  "US_1912": {
+   "name": "United States",
+   "flag": "commons:Flag_of_the_United_States_(1912-1959).svg",
+   "color": "US",
+   "kind": "state"
+  },
+  "CA_1921": {
+   "name": "Canada",
+   "flag": "commons:Flag_of_Canada_(1921–1957).svg",
+   "color": "CA",
+   "kind": "state"
+  },
+  "AU_DOMINION": {
+   "name": "Commonwealth of Australia",
+   "flag": "asset:world_flag_au",
+   "color": "AU",
+   "kind": "state"
+  },
+  "NZ_DOMINION": {
+   "name": "Dominion of New Zealand",
+   "flag": "asset:world_flag_nz",
+   "color": "NZ",
+   "kind": "state"
+  },
+  "ZA_1928": {
+   "name": "Union of South Africa",
+   "flag": "commons:Flag_of_South_Africa_(1928–1994,_dark_colors).svg",
+   "color": "ZA",
+   "kind": "state"
+  },
+  "DK_REALM": {
+   "name": "Kingdom of Denmark",
+   "flag": "asset:world_flag_dk",
+   "color": "DK",
+   "kind": "state"
+  },
+  "ROC": {
+   "name": "Republic of China",
+   "flag": "commons:Flag_of_the_Republic_of_China.svg",
+   "color": "CN",
+   "kind": "state"
+  },
+  "MANCHUKUO": {
+   "name": "Manchukuo",
+   "flag": "commons:Flag_of_Manchukuo.svg",
+   "color": "gold",
+   "kind": "state"
+  },
+  "TIBET": {
+   "name": "Tibet",
+   "flag": "commons:Flag_of_Tibet.svg",
+   "color": "amber",
+   "kind": "state"
+  },
+  "MN_1924": {
+   "name": "Mongolian People's Republic",
+   "flag": "commons:Flag_of_Mongolia_(1924–1940).svg",
+   "color": "MN",
+   "kind": "state"
+  },
+  "SLOVAK_STATE": {
+   "name": "Slovak Republic",
+   "flag": "commons:Flag_of_Slovakia_(1939–1945).svg",
+   "color": "SK",
+   "kind": "state"
+  },
+  "HU_KINGDOM": {
+   "name": "Kingdom of Hungary",
+   "flag": "commons:Flag_of_Hungary_(1915-1918,_1919-1946).svg",
+   "color": "HU",
+   "kind": "state"
+  },
+  "PL_1928": {
+   "name": "Poland",
+   "flag": "commons:Flag_of_Poland_(1928–1980).svg",
+   "color": "PL",
+   "kind": "state"
+  },
+  "RO_KINGDOM": {
+   "name": "Kingdom of Romania",
+   "flag": "asset:world_flag_ro",
+   "color": "RO",
+   "kind": "state"
+  },
+  "YUGOSLAVIA_KINGDOM": {
+   "name": "Kingdom of Yugoslavia",
+   "flag": "commons:Flag_of_Yugoslavia_(1918–1941).svg",
+   "color": "RS",
+   "kind": "state"
+  },
+  "GR_KINGDOM": {
+   "name": "Kingdom of Greece",
+   "flag": "commons:Flag_of_Greece_(1822-1978).svg",
+   "color": "GR",
+   "kind": "state"
+  },
+  "TURKEY": {
+   "name": "Turkey",
+   "flag": "asset:world_flag_tr",
+   "color": "TR",
+   "kind": "state"
+  },
+  "EGYPT_KINGDOM": {
+   "name": "Kingdom of Egypt",
+   "flag": "commons:Flag_of_Egypt_(1922-1958).svg",
+   "color": "EG",
+   "kind": "state"
+  },
+  "IQ_KINGDOM": {
+   "name": "Kingdom of Iraq",
+   "flag": "commons:Flag_of_Iraq_(1924–1959).svg",
+   "color": "IQ",
+   "kind": "state"
+  },
+  "IR_PAHLAVI": {
+   "name": "Imperial State of Iran",
+   "flag": "commons:State_flag_of_Iran_(1933–1964).svg",
+   "color": "IR",
+   "kind": "state"
+  },
+  "AF_KINGDOM": {
+   "name": "Kingdom of Afghanistan",
+   "flag": "commons:Flag_of_Afghanistan_(1931–1973).svg",
+   "color": "AF",
+   "kind": "state"
+  },
+  "SA_1938": {
+   "name": "Kingdom of Saudi Arabia",
+   "flag": "commons:Flag_of_Saudi_Arabia_(1938–1973).svg",
+   "color": "SA",
+   "kind": "state"
+  },
+  "YE_KINGDOM": {
+   "name": "Mutawakkilite Kingdom of Yemen",
+   "flag": "commons:Flag_of_the_Mutawakkilite_Kingdom_of_Yemen.svg",
+   "color": "YE",
+   "kind": "state"
+  },
+  "MUSCAT_OMAN": {
+   "name": "Sultanate of Muscat and Oman",
+   "flag": "commons:Flag_of_Muscat.svg",
+   "color": "OM",
+   "kind": "state"
+  },
+  "NP_KINGDOM": {
+   "name": "Kingdom of Nepal",
+   "flag": "commons:Flag_of_Nepal_(1743–1962).svg",
+   "color": "NP",
+   "kind": "state"
+  },
+  "MX_1934": {
+   "name": "Mexico",
+   "flag": "commons:Flag_of_Mexico_(1934-1968).svg",
+   "color": "MX",
+   "kind": "state"
+  },
+  "BR_1889": {
+   "name": "United States of Brazil",
+   "flag": "commons:Flag_of_Brazil_(1889–1960).svg",
+   "color": "BR",
+   "kind": "state"
+  },
+  "VE_1930": {
+   "name": "Venezuela",
+   "flag": "commons:Flag_of_Venezuela_(1930–2006).svg",
+   "color": "VE",
+   "kind": "state"
+  },
+  "ETHIOPIA_EMPIRE": {
+   "name": "Ethiopian Empire",
+   "flag": "commons:Flag_of_Ethiopia_(1897–1974).svg",
+   "color": "ET",
+   "kind": "state"
+  },
+  "AT_FIRST_REPUBLIC": {
+   "name": "Austria",
+   "flag": "asset:world_flag_at",
+   "color": "AT",
+   "kind": "state"
+  },
+  "CZECHOSLOVAKIA": {
+   "name": "Czechoslovakia",
+   "flag": "asset:world_flag_cz",
+   "color": "CZ",
+   "kind": "state"
+  },
+  "AL_KINGDOM": {
+   "name": "Kingdom of Albania",
+   "flag": "commons:Flag_of_Albania_(1934–1939).svg",
+   "color": "AL",
+   "kind": "state"
+  },
+  "ES_REPUBLIC": {
+   "name": "Spanish Republic",
+   "flag": "commons:Flag_of_Spain_(1931–1939).svg",
+   "color": "ES",
+   "kind": "state"
+  },
+  "HEJAZ": {
+   "name": "Kingdom of Hejaz",
+   "flag": "commons:Flag_of_Hejaz_(1920).svg",
+   "color": "sand",
+   "kind": "state"
+  },
+  "TUVA_1935": {
+   "name": "Tuvan People's Republic",
+   "flag": "commons:Flag_of_the_Tuvan_People's_Republic_(1935-1939).svg",
+   "color": "sage",
+   "kind": "state"
+  },
+  "NEJD_1921": {
+   "name": "Sultanate of Nejd",
+   "flag": "commons:Flag_of_the_Sultanate_of_Nejd.svg",
+   "color": "SA",
+   "kind": "state"
+  }
+ },
+ "era": {
+  "id": "1939",
+  "year": 1939,
+  "title": "On the Brink of War",
+  "summary": "Germany and Italy have annexed their neighbours, Japan rules Manchuria, and Europe's empires still span much of the globe.",
+  "assign": {
+   "GB": "GB_EMPIRE|United Kingdom",
+   "GB-ENG": "GB_EMPIRE|England",
+   "GB-SCT": "GB_EMPIRE|Scotland",
+   "GB-WLS": "GB_EMPIRE|Wales",
+   "GB-NIR": "GB_EMPIRE|Northern Ireland",
+   "IM": "GB_EMPIRE|Isle of Man",
+   "JE": "GB_EMPIRE|Jersey",
+   "GG": "GB_EMPIRE|Guernsey",
+   "GI": "GB_EMPIRE|Gibraltar",
+   "MT": "GB_EMPIRE|Malta",
+   "CY": "GB_EMPIRE|Cyprus",
+   "XC": "GB_EMPIRE|Cyprus",
+   "PS": "GB_EMPIRE|Palestine",
+   "IL": "GB_EMPIRE|Palestine",
+   "JO": "GB_EMPIRE|Transjordan",
+   "KW": "GB_EMPIRE|Kuwait",
+   "BH": "GB_EMPIRE|Bahrain",
+   "QA": "GB_EMPIRE|Qatar",
+   "AE": "GB_EMPIRE|Trucial States",
+   "YE~south": "GB_EMPIRE|Aden",
+   "IN": "GB_EMPIRE|British India",
+   "PK": "GB_EMPIRE|British India",
+   "BD": "GB_EMPIRE|British India",
+   "MM": "GB_EMPIRE|Burma",
+   "LK": "GB_EMPIRE|Ceylon",
+   "MV": "GB_EMPIRE|Maldive Islands",
+   "MY": "GB_EMPIRE|British Malaya and Borneo",
+   "SG": "GB_EMPIRE|Straits Settlements",
+   "BN": "GB_EMPIRE|Brunei",
+   "CN-HK": "GB_EMPIRE|Hong Kong",
+   "AU-CX": "GB_EMPIRE|Christmas Island (Straits Settlements)",
+   "AU-CC": "GB_EMPIRE|Cocos Islands (Straits Settlements)",
+   "AU-HM": "GB_EMPIRE|Heard Island",
+   "SD": "GB_EMPIRE|Anglo-Egyptian Sudan",
+   "SS": "GB_EMPIRE|Anglo-Egyptian Sudan",
+   "KE": "GB_EMPIRE|Kenya",
+   "UG": "GB_EMPIRE|Uganda",
+   "TZ": "GB_EMPIRE|Tanganyika",
+   "ZM": "GB_EMPIRE|Northern Rhodesia",
+   "ZW": "GB_EMPIRE|Southern Rhodesia",
+   "MW": "GB_EMPIRE|Nyasaland",
+   "BW": "GB_EMPIRE|Bechuanaland",
+   "LS": "GB_EMPIRE|Basutoland",
+   "SZ": "GB_EMPIRE|Swaziland",
+   "GM": "GB_EMPIRE|Gambia",
+   "SL": "GB_EMPIRE|Sierra Leone",
+   "GH~main": "GB_EMPIRE|Gold Coast",
+   "GH~togoland": "GB_EMPIRE|British Togoland",
+   "NG": "GB_EMPIRE|Nigeria",
+   "CM~british": "GB_EMPIRE|British Cameroons",
+   "SO~somaliland": "GB_EMPIRE|British Somaliland",
+   "SH": "GB_EMPIRE|St Helena",
+   "MU": "GB_EMPIRE|Mauritius",
+   "SC": "GB_EMPIRE|Seychelles",
+   "IO": "GB_EMPIRE|Chagos Archipelago (Mauritius)",
+   "BZ": "GB_EMPIRE|British Honduras",
+   "GY": "GB_EMPIRE|British Guiana",
+   "JM": "GB_EMPIRE|Jamaica",
+   "KY": "GB_EMPIRE|Cayman Islands",
+   "TC": "GB_EMPIRE|Turks and Caicos Islands",
+   "BS": "GB_EMPIRE|Bahamas",
+   "BM": "GB_EMPIRE|Bermuda",
+   "BB": "GB_EMPIRE|Barbados",
+   "TT": "GB_EMPIRE|Trinidad and Tobago",
+   "AG": "GB_EMPIRE|Leeward Islands",
+   "KN": "GB_EMPIRE|Leeward Islands",
+   "AI": "GB_EMPIRE|Leeward Islands",
+   "MS": "GB_EMPIRE|Leeward Islands",
+   "VG": "GB_EMPIRE|Leeward Islands",
+   "DM": "GB_EMPIRE|Leeward Islands",
+   "GD": "GB_EMPIRE|Windward Islands",
+   "VC": "GB_EMPIRE|Windward Islands",
+   "LC": "GB_EMPIRE|Windward Islands",
+   "FK": "GB_EMPIRE|Falkland Islands",
+   "GS": "GB_EMPIRE|Falkland Islands Dependencies",
+   "FJ": "GB_EMPIRE|Fiji",
+   "SB": "GB_EMPIRE|British Solomon Islands",
+   "KI": "GB_EMPIRE|Gilbert and Ellice Islands",
+   "TV": "GB_EMPIRE|Gilbert and Ellice Islands",
+   "TO": "GB_EMPIRE|Tonga",
+   "PN": "GB_EMPIRE|Pitcairn Islands",
+   "VU": "GB_EMPIRE|New Hebrides (Anglo-French condominium)",
+   "FR": "FR_EMPIRE|France",
+   "DZ": "FR_EMPIRE|Algeria",
+   "TN": "FR_EMPIRE|Tunisia",
+   "MA~main": "FR_EMPIRE|French Morocco",
+   "MR": "FR_EMPIRE|French West Africa",
+   "SN": "FR_EMPIRE|French West Africa",
+   "ML": "FR_EMPIRE|French West Africa",
+   "GN": "FR_EMPIRE|French West Africa",
+   "CI": "FR_EMPIRE|French West Africa",
+   "BF": "FR_EMPIRE|French West Africa",
+   "NE": "FR_EMPIRE|French West Africa",
+   "BJ": "FR_EMPIRE|French West Africa",
+   "TG": "FR_EMPIRE|French Togoland",
+   "CM~main": "FR_EMPIRE|French Cameroons",
+   "GA": "FR_EMPIRE|French Equatorial Africa",
+   "CG": "FR_EMPIRE|French Equatorial Africa",
+   "CF": "FR_EMPIRE|French Equatorial Africa",
+   "TD": "FR_EMPIRE|French Equatorial Africa",
+   "DJ": "FR_EMPIRE|French Somaliland",
+   "MG": "FR_EMPIRE|Madagascar",
+   "KM": "FR_EMPIRE|Comoro Islands",
+   "FR-976": "FR_EMPIRE|Comoro Islands",
+   "FR-974": "FR_EMPIRE|Réunion",
+   "TF": "FR_EMPIRE|Kerguelen and other southern islands",
+   "SY": "FR_EMPIRE|Syria",
+   "LB": "FR_EMPIRE|Lebanon",
+   "VN": "FR_EMPIRE|French Indochina",
+   "LA": "FR_EMPIRE|French Indochina",
+   "KH": "FR_EMPIRE|French Indochina",
+   "FR-971": "FR_EMPIRE|Guadeloupe",
+   "BL": "FR_EMPIRE|Guadeloupe",
+   "MF": "FR_EMPIRE|Guadeloupe",
+   "FR-972": "FR_EMPIRE|Martinique",
+   "FR-973": "FR_EMPIRE|French Guiana",
+   "PM": "FR_EMPIRE|Saint-Pierre and Miquelon",
+   "NC": "FR_EMPIRE|New Caledonia",
+   "PF": "FR_EMPIRE|French Establishments in Oceania",
+   "WF": "FR_EMPIRE|Wallis and Futuna",
+   "ES": "ES_1938|Spain",
+   "MA~spanish": "ES_1938|Spanish Morocco",
+   "EH": "ES_1938|Spanish Sahara",
+   "GQ": "ES_1938|Spanish Guinea",
+   "PT": "PT_EMPIRE|Portugal",
+   "AO": "PT_EMPIRE|Angola",
+   "MZ": "PT_EMPIRE|Mozambique",
+   "GW": "PT_EMPIRE|Portuguese Guinea",
+   "CV": "PT_EMPIRE|Cape Verde",
+   "ST": "PT_EMPIRE|São Tomé and Príncipe",
+   "TL": "PT_EMPIRE|Portuguese Timor",
+   "CN-MO": "PT_EMPIRE|Macau",
+   "NL": "NL_EMPIRE|Netherlands",
+   "ID": "NL_EMPIRE|Dutch East Indies",
+   "SR": "NL_EMPIRE|Surinam",
+   "CW": "NL_EMPIRE|Curaçao",
+   "AW": "NL_EMPIRE|Curaçao",
+   "BQ": "NL_EMPIRE|Curaçao",
+   "SX": "NL_EMPIRE|Curaçao",
+   "BE": "BE_EMPIRE|Belgium",
+   "CD": "BE_EMPIRE|Belgian Congo",
+   "RW": "BE_EMPIRE|Ruanda-Urundi",
+   "BI": "BE_EMPIRE|Ruanda-Urundi",
+   "IT": "IT_KINGDOM|Italy",
+   "LY": "IT_KINGDOM|Libya",
+   "ER": "IT_KINGDOM|Italian East Africa",
+   "ET": "IT_KINGDOM|Italian East Africa",
+   "SO~italian": "IT_KINGDOM|Italian East Africa",
+   "AL": "IT_KINGDOM|Albania",
+   "JP": "JP_EMPIRE|Japan",
+   "KR": "JP_EMPIRE|Korea (Chōsen)",
+   "KP": "JP_EMPIRE|Korea (Chōsen)",
+   "TW": "JP_EMPIRE|Taiwan",
+   "RU~sakhalin": "JP_EMPIRE|Karafuto",
+   "PW": "JP_EMPIRE|South Seas Mandate",
+   "FM": "JP_EMPIRE|South Seas Mandate",
+   "MH": "JP_EMPIRE|South Seas Mandate",
+   "US-MP": "JP_EMPIRE|South Seas Mandate",
+   "DE": "NAZI_GERMANY|Germany",
+   "PL~west": "NAZI_GERMANY|Germany",
+   "RU~kaliningrad": "NAZI_GERMANY|Germany",
+   "LT~klaipeda": "NAZI_GERMANY|Memel Territory",
+   "AT": "NAZI_GERMANY|Ostmark (Austria)",
+   "CZ": "NAZI_GERMANY|Protectorate of Bohemia and Moravia",
+   "SK": "SLOVAK_STATE",
+   "HU": "HU_KINGDOM|Hungary",
+   "UA~transcarpathia": "HU_KINGDOM|Subcarpathia",
+   "PL~posen": "PL_1928|Poland",
+   "PL~galicia": "PL_1928|Poland",
+   "PL~congress": "PL_1928|Poland",
+   "UA~galicia": "PL_1928|Poland",
+   "UA~volhynia": "PL_1928|Poland",
+   "BY~west": "PL_1928|Poland",
+   "LT~vilnius": "PL_1928|Poland",
+   "RO": "RO_KINGDOM|Romania",
+   "RO~transylvania": "RO_KINGDOM|Transylvania",
+   "RO~bukovina": "RO_KINGDOM|Bukovina",
+   "MD": "RO_KINGDOM|Bessarabia",
+   "UA~bukovina": "RO_KINGDOM|Bukovina",
+   "BG~dobruja": "RO_KINGDOM|Southern Dobruja",
+   "SI": "YUGOSLAVIA_KINGDOM|Yugoslavia",
+   "HR": "YUGOSLAVIA_KINGDOM|Yugoslavia",
+   "BA": "YUGOSLAVIA_KINGDOM|Yugoslavia",
+   "RS": "YUGOSLAVIA_KINGDOM|Yugoslavia",
+   "ME": "YUGOSLAVIA_KINGDOM|Yugoslavia",
+   "MK": "YUGOSLAVIA_KINGDOM|Yugoslavia",
+   "XK": "YUGOSLAVIA_KINGDOM|Yugoslavia",
+   "GR": "GR_KINGDOM",
+   "TR": "TURKEY",
+   "RU": "USSR|Russian SFSR",
+   "UA": "USSR|Ukrainian SSR",
+   "BY": "USSR|Byelorussian SSR",
+   "GE": "USSR|Georgian SSR",
+   "AM": "USSR|Armenian SSR",
+   "AZ": "USSR|Azerbaijan SSR",
+   "KZ": "USSR|Kazakh SSR",
+   "KG": "USSR|Kirghiz SSR",
+   "TJ": "USSR|Tajik SSR",
+   "TM": "USSR|Turkmen SSR",
+   "UZ": "USSR|Uzbek SSR",
+   "RU~tuva": "TUVA_1935",
+   "MN": "MN_1924",
+   "CN~tibet": "TIBET",
+   "CN": "ROC",
+   "CN~manchuria": "MANCHUKUO",
+   "EG": "EGYPT_KINGDOM",
+   "IQ": "IQ_KINGDOM",
+   "IR": "IR_PAHLAVI",
+   "AF": "AF_KINGDOM",
+   "SA": "SA_1938",
+   "YE~north": "YE_KINGDOM",
+   "OM": "MUSCAT_OMAN",
+   "NP": "NP_KINGDOM",
+   "US": "US_1912|United States",
+   "US~alaska": "US_1912|Territory of Alaska",
+   "US~hawaii": "US_1912|Territory of Hawaii",
+   "US-PR": "US_1912|Puerto Rico",
+   "US-VI": "US_1912|US Virgin Islands",
+   "US-GU": "US_1912|Guam",
+   "US-AS": "US_1912|American Samoa",
+   "UM": "US_1912|US Pacific islands",
+   "PH": "US_1912|Commonwealth of the Philippines",
+   "CA": "CA_1921",
+   "AU": "AU_DOMINION|Australia",
+   "PG": "AU_DOMINION|Papua and New Guinea",
+   "NR": "AU_DOMINION|Nauru",
+   "AU-NF": "AU_DOMINION|Norfolk Island",
+   "NZ": "NZ_DOMINION|New Zealand",
+   "WS": "NZ_DOMINION|Western Samoa",
+   "CK": "NZ_DOMINION|Cook Islands",
+   "NU": "NZ_DOMINION|Niue",
+   "TK": "NZ_DOMINION|Tokelau Islands",
+   "ZA": "ZA_1928|South Africa",
+   "NA": "ZA_1928|South West Africa",
+   "DK": "DK_REALM|Denmark",
+   "GL": "DK_REALM|Greenland",
+   "FO": "DK_REALM|Faroe Islands",
+   "MX": "MX_1934",
+   "BR": "BR_1889",
+   "VE": "VE_1930"
+  },
+  "events": [
+   {
+    "year": 1932,
+    "title": "Japan sets up Manchukuo",
+    "detail": "After seizing Manchuria in 1931, Japan proclaimed the state of Manchukuo, with Puyi, the last Qing emperor, as its figurehead ruler.",
+    "at": [
+     125.3,
+     43.9
+    ],
+    "units": [
+     "CN~manchuria"
+    ],
+    "from": [
+     "ROC"
+    ],
+    "to": [
+     "MANCHUKUO"
+    ],
+    "kind": "partition"
+   },
+   {
+    "year": 1932,
+    "title": "Saudi Arabia is proclaimed",
+    "detail": "Ibn Saud, ruler of Nejd, conquered the Hejaz in 1925 and in 1932 united his lands as the Kingdom of Saudi Arabia.",
+    "at": [
+     46.7,
+     24.7
+    ],
+    "units": [
+     "SA"
+    ],
+    "from": [
+     "HEJAZ",
+     "NEJD_1921"
+    ],
+    "to": [
+     "SA_1938"
+    ],
+    "kind": "unification"
+   },
+   {
+    "year": 1932,
+    "title": "Iraq becomes independent",
+    "detail": "The British mandate ended and the Kingdom of Iraq joined the League of Nations, though Britain kept air bases and a strong influence.",
+    "at": [
+     44.4,
+     33.3
+    ],
+    "units": [
+     "IQ"
+    ],
+    "from": [
+     "GB_EMPIRE"
+    ],
+    "to": [
+     "IQ_KINGDOM"
+    ],
+    "kind": "independence"
+   },
+   {
+    "year": 1936,
+    "title": "Italy conquers Ethiopia",
+    "detail": "Italian forces took Addis Ababa in May 1936. Ethiopia was joined with Eritrea and Italian Somaliland as Italian East Africa.",
+    "at": [
+     38.7,
+     9.0
+    ],
+    "units": [
+     "ET",
+     "ER",
+     "SO~italian"
+    ],
+    "from": [
+     "ETHIOPIA_EMPIRE"
+    ],
+    "to": [
+     "IT_KINGDOM"
+    ],
+    "kind": "annexation"
+   },
+   {
+    "year": 1938,
+    "title": "Germany annexes Austria",
+    "detail": "In March 1938 German troops crossed into Austria, which was absorbed into the Reich and renamed the Ostmark.",
+    "at": [
+     16.37,
+     48.21
+    ],
+    "units": [
+     "AT"
+    ],
+    "from": [
+     "AT_FIRST_REPUBLIC"
+    ],
+    "to": [
+     "NAZI_GERMANY"
+    ],
+    "kind": "annexation"
+   },
+   {
+    "year": 1939,
+    "title": "Czechoslovakia is broken up",
+    "detail": "Germany took the Sudetenland in 1938 and Bohemia and Moravia in March 1939. Slovakia became a German client state and Hungary seized Carpatho-Ukraine.",
+    "at": [
+     14.42,
+     50.08
+    ],
+    "units": [
+     "CZ",
+     "SK",
+     "UA~transcarpathia"
+    ],
+    "from": [
+     "CZECHOSLOVAKIA"
+    ],
+    "to": [
+     "NAZI_GERMANY",
+     "SLOVAK_STATE",
+     "HU_KINGDOM"
+    ],
+    "kind": "partition"
+   },
+   {
+    "year": 1939,
+    "title": "Italy invades Albania",
+    "detail": "Italian troops landed in Albania in April 1939. King Zog fled, and the Albanian crown passed to the King of Italy.",
+    "at": [
+     19.82,
+     41.33
+    ],
+    "units": [
+     "AL"
+    ],
+    "from": [
+     "AL_KINGDOM"
+    ],
+    "to": [
+     "IT_KINGDOM"
+    ],
+    "kind": "annexation"
+   },
+   {
+    "year": 1939,
+    "title": "Franco wins in Spain",
+    "detail": "Spain became a republic in 1931. The civil war that began in 1936 ended in April 1939 with victory for Franco's Nationalists, and he ruled as dictator.",
+    "at": [
+     -3.7,
+     40.42
+    ],
+    "units": [
+     "ES"
+    ],
+    "from": [
+     "ES_REPUBLIC"
+    ],
+    "to": [
+     "ES_1938"
+    ],
+    "kind": "revolution"
+   }
+  ]
+ },
+ "notes": [
+  "Danzig (Free City, under League of Nations) lies inside PL~posen (PL-22) and is drawn as Polish. PL~posen also holds land that was German in 1939: western Pomorskie (Lauenburg, Bütow, Stolp), the Grenzmark strip of Wielkopolskie (Schneidemühl) and western Upper Silesia in Śląskie (Gleiwitz, Beuthen, Hindenburg). Soldau (Działdowo), Polish, is inside PL~west.",
+  "Sudetenland was annexed directly into Germany (1938) but sits inside CZ, drawn as the Protectorate of Bohemia and Moravia; both are German-held so only the label is approximate.",
+  "Zaolzie (Czech Teschen), annexed by Poland in October 1938, is inside CZ and drawn as part of the Protectorate.",
+  "Polish land east of BY~west (the Vileyka/Hlybokaye area of Wilno voivodeship, now in Minsk and Vitebsk oblasts) is inside BY~main, drawn as Soviet. Interwar Poland and Greater Romania were unitary states: the eastern Polish pieces carry the plain label Poland so no dashed line traces today's PL/UA/BY/LT borders; Romanian labels follow historic provinces as in 1923 (Bukovina spans RO~bukovina and UA~bukovina).",
+  "Southern Slovakia (First Vienna Award, Nov 1938) was Hungarian but is inside SK, drawn as Slovak.",
+  "Dodecanese (Italian since 1912) is inside GR~old (GR-L) and drawn as Greek; Istria, Zara and Fiume (Italian) are inside HR/SI and drawn as Yugoslav.",
+  "Karelian Isthmus, Salla and Petsamo were Finnish in 1939 but lie inside RU~main.",
+  "Transnistria (Moldavian ASSR, Soviet) is inside MD, drawn as Romanian Bessarabia; southern Bessarabia (Budjak) is inside UA~main, drawn as Soviet; Crimea was in the Russian SFSR (1939) but sits in UA~main labelled Ukrainian SSR.",
+  "Newfoundland and Labrador (a British dominion under direct Commission of Government since 1934) is inside CA, drawn as Canada.",
+  "Manchukuo also included Rehe/Jehol (now in Hebei/Inner Mongolia) inside CN~main; Japan's Kwantung Leased Territory is inside CN~manchuria. Japanese-occupied eastern China and its puppet regimes, and French Kwangchowan, are drawn as Republic of China.",
+  "Hatay passed from French Syria to Turkey in June 1939 and is inside TR; correct for summer 1939.",
+  "New Hebrides was an Anglo-French condominium; assigned to GB_EMPIRE with a condominium label. Canton and Enderbury (in KI) became an Anglo-US condominium in 1939.",
+  "Ifni (Spanish) and the Tangier International Zone are not separable; Ifni is inside MA~main (French Morocco), Tangier inside MA~spanish. Cape Juby (the Tarfaya strip, Spanish) is also inside MA~main.",
+  "Zanzibar (British protectorate) is inside TZ, labelled Tanganyika. Sarawak (Brooke Raj) and North Borneo are inside MY, labelled British Malaya and Borneo. Panama Canal Zone (US) is inside PA.",
+  "Bhutan left implicit: a kingdom under British guidance with no national flag until 1949. Antarctica left implicit (British, NZ, French, Australian and Norwegian claims existed by 1939).",
+  "Tuva flag: Commons has 1935-1939 and 1939-1941 versions; the switch date in 1939 is unclear, chose 1935-1939 for summer 1939.",
+  "Iceland (Kingdom of Iceland in personal union with Denmark), Ireland (Éire), Thailand (renamed from Siam on 24 June 1939) and Lithuania/Latvia/Estonia used flags matching today's and are left implicit.",
+  "Polity ids not in the canonical list that other eras may need to reconcile: ES_1938 (Francoist Spain incl. colonies, used instead of ES_EMPIRE because the flag differs), PL_1928, RO_KINGDOM, HU_KINGDOM, GR_KINGDOM, TURKEY, AU_DOMINION, NZ_DOMINION, ZA_1928, CA_1921, US_1912, DK_REALM, MN_1924, IR_PAHLAVI, AF_KINGDOM, SA_1938, IQ_KINGDOM, EGYPT_KINGDOM, YE_KINGDOM, MUSCAT_OMAN, NP_KINGDOM, MX_1934, BR_1889, VE_1930, TIBET, TUVA_1935, SLOVAK_STATE, AT_FIRST_REPUBLIC, AL_KINGDOM, ES_REPUBLIC, HEJAZ, NEJD_1921 (as in 1923).",
+  "USSR uses the 1936-1955 flag; if other eras share the USSR id with a different flag version, they may need splitting.",
+  "Tuva gets TUVA_1935 because 1923's TUVA has a different name and flag. Its 1935 flag formally stayed in use until the 1941 constitution (Wikipedia, Flag of Tuva).",
+  "Bhutan is left implicit, so it would show today's flag, which dates from 1949; Bhutan had no national flag in 1939."
+ ]
+}

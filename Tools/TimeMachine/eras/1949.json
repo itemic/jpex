@@ -1,0 +1,837 @@
+{
+  "polities": {
+    "GB_EMPIRE": {
+      "name": "British Empire",
+      "flag": "commons:Flag_of_the_United_Kingdom.svg",
+      "color": "GB",
+      "kind": "empire"
+    },
+    "FR_EMPIRE": {
+      "name": "French colonial empire",
+      "flag": "commons:Flag_of_France_(1794–1815,_1830–1974,_2020–present).svg",
+      "color": "FR",
+      "kind": "empire"
+    },
+    "NL_EMPIRE": {
+      "name": "Dutch colonial empire",
+      "flag": "commons:Flag_of_the_Netherlands.svg",
+      "color": "NL",
+      "kind": "empire"
+    },
+    "BE_EMPIRE": {
+      "name": "Belgian colonial empire",
+      "flag": "commons:Flag_of_Belgium.svg",
+      "color": "BE",
+      "kind": "empire"
+    },
+    "PT_EMPIRE": {
+      "name": "Portuguese Empire",
+      "flag": "commons:Flag_of_Portugal.svg",
+      "color": "PT",
+      "kind": "empire"
+    },
+    "ES_1945": {
+      "name": "Spanish State",
+      "flag": "commons:Flag_of_Spain_(1945–1977).svg",
+      "color": "ES",
+      "kind": "empire"
+    },
+    "DK_REALM": {
+      "name": "Kingdom of Denmark",
+      "flag": "commons:Flag_of_Denmark.svg",
+      "color": "DK",
+      "kind": "empire"
+    },
+    "US_1912": {
+      "name": "United States",
+      "flag": "commons:Flag_of_the_United_States_(1912–1959).svg",
+      "color": "US",
+      "kind": "state"
+    },
+    "CA_1921": {
+      "name": "Canada",
+      "flag": "commons:Canadian_Red_Ensign_(1921–1957).svg",
+      "color": "CA",
+      "kind": "state"
+    },
+    "MX_1934": {
+      "name": "Mexico",
+      "flag": "commons:Flag_of_Mexico_(1934-1968).svg",
+      "color": "MX",
+      "kind": "state"
+    },
+    "GT_1871": {
+      "name": "Guatemala",
+      "flag": "commons:Flag_of_Guatemala_(1871–1968).svg",
+      "color": "GT",
+      "kind": "state"
+    },
+    "NI_1908": {
+      "name": "Nicaragua",
+      "flag": "commons:Flag_of_Nicaragua_(1908-1971).svg",
+      "color": "NI",
+      "kind": "state"
+    },
+    "VE_1930": {
+      "name": "Venezuela",
+      "flag": "commons:Flag_of_Venezuela_(1930–2006).svg",
+      "color": "VE",
+      "kind": "state"
+    },
+    "BR_1889": {
+      "name": "United States of Brazil",
+      "flag": "commons:Flag_of_Brazil_(1889–1960).svg",
+      "color": "BR",
+      "kind": "state"
+    },
+    "AU": {
+      "name": "Commonwealth of Australia",
+      "flag": "asset:world_flag_au",
+      "color": "AU",
+      "kind": "state"
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "flag": "asset:world_flag_nz",
+      "color": "NZ",
+      "kind": "state"
+    },
+    "ZA_UNION": {
+      "name": "Union of South Africa",
+      "flag": "commons:Flag_of_South_Africa_(1928–1994).svg",
+      "color": "ZA",
+      "kind": "state"
+    },
+    "EGYPT_KINGDOM": {
+      "name": "Kingdom of Egypt",
+      "flag": "commons:Flag_of_Egypt_(1922–1958).svg",
+      "color": "EG",
+      "kind": "state"
+    },
+    "ETHIOPIA_EMPIRE": {
+      "name": "Ethiopian Empire",
+      "flag": "commons:Flag_of_Ethiopia_(1897–1974).svg",
+      "color": "ET",
+      "kind": "state"
+    },
+    "SA_1938": {
+      "name": "Kingdom of Saudi Arabia",
+      "flag": "commons:Flag_of_Saudi_Arabia_(1938–1973).svg",
+      "color": "SA",
+      "kind": "state"
+    },
+    "YE_KINGDOM": {
+      "name": "Mutawakkilite Kingdom of Yemen",
+      "flag": "commons:Flag_of_the_Mutawakkilite_Kingdom_of_Yemen.svg",
+      "color": "YE",
+      "kind": "state"
+    },
+    "MUSCAT_OMAN": {
+      "name": "Sultanate of Muscat and Oman",
+      "flag": "commons:Flag_of_Muscat.svg",
+      "color": "OM",
+      "kind": "state"
+    },
+    "IQ_KINGDOM": {
+      "name": "Kingdom of Iraq",
+      "flag": "commons:Flag_of_Iraq_(1924–1959).svg",
+      "color": "IQ",
+      "kind": "state"
+    },
+    "SY_1932": {
+      "name": "Syrian Republic",
+      "flag": "commons:Flag_of_Syria_(1932–1958,_1961–1963).svg",
+      "color": "SY",
+      "kind": "state"
+    },
+    "IR_PAHLAVI": {
+      "name": "Imperial State of Iran",
+      "flag": "commons:State_flag_of_Iran_(1933–1964).svg",
+      "color": "IR",
+      "kind": "state"
+    },
+    "AF_KINGDOM": {
+      "name": "Kingdom of Afghanistan",
+      "flag": "commons:Flag_of_Afghanistan_(1931–1973).svg",
+      "color": "AF",
+      "kind": "state"
+    },
+    "TURKEY": {
+      "name": "Turkey",
+      "flag": "asset:world_flag_tr",
+      "color": "TR",
+      "kind": "state"
+    },
+    "JO": {
+      "name": "Hashemite Kingdom of Jordan",
+      "flag": "asset:world_flag_jo",
+      "color": "JO",
+      "kind": "state"
+    },
+    "IL": {
+      "name": "State of Israel",
+      "flag": "asset:world_flag_il",
+      "color": "IL",
+      "kind": "state"
+    },
+    "IN": {
+      "name": "Dominion of India",
+      "flag": "asset:world_flag_in",
+      "color": "IN",
+      "kind": "state"
+    },
+    "PK": {
+      "name": "Dominion of Pakistan",
+      "flag": "asset:world_flag_pk",
+      "color": "PK",
+      "kind": "state"
+    },
+    "CEYLON_1948": {
+      "name": "Dominion of Ceylon",
+      "flag": "commons:Flag_of_Ceylon_(1948–1951).svg",
+      "color": "LK",
+      "kind": "state"
+    },
+    "BURMA": {
+      "name": "Union of Burma",
+      "flag": "commons:Flag_of_Burma_(1948–1974).svg",
+      "color": "MM",
+      "kind": "state"
+    },
+    "NP_KINGDOM": {
+      "name": "Kingdom of Nepal",
+      "flag": "commons:Flag_of_Nepal_(1743–1962).svg",
+      "color": "NP",
+      "kind": "state"
+    },
+    "BT_1949": {
+      "name": "Kingdom of Bhutan",
+      "flag": "commons:Flag_of_Bhutan_(1949–1956).svg",
+      "color": "BT",
+      "kind": "state"
+    },
+    "TIBET": {
+      "name": "Tibet",
+      "flag": "commons:Flag_of_Tibet.svg",
+      "color": "amber",
+      "kind": "state"
+    },
+    "PRC": {
+      "name": "People's Republic of China",
+      "flag": "asset:world_flag_cn",
+      "color": "CN",
+      "kind": "state"
+    },
+    "ROC": {
+      "name": "Republic of China",
+      "flag": "commons:Flag_of_the_Republic_of_China.svg",
+      "color": "TW",
+      "kind": "state"
+    },
+    "MN_1945": {
+      "name": "Mongolian People's Republic",
+      "flag": "commons:Flag_of_the_Mongolian_People's_Republic_(1945–1992).svg",
+      "color": "MN",
+      "kind": "state"
+    },
+    "KR_1949": {
+      "name": "Republic of Korea",
+      "flag": "commons:Flag_of_South_Korea_(1949–1984).svg",
+      "color": "KR",
+      "kind": "state"
+    },
+    "KP": {
+      "name": "Democratic People's Republic of Korea",
+      "flag": "asset:world_flag_kp",
+      "color": "KP",
+      "kind": "state"
+    },
+    "PH_1936": {
+      "name": "Republic of the Philippines",
+      "flag": "commons:Flag_of_the_Philippines_(1936–1985,_1986–1998).svg",
+      "color": "PH",
+      "kind": "state"
+    },
+    "ID_RUSI": {
+      "name": "United States of Indonesia",
+      "flag": "asset:world_flag_id",
+      "color": "ID",
+      "kind": "state"
+    },
+    "JP_EMPIRE": {
+      "name": "Empire of Japan",
+      "flag": "commons:Flag_of_Japan_(1870–1999).svg",
+      "color": "JP",
+      "kind": "empire"
+    },
+    "USSR": {
+      "name": "Soviet Union",
+      "flag": "commons:Flag_of_the_Soviet_Union_(1936_–_1955).svg",
+      "color": "RU",
+      "kind": "state"
+    },
+    "NAZI_GERMANY": {
+      "name": "German Reich",
+      "flag": "commons:Flag_of_Germany_(1935–1945).svg",
+      "color": "DE",
+      "kind": "state"
+    },
+    "FRG": {
+      "name": "Federal Republic of Germany",
+      "flag": "asset:world_flag_de",
+      "color": "DE",
+      "kind": "state"
+    },
+    "GDR_1949": {
+      "name": "German Democratic Republic",
+      "flag": "commons:Flag_of_Germany.svg",
+      "color": "plum",
+      "kind": "state"
+    },
+    "CZECHOSLOVAKIA": {
+      "name": "Czechoslovakia",
+      "flag": "commons:Flag_of_the_Czech_Republic.svg",
+      "color": "CZ",
+      "kind": "state"
+    },
+    "HU_1949": {
+      "name": "Hungarian People's Republic",
+      "flag": "commons:Flag_of_Hungary_(1949-1956).svg",
+      "color": "HU",
+      "kind": "state"
+    },
+    "RO_1948": {
+      "name": "Romanian People's Republic",
+      "flag": "commons:Flag_of_Romania_(1948–1952).svg",
+      "color": "RO",
+      "kind": "state"
+    },
+    "BG_1948": {
+      "name": "People's Republic of Bulgaria",
+      "flag": "commons:Flag_of_Bulgaria_(1948–1967).svg",
+      "color": "BG",
+      "kind": "state"
+    },
+    "AL_1946": {
+      "name": "People's Republic of Albania",
+      "flag": "commons:Flag_of_Albania_(1946–1992).svg",
+      "color": "AL",
+      "kind": "state"
+    },
+    "YUGOSLAVIA": {
+      "name": "Yugoslavia",
+      "flag": "commons:Flag_of_Yugoslavia_(1946–1992).svg",
+      "color": "RS",
+      "kind": "state"
+    },
+    "GR_KINGDOM": {
+      "name": "Kingdom of Greece",
+      "flag": "commons:Flag_of_Greece_(1822-1978).svg",
+      "color": "GR",
+      "kind": "state"
+    },
+    "LI_1937": {
+      "name": "Liechtenstein",
+      "flag": "commons:Flag_of_Liechtenstein_(1937–1982).svg",
+      "color": "LI",
+      "kind": "state"
+    },
+    "PE_1884": {
+      "name": "Peru",
+      "flag": "commons:Flag_of_Peru_(1884–1950).svg",
+      "color": "PE",
+      "kind": "state"
+    },
+    "PY_1842": {
+      "name": "Paraguay",
+      "flag": "commons:Flag_of_Paraguay_(1842–1954).svg",
+      "color": "PY",
+      "kind": "state"
+    },
+    "EC_1900": {
+      "name": "Ecuador",
+      "flag": "commons:Flag_of_Ecuador_(1900–2009).svg",
+      "color": "EC",
+      "kind": "state"
+    },
+    "CR_1906": {
+      "name": "Costa Rica",
+      "flag": "commons:State_flag_of_Costa_Rica_(1906–1964).svg",
+      "color": "CR",
+      "kind": "state"
+    },
+    "HT_1859": {
+      "name": "Haiti",
+      "flag": "commons:Flag_of_Haiti_(1820–1849,_1859–1964).svg",
+      "color": "HT",
+      "kind": "state"
+    },
+    "PL_1928": {
+      "name": "Poland",
+      "flag": "commons:Flag_of_Poland_(1928–1980).svg",
+      "color": "PL",
+      "kind": "state"
+    },
+    "IT_KINGDOM": {
+      "name": "Kingdom of Italy",
+      "flag": "commons:Flag_of_Italy_(1861–1946).svg",
+      "color": "IT",
+      "kind": "empire"
+    }
+  },
+  "era": {
+    "id": "1949",
+    "year": 1949,
+    "title": "A World Divided",
+    "summary": "The Iron Curtain splits Europe and Germany, while India, Pakistan, Indonesia and other new Asian states step out of the old empires.",
+    "assign": {
+      "GB": "GB_EMPIRE|United Kingdom",
+      "GB-ENG": "GB_EMPIRE|England",
+      "GB-SCT": "GB_EMPIRE|Scotland",
+      "GB-WLS": "GB_EMPIRE|Wales",
+      "GB-NIR": "GB_EMPIRE|Northern Ireland",
+      "IM": "GB_EMPIRE|Isle of Man",
+      "JE": "GB_EMPIRE|Jersey",
+      "GG": "GB_EMPIRE|Guernsey",
+      "GI": "GB_EMPIRE|Gibraltar",
+      "MT": "GB_EMPIRE|Malta",
+      "CY": "GB_EMPIRE|Cyprus",
+      "XC": "GB_EMPIRE|Cyprus",
+      "FR": "FR_EMPIRE|France",
+      "NL": "NL_EMPIRE|Netherlands",
+      "BE": "BE_EMPIRE|Belgium",
+      "PT": "PT_EMPIRE|Portugal",
+      "ES": "ES_1945|Spain",
+      "DK": "DK_REALM|Denmark",
+      "GL": "DK_REALM|Greenland",
+      "FO": "DK_REALM|Faroe Islands",
+      "DE": "FRG",
+      "DE~brandenburg": "GDR_1949",
+      "DE~mecklenburg": "GDR_1949",
+      "DE~saxony": "GDR_1949",
+      "DE~saxonyanhalt": "GDR_1949",
+      "DE~thuringia": "GDR_1949",
+      "PL": "PL_1928",
+      "CZ": "CZECHOSLOVAKIA|Czech lands",
+      "SK": "CZECHOSLOVAKIA|Slovakia",
+      "HU": "HU_1949",
+      "RO": "RO_1948",
+      "BG": "BG_1948",
+      "AL": "AL_1946",
+      "RS": "YUGOSLAVIA|Serbia",
+      "XK": "YUGOSLAVIA|Serbia",
+      "HR": "YUGOSLAVIA|Croatia",
+      "SI": "YUGOSLAVIA|Slovenia",
+      "BA": "YUGOSLAVIA|Bosnia and Herzegovina",
+      "ME": "YUGOSLAVIA|Montenegro",
+      "MK": "YUGOSLAVIA|Macedonia",
+      "GR": "GR_KINGDOM",
+      "TR": "TURKEY",
+      "LI": "LI_1937",
+      "RU": "USSR|Russian SFSR",
+      "UA": "USSR|Ukrainian SSR",
+      "BY": "USSR|Byelorussian SSR",
+      "LT": "USSR|Lithuanian SSR",
+      "LV": "USSR|Latvian SSR",
+      "EE": "USSR|Estonian SSR",
+      "MD": "USSR|Moldavian SSR",
+      "GE": "USSR|Georgian SSR",
+      "AM": "USSR|Armenian SSR",
+      "AZ": "USSR|Azerbaijan SSR",
+      "KZ": "USSR|Kazakh SSR",
+      "UZ": "USSR|Uzbek SSR",
+      "TM": "USSR|Turkmen SSR",
+      "TJ": "USSR|Tajik SSR",
+      "KG": "USSR|Kirghiz SSR",
+      "EG": "EGYPT_KINGDOM",
+      "SA": "SA_1938",
+      "YE~north": "YE_KINGDOM",
+      "YE~south": "GB_EMPIRE|Aden",
+      "OM": "MUSCAT_OMAN",
+      "AE": "GB_EMPIRE|Trucial States",
+      "QA": "GB_EMPIRE|Qatar",
+      "BH": "GB_EMPIRE|Bahrain",
+      "KW": "GB_EMPIRE|Kuwait",
+      "IQ": "IQ_KINGDOM",
+      "SY": "SY_1932",
+      "IR": "IR_PAHLAVI",
+      "AF": "AF_KINGDOM",
+      "JO": "JO",
+      "PS": "JO|West Bank",
+      "IL": "IL",
+      "IN": "IN",
+      "PK": "PK",
+      "BD": "PK|East Bengal",
+      "LK": "CEYLON_1948",
+      "MM": "BURMA",
+      "NP": "NP_KINGDOM",
+      "BT": "BT_1949",
+      "MV": "GB_EMPIRE|Maldive Islands",
+      "CN": "PRC",
+      "CN~tibet": "TIBET",
+      "TW": "ROC|Taiwan",
+      "CN-HK": "GB_EMPIRE|Hong Kong",
+      "CN-MO": "PT_EMPIRE|Macau",
+      "MN": "MN_1945",
+      "KR": "KR_1949",
+      "KP": "KP",
+      "PH": "PH_1936",
+      "VN": "FR_EMPIRE|State of Vietnam",
+      "LA": "FR_EMPIRE|Kingdom of Laos",
+      "KH": "FR_EMPIRE|Kingdom of Cambodia",
+      "MY": "GB_EMPIRE|Malaya, Sarawak and North Borneo",
+      "SG": "GB_EMPIRE|Singapore",
+      "BN": "GB_EMPIRE|Brunei",
+      "AU-CX": "GB_EMPIRE|Christmas Island",
+      "AU-CC": "GB_EMPIRE|Cocos (Keeling) Islands",
+      "ID": "ID_RUSI",
+      "TL": "PT_EMPIRE|Portuguese Timor",
+      "DZ": "FR_EMPIRE|Algeria",
+      "TN": "FR_EMPIRE|Tunisia",
+      "MA~main": "FR_EMPIRE|French Morocco",
+      "MA~spanish": "ES_1945|Spanish Morocco",
+      "EH": "ES_1945|Spanish Sahara",
+      "GQ": "ES_1945|Spanish Guinea",
+      "LY": "GB_EMPIRE|Libya (Allied administration)",
+      "SD": "GB_EMPIRE|Anglo-Egyptian Sudan",
+      "SS": "GB_EMPIRE|Anglo-Egyptian Sudan",
+      "ER": "GB_EMPIRE|Eritrea (British administration)",
+      "ET": "ETHIOPIA_EMPIRE",
+      "DJ": "FR_EMPIRE|French Somaliland",
+      "SO~somaliland": "GB_EMPIRE|British Somaliland",
+      "SO~italian": "GB_EMPIRE|Somalia (British administration)",
+      "MR": "FR_EMPIRE|Mauritania",
+      "SN": "FR_EMPIRE|Senegal",
+      "ML": "FR_EMPIRE|French Sudan",
+      "BF": "FR_EMPIRE|Upper Volta",
+      "GN": "FR_EMPIRE|French Guinea",
+      "CI": "FR_EMPIRE|Ivory Coast",
+      "NE": "FR_EMPIRE|Niger",
+      "BJ": "FR_EMPIRE|Dahomey",
+      "TD": "FR_EMPIRE|Chad",
+      "CF": "FR_EMPIRE|Ubangi-Shari",
+      "CG": "FR_EMPIRE|Middle Congo",
+      "GA": "FR_EMPIRE|Gabon",
+      "TG": "FR_EMPIRE|French Togoland",
+      "CM~main": "FR_EMPIRE|French Cameroons",
+      "MG": "FR_EMPIRE|Madagascar",
+      "KM": "FR_EMPIRE|Comoros",
+      "FR-976": "FR_EMPIRE|Comoros",
+      "FR-974": "FR_EMPIRE|Réunion",
+      "TF": "FR_EMPIRE|Kerguelen, Crozet and Amsterdam",
+      "GH~main": "GB_EMPIRE|Gold Coast",
+      "GH~togoland": "GB_EMPIRE|British Togoland",
+      "CM~british": "GB_EMPIRE|British Cameroons",
+      "NG": "GB_EMPIRE|Nigeria",
+      "SL": "GB_EMPIRE|Sierra Leone",
+      "GM": "GB_EMPIRE|Gambia",
+      "KE": "GB_EMPIRE|Kenya",
+      "UG": "GB_EMPIRE|Uganda",
+      "TZ": "GB_EMPIRE|Tanganyika",
+      "ZM": "GB_EMPIRE|Northern Rhodesia",
+      "ZW": "GB_EMPIRE|Southern Rhodesia",
+      "MW": "GB_EMPIRE|Nyasaland",
+      "BW": "GB_EMPIRE|Bechuanaland",
+      "LS": "GB_EMPIRE|Basutoland",
+      "SZ": "GB_EMPIRE|Swaziland",
+      "MU": "GB_EMPIRE|Mauritius",
+      "IO": "GB_EMPIRE|Chagos Archipelago",
+      "SC": "GB_EMPIRE|Seychelles",
+      "SH": "GB_EMPIRE|St Helena",
+      "CD": "BE_EMPIRE|Belgian Congo",
+      "RW": "BE_EMPIRE|Ruanda-Urundi",
+      "BI": "BE_EMPIRE|Ruanda-Urundi",
+      "AO": "PT_EMPIRE|Angola",
+      "MZ": "PT_EMPIRE|Mozambique",
+      "GW": "PT_EMPIRE|Portuguese Guinea",
+      "CV": "PT_EMPIRE|Cape Verde",
+      "ST": "PT_EMPIRE|São Tomé and Príncipe",
+      "ZA": "ZA_UNION",
+      "NA": "ZA_UNION|South West Africa",
+      "US": "US_1912",
+      "US~alaska": "US_1912|Territory of Alaska",
+      "US~hawaii": "US_1912|Territory of Hawaii",
+      "US-PR": "US_1912|Puerto Rico",
+      "US-VI": "US_1912|US Virgin Islands",
+      "CA": "CA_1921",
+      "MX": "MX_1934",
+      "GT": "GT_1871",
+      "NI": "NI_1908",
+      "VE": "VE_1930",
+      "BR": "BR_1889",
+      "PE": "PE_1884",
+      "PY": "PY_1842",
+      "EC": "EC_1900",
+      "CR": "CR_1906",
+      "HT": "HT_1859",
+      "BZ": "GB_EMPIRE|British Honduras",
+      "BS": "GB_EMPIRE|Bahamas",
+      "JM": "GB_EMPIRE|Jamaica",
+      "KY": "GB_EMPIRE|Cayman Islands",
+      "TC": "GB_EMPIRE|Turks and Caicos Islands",
+      "BM": "GB_EMPIRE|Bermuda",
+      "TT": "GB_EMPIRE|Trinidad and Tobago",
+      "BB": "GB_EMPIRE|Barbados",
+      "GD": "GB_EMPIRE|Grenada",
+      "VC": "GB_EMPIRE|St Vincent",
+      "LC": "GB_EMPIRE|St Lucia",
+      "DM": "GB_EMPIRE|Dominica",
+      "AG": "GB_EMPIRE|Antigua",
+      "MS": "GB_EMPIRE|Montserrat",
+      "KN": "GB_EMPIRE|St Kitts-Nevis-Anguilla",
+      "AI": "GB_EMPIRE|St Kitts-Nevis-Anguilla",
+      "VG": "GB_EMPIRE|British Virgin Islands",
+      "GY": "GB_EMPIRE|British Guiana",
+      "FK": "GB_EMPIRE|Falkland Islands",
+      "GS": "GB_EMPIRE|Falkland Islands Dependencies",
+      "SR": "NL_EMPIRE|Surinam",
+      "CW": "NL_EMPIRE|Netherlands Antilles",
+      "AW": "NL_EMPIRE|Netherlands Antilles",
+      "BQ": "NL_EMPIRE|Netherlands Antilles",
+      "SX": "NL_EMPIRE|Netherlands Antilles",
+      "FR-971": "FR_EMPIRE|Guadeloupe",
+      "BL": "FR_EMPIRE|Guadeloupe",
+      "MF": "FR_EMPIRE|Guadeloupe",
+      "FR-972": "FR_EMPIRE|Martinique",
+      "FR-973": "FR_EMPIRE|French Guiana",
+      "PM": "FR_EMPIRE|St Pierre and Miquelon",
+      "AU": "AU|Australia",
+      "PG": "AU|Papua and New Guinea",
+      "NR": "AU|Nauru",
+      "AU-NF": "AU|Norfolk Island",
+      "AU-HM": "AU|Heard and McDonald Islands",
+      "NZ": "NZ|New Zealand",
+      "WS": "NZ|Western Samoa",
+      "CK": "NZ|Cook Islands",
+      "NU": "NZ|Niue",
+      "TK": "NZ|Tokelau",
+      "US-GU": "US_1912|Guam",
+      "US-AS": "US_1912|American Samoa",
+      "UM": "US_1912|US minor outlying islands",
+      "US-MP": "US_1912|Trust Territory of the Pacific Islands",
+      "FM": "US_1912|Trust Territory of the Pacific Islands",
+      "MH": "US_1912|Trust Territory of the Pacific Islands",
+      "PW": "US_1912|Trust Territory of the Pacific Islands",
+      "FJ": "GB_EMPIRE|Fiji",
+      "TO": "GB_EMPIRE|Tonga",
+      "SB": "GB_EMPIRE|British Solomon Islands",
+      "VU": "GB_EMPIRE|New Hebrides (Anglo-French)",
+      "KI": "GB_EMPIRE|Gilbert and Ellice Islands",
+      "TV": "GB_EMPIRE|Gilbert and Ellice Islands",
+      "PN": "GB_EMPIRE|Pitcairn Islands",
+      "NC": "FR_EMPIRE|New Caledonia",
+      "PF": "FR_EMPIRE|French Settlements in Oceania",
+      "WF": "FR_EMPIRE|Wallis and Futuna"
+    },
+    "events": [
+      {
+        "year": 1941,
+        "title": "Italy loses its African empire",
+        "detail": "British and Ethiopian forces freed Ethiopia in 1941 and Haile Selassie returned. Libya, Eritrea and Italian Somaliland passed to British administration.",
+        "at": [
+          38.75,
+          9.0
+        ],
+        "units": [
+          "ET",
+          "ER",
+          "SO~italian",
+          "LY"
+        ],
+        "from": [
+          "IT_KINGDOM"
+        ],
+        "to": [
+          "ETHIOPIA_EMPIRE",
+          "GB_EMPIRE"
+        ],
+        "kind": "decolonization"
+      },
+      {
+        "year": 1945,
+        "title": "Borders move west",
+        "detail": "The USSR annexed the Baltic states, eastern Poland and northern East Prussia. Poland was shifted west onto German lands up to the Oder and Neisse.",
+        "at": [
+          21.0,
+          53.5
+        ],
+        "units": [
+          "PL~west",
+          "RU~kaliningrad",
+          "LT",
+          "LV",
+          "EE",
+          "BY~west",
+          "UA~galicia",
+          "UA~volhynia"
+        ],
+        "from": [
+          "NAZI_GERMANY",
+          "PL_1928"
+        ],
+        "to": [
+          "USSR",
+          "PL_1928"
+        ],
+        "kind": "annexation"
+      },
+      {
+        "year": 1947,
+        "title": "Britain leaves South Asia",
+        "detail": "British India was partitioned into India and Pakistan in August 1947, uprooting millions. Burma and Ceylon became independent in early 1948.",
+        "at": [
+          78.0,
+          23.0
+        ],
+        "units": [
+          "IN",
+          "PK",
+          "BD",
+          "MM",
+          "LK"
+        ],
+        "from": [
+          "GB_EMPIRE"
+        ],
+        "to": [
+          "IN",
+          "PK",
+          "BURMA",
+          "CEYLON_1948"
+        ],
+        "kind": "independence"
+      },
+      {
+        "year": 1948,
+        "title": "Israel is founded",
+        "detail": "Israel declared independence as the British mandate in Palestine ended in May 1948. After the war, Jordan held the West Bank and Egypt the Gaza Strip.",
+        "at": [
+          34.9,
+          31.3
+        ],
+        "units": [
+          "IL",
+          "PS"
+        ],
+        "from": [
+          "GB_EMPIRE"
+        ],
+        "to": [
+          "IL",
+          "JO"
+        ],
+        "kind": "independence"
+      },
+      {
+        "year": 1948,
+        "title": "Korea is divided",
+        "detail": "Freed from Japanese rule in 1945 and split at the 38th parallel, Korea became two states in 1948: the Republic of Korea and the DPRK.",
+        "at": [
+          127.0,
+          37.8
+        ],
+        "units": [
+          "KR",
+          "KP"
+        ],
+        "from": [
+          "JP_EMPIRE"
+        ],
+        "to": [
+          "KR_1949",
+          "KP"
+        ],
+        "kind": "partition"
+      },
+      {
+        "year": 1949,
+        "title": "Two German states",
+        "detail": "The western occupation zones became the Federal Republic in May 1949 and the Soviet zone the German Democratic Republic in October. Berlin was split too.",
+        "at": [
+          11.0,
+          51.5
+        ],
+        "units": [
+          "DE~bavaria",
+          "DE~badenwurttemberg",
+          "DE~hesse",
+          "DE~rhineland",
+          "DE~palatinate",
+          "DE~lowersaxony",
+          "DE~holstein",
+          "DE~brandenburg",
+          "DE~mecklenburg",
+          "DE~saxony",
+          "DE~saxonyanhalt",
+          "DE~thuringia"
+        ],
+        "from": [
+          "NAZI_GERMANY"
+        ],
+        "to": [
+          "FRG",
+          "GDR_1949"
+        ],
+        "kind": "partition"
+      },
+      {
+        "year": 1949,
+        "title": "People's Republic of China",
+        "detail": "Mao Zedong proclaimed the People's Republic of China on 1 October 1949. The Nationalist government withdrew to Taiwan.",
+        "at": [
+          116.4,
+          39.9
+        ],
+        "units": [
+          "CN~main",
+          "CN~manchuria"
+        ],
+        "from": [
+          "ROC"
+        ],
+        "to": [
+          "PRC"
+        ],
+        "kind": "revolution"
+      },
+      {
+        "year": 1949,
+        "title": "Indonesia gains independence",
+        "detail": "After four years of struggle, the Netherlands handed sovereignty to the United States of Indonesia in December 1949. Western New Guinea stayed Dutch.",
+        "at": [
+          110.4,
+          -7.8
+        ],
+        "units": [
+          "ID"
+        ],
+        "from": [
+          "NL_EMPIRE"
+        ],
+        "to": [
+          "ID_RUSI"
+        ],
+        "kind": "decolonization"
+      }
+    ]
+  },
+  "notes": [
+    "PS is one unit: assigned wholly to Jordan (West Bank); the Gaza Strip was actually under Egyptian administration.",
+    "West Berlin lies inside DE~brandenburg (BB+BE) and is drawn as GDR; the Saar (inside DE~palatinate, RP+SL) was a French protectorate in 1949 but is drawn as FRG.",
+    "Crimea (inside UA~main) belonged to the Russian SFSR until 1954 but is drawn as Ukrainian SSR. Karelo-Finnish SSR is not separable from RU.",
+    "LY: Tripolitania and Cyrenaica were under British and Fezzan under French administration; drawn as GB_EMPIRE.",
+    "SO~italian: still under British military administration at end of 1949; Italian trusteeship began 1 April 1950.",
+    "TZ includes Zanzibar (a separate British protectorate); MY covers Malaya, Sarawak and North Borneo; IN includes Portuguese Goa and French Pondicherry; ID includes Dutch Western New Guinea; JP includes US-administered Ryukyu and Bonin islands; IT~friuli includes the Free Territory of Trieste; PA includes the US Canal Zone; Tangier and Ifni are inside MA.",
+    "Hainan (inside CN~main) was still held by the ROC until April 1950.",
+    "VU (New Hebrides) was an Anglo-French condominium; assigned to GB_EMPIRE with a label saying so.",
+    "AQ left unassigned: overlapping national claims existed (UK, NZ, France, Australia, Norway, Chile, Argentina) but no single polity can be drawn.",
+    "GDR_1949 uses the plain black-red-gold tricolour (emblem added 1959) and colour 'plum' to match GDR in the 1960 fragment (1976 uses 'sage'; reconcile).",
+    "Protected states (Kuwait, Bahrain, Qatar, Trucial States, Maldives, Tonga, Brunei) drawn under GB_EMPIRE. Muscat and Oman drawn as its own state.",
+    "Spain uses id ES_1945 (Franco-era flag); Turkey uses TURKEY to match the 2011 fragment.",
+    "Period flags given to Guatemala, Nicaragua, Peru (arms on the flag until 1950), Paraguay (1842–1954), Ecuador (1900–2009), Costa Rica (1906–1964) and Haiti (1859–1964), matching the ids used in 1914. Honduras adopted its five-star flag in Feb 1949, which is today's flag again since 2026, so HN is left unassigned. El Salvador's arms detail ignored.",
+    "Polity ids renamed to match neighbouring eras with the same flag: AF_KINGDOM (1939, 1960), IR_PAHLAVI (1939; 1960 calls it PERSIA), EGYPT_KINGDOM (1939), NP_KINGDOM (1939). Ceylon is CEYLON_1948 because 1960's CEYLON has the 1951 flag. TIBET colour 'amber' to match 1939.",
+    "USSR here carries the 1936–1955 flag, as in 1939; 1960/1976/1990/1993 define USSR with the 1955 flag. The merged file needs one definition or a split id (e.g. USSR_1936).",
+    "Unassigned on purpose: Japan (occupied, same Hinomaru), Italy (republic since 1946, same tricolour), Austria (Allied occupation, still Austria), Thailand (renamed from Siam again in May 1949), Ireland (republic from April 1949), Iceland, Lebanon, Liberia, Latin American states with today's flag. Sikkim (Indian-protected) is inside IN; Saar protectorate inside DE~palatinate.",
+    "Reviewer: Poland now uses PL_1928 (1928–1980 vermilion flag, as in 1939); 1960 uses PL_PRL. Newfoundland joined Canada on 31 March 1949 but CA is a single unit, so no event. ROC colour is TW here but CN in 1939; reconcile. Polity names differ across eras for FRG (1960: West Germany) and PK/JO (1960: Pakistan/Jordan); reconcile on merge."
+  ]
+}
