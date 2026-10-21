@@ -2,7 +2,7 @@ import SwiftUI
 
 /// The quiz board: the map coloured with how each answer went, the places outside the round
 /// veiled, and the quiz's lights on top. Pinch and drag to look closer, past the map's edges if
-/// you like; double-tap to zoom, except in Find and Learn, where a tap chooses a place. The
+/// you like; double-tap to zoom, except in Find, where a tap chooses a place. The
 /// World wraps around: copies of it sit either side, so dragging sideways never reaches an edge.
 /// Places twinkling in the lobby have their names float just above them, never over one another.
 /// While iPhone Duo is partly folded, the map carries on under the near side, its camera keeping
@@ -89,9 +89,11 @@ struct GameMapStage: View {
                     }
                     if let flash {
                         let anchor = nearest(geometry.toScreen(flash.anchor), to: fitArea.midX, lap: lap)
+                        // It springs up from the place it names, and fades as it goes; with Reduce
+                        // Motion it only fades in and out.
                         FlashBubble(flash: flash)
                             .position(x: anchor.x, y: anchor.y - 28)
-                            .transition(.scale(scale: 0.6, anchor: .bottom).combined(with: .opacity))
+                            .transition(.arrive(reduceMotion: reduceMotion, anchor: .bottom))
                             .id(flash.id)
                     }
                     LinearGradient(
@@ -275,7 +277,8 @@ private struct TwinkleCaption: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        TimelineView(.animation) { context in
+        // A slow rise and fade, smooth enough at a gentler pace than the display's.
+        TimelineView(.animation(minimumInterval: 1.0 / 30)) { context in
             let progress = min(max(context.date.timeIntervalSince(start) / GameSpotlight.twinkleDuration, 0), 1)
             // The same rise and fall as the twinkle's light.
             let envelope = sin(.pi * progress)

@@ -1,0 +1,5 @@
+No sign-in or account is needed. Everything is stored on the device.
+
+To try it: pick a country from the World list, tap a place to give it a level, and its map fills in. The game controller button in a list's toolbar opens the map quiz. On the World list, the toolbar also opens World Time.
+
+Map boundaries and flags come from openly licensed and public domain sources, credited in Settings > Acknowledgements.

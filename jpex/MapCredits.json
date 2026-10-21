@@ -5,7 +5,7 @@
     "sourceURL": "https://www.naturalearthdata.com/",
     "license": "Public domain",
     "licenseURL": "https://www.naturalearthdata.com/about/terms-of-use/",
-    "note": "1:10m Admin 0 map subunits, Admin 1 states and provinces (including the version without large lakes), lakes, Admin 0 disputed areas, land and disputed-area boundary lines, and minor islands, versions 4.1–5.1.1. Used for both world maps and the maps of Japan, Australia, Canada, China (including Taiwan), France, Germany, Italy, Spain, Switzerland, the United Kingdom, the United States, South Korea, Austria, the Netherlands, Belgium, Poland, Portugal, Brazil, Argentina, Mexico, Malaysia, Thailand, India, Ireland, Sweden, Denmark, Czechia, Croatia, Greece, Hungary, Chile, Colombia, Türkiye, the United Arab Emirates, Sri Lanka, New Zealand and South Africa; for the coastlines of Norway, Finland and Peru and for Åland; for lakes in Indonesia, the Philippines, Finland and Peru; and for the disputed areas and lines. Reprojected, merged and simplified for this app."
+    "note": "1:10m Admin 0 map subunits, Admin 1 states and provinces (including the version without large lakes), lakes, Admin 0 disputed areas, land and disputed-area boundary lines, and minor islands, versions 4.1–5.1.1. Used for both world maps and the maps of Japan, Australia, Canada, China (including Taiwan), France, Germany, Italy, Spain, Switzerland, the United Kingdom, the United States, South Korea, Austria, the Netherlands, Belgium, Poland, Portugal, Brazil, Argentina, Mexico, Malaysia, Thailand, India, Ireland, Sweden, Denmark, Czechia, Croatia, Greece, Hungary, Chile, Colombia, Türkiye, the United Arab Emirates, Sri Lanka, New Zealand and South Africa; for the coastlines of Norway, Finland and Peru and for Åland; for lakes in Indonesia, the Philippines, Finland and Peru; for the disputed areas and lines; and for the coastlines of the seas, the Caspian Sea and the Dead Sea. Also used for the regions of Pakistan and Botswana's town councils, and for the outlines, lakes and disputed areas and lines of the maps added with them. Reprojected, merged and simplified for this app."
   },
   {
     "name": "Indonesia regency boundaries",
@@ -133,7 +133,7 @@
     "sourceURL": "https://datacatalog.worldbank.org/search/dataset/0038272/world-bank-official-boundaries",
     "license": "CC BY 4.0",
     "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
-    "note": "Global Administrative Divisions, Admin 1, version 3 (10 September 2026). Used for Ecuador and Saudi Arabia, and for one internal border each in Iceland and Cuba, clipped to Natural Earth's country outlines. Also used for Jordan, Oman, Kuwait and Iran. Also used for the regions of Venezuela, Paraguay, Guatemala, Costa Rica, the Dominican Republic, Jamaica, Honduras, El Salvador, Nigeria, Tanzania, Ghana, Senegal, Rwanda, Namibia, Tunisia and Algeria. Also used for Serbia, Albania, Armenia, Kazakhstan and Uzbekistan, and (Admin 2) Malta's local councils and coastline."
+    "note": "Global Administrative Divisions, Admin 1, version 3 (10 September 2026). Used for Ecuador and Saudi Arabia, and for one internal border each in Iceland and Cuba, clipped to Natural Earth's country outlines. Also used for Jordan, Oman, Kuwait and Iran. Also used for the regions of Venezuela, Paraguay, Guatemala, Costa Rica, the Dominican Republic, Jamaica, Honduras, El Salvador, Nigeria, Tanzania, Ghana, Senegal, Rwanda, Namibia, Tunisia and Algeria. Also used for Serbia, Albania, Armenia, Kazakhstan and Uzbekistan, and (Admin 2) Malta's local councils and coastline. Also used (Global Administrative Divisions, last edited 28 August 2026) for the regions of Vietnam, Afghanistan, Brunei, Myanmar, Georgia, Tajikistan, Lebanon, Moldova, Zambia, Zimbabwe, Mozambique, Cameroon, Botswana, Nicaragua, Haiti, Trinidad and Tobago, Guyana, Suriname, Belize, Samoa, Vanuatu, Tonga and the Solomon Islands, and (Admin 2) for Spain's provinces."
   },
   {
     "name": "Iraq governorate boundaries",
@@ -254,5 +254,29 @@
     "license": "CC BY 4.0",
     "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
     "note": "Settlement points used, with Wikidata (CC0), to approximate Montenegro's four newest municipalities (Gusinje, Petnjica, Tuzi, Zeta)."
+  },
+  {
+    "name": "Australian local government areas",
+    "author": "Australian Bureau of Statistics",
+    "sourceURL": "https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-4-july-2026-june-2031/non-abs-structures/local-government-areas",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "Australian Statistical Geography Standard (ASGS) Edition 4, Local Government Areas 2026 (released 14 October 2026), for the local government areas of every state and the Northern Territory. Lord Howe Island and Victoria's alpine resorts are listed apart from their states' unincorporated areas, Macquarie Island is omitted, and the Darwin Waterfront Precinct is drawn as part of Darwin. Reprojected and simplified, with enlarged insets of inner Sydney, Melbourne, Adelaide and Perth. Source: Australian Bureau of Statistics."
+  },
+  {
+    "name": "UK local authority boundaries",
+    "author": "Office for National Statistics",
+    "sourceURL": "https://geoportal.statistics.gov.uk/",
+    "license": "Open Government Licence v3.0",
+    "licenseURL": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+    "note": "Local Authority Districts (May 2026) Boundaries UK BGC, for Scotland's council areas, Wales's principal areas and Northern Ireland's districts. Reprojected and simplified. Source: Office for National Statistics licensed under the Open Government Licence v.3.0. Contains OS data © Crown copyright and database right 2026."
+  },
+  {
+    "name": "Marine Regions",
+    "author": "Flanders Marine Institute (2024). The intersect of the Exclusive Economic Zones and IHO sea areas, version 5. https://doi.org/10.14284/699",
+    "sourceURL": "https://www.marineregions.org/",
+    "license": "CC BY 4.0",
+    "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+    "note": "The limits and names of the world's 101 IHO sea areas, for Seas and the seas each country has coasts on. Merged by sea, fitted to Natural Earth's coastline and simplified for this app; some names are modernised, such as Barents Sea for Barentsz Sea."
   }
 ]

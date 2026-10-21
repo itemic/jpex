@@ -382,16 +382,21 @@ extension CountryCatalog {
     /// as countries of their own, such as Hong Kong or the UK nations when the rules list them.
     /// Taiwan's places belong to Taiwan, and through it to China while Taiwan isn't counted.
     static func countries(containing place: AdministrativeDivision, rules: CountingRules) -> [AdministrativeDivision] {
-        let counted = world(applying: rules).divisions
-        guard !counted.contains(where: { $0.id == place.id }) else { return [] }
+        countries(containing: place, counted: Set(world(applying: rules).divisions.map(\.id)))
+    }
+
+    /// The same, given the IDs of the places counted as countries, so a caller asking about many
+    /// places, and the climb from one owner to the next, builds the World under the rules once.
+    private static func countries(containing place: AdministrativeDivision, counted: Set<String>) -> [AdministrativeDivision] {
+        guard !counted.contains(place.id) else { return [] }
         let owner: AdministrativeDivision? = if place.countryID == world.id {
             sovereignCodes[place.abbreviation].flatMap { code in world.divisions.first { $0.abbreviation == code } }
         } else {
             world.divisions.first { $0.abbreviation == place.countryID }
         }
         guard let owner, owner.id != place.id else { return [] }
-        if counted.contains(where: { $0.id == owner.id }) { return [owner] }
-        let above = countries(containing: owner, rules: rules)
+        if counted.contains(owner.id) { return [owner] }
+        let above = countries(containing: owner, counted: counted)
         return above.isEmpty ? [] : [owner] + above
     }
 
@@ -401,7 +406,7 @@ extension CountryCatalog {
         let counted = Set(world(applying: rules).divisions.map(\.id))
         var owners: [String: String] = [:]
         for place in world.divisions where !counted.contains(place.id) {
-            guard let owner = countries(containing: place, rules: rules).last else { continue }
+            guard let owner = countries(containing: place, counted: counted).last else { continue }
             owners[place.id] = owner.id
         }
         return owners
@@ -486,7 +491,7 @@ extension CountingRules {
     /// Whether a place in the World list counts as a country of its own: its group is switched on
     /// and the place itself hasn't been switched off.
     func includesWorldPlace(code: String) -> Bool {
-        guard let group = CountryCatalog.optionalPlaceGroup(code: code) else { return true }
+        guard let group = CountryCatalog.optionalPlaceGroup(code: code) else { return !hiddenStates.contains(code) }
         return includes(group) && !excludedPlaces.contains(code)
     }
 }

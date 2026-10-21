@@ -49,12 +49,6 @@ struct VisitLadder: Codable, Equatable, Sendable {
         return levels[rank - 1].pattern ?? LevelPatternStyle(rank: rank)
     }
 
-    /// One step up, wrapping from the highest level back to never been.
-    func next(after level: VisitLevel) -> VisitLevel {
-        let all = allLevels
-        return all[(rank(of: level) + 1) % all.count]
-    }
-
     /// One step up, without wrapping around.
     func higher(than level: VisitLevel) -> VisitLevel? {
         let rank = rank(of: level)

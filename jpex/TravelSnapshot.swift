@@ -64,15 +64,35 @@ struct LevelChange {
 }
 
 extension TravelSnapshot {
-    /// The countries a place belongs to that sit below `level`, nearest first, with their levels
-    /// before rising. A country never falls because one of its places did.
-    func countriesRaised(
+    /// The places a place lies within that sit below `level`, nearest first, with their levels
+    /// before rising: its region, such as Île-de-France for Paris, and the countries it belongs to.
+    /// None ever falls because one of its places did.
+    func placesRaised(
         by level: VisitLevel, at place: AdministrativeDivision, rules: CountingRules
     ) -> [LevelChange] {
-        CountryCatalog.countries(containing: place, rules: rules).compactMap { country in
-            let current = status(for: country)
-            return ladder.rank(of: current) < ladder.rank(of: level) ? LevelChange(place: country, previous: current) : nil
+        CountryCatalog.placesContaining(place, rules: rules).compactMap { container in
+            let current = status(for: container)
+            return ladder.rank(of: current) < ladder.rank(of: level) ? LevelChange(place: container, previous: current) : nil
         }
+    }
+
+    /// Regions among `regionIDs` sitting below the highest level among the places within them, such
+    /// as France's regions below their departments, with the level each should rise to.
+    func regionsBelowTheirPlaces(among regionIDs: Set<String>) -> [(AdministrativeDivision, VisitLevel)] {
+        var highest: [String: VisitLevel] = [:]
+        for collection in CountryCatalog.countries where collection.id != CountryCatalog.world.id {
+            for place in collection.divisions {
+                guard let regionID = place.parentID, regionIDs.contains(regionID) else { continue }
+                let level = status(for: place)
+                guard ladder.rank(of: level) > 0 else { continue }
+                if let best = highest[regionID], ladder.rank(of: best) >= ladder.rank(of: level) { continue }
+                highest[regionID] = level
+            }
+        }
+        return highest
+            .compactMap { id, level in CountryCatalog.countryPlace(id: id).map { ($0, level) } }
+            .filter { region, level in ladder.rank(of: status(for: region)) < ladder.rank(of: level) }
+            .sorted { $0.0.id < $1.0.id }
     }
 
     /// Countries sitting below the highest level among their places, with the level each should rise to.

@@ -5,8 +5,8 @@ import SwiftUI
 /// and Capital asks for a place's capital. With Auto Zoom on, the camera flies close enough to each
 /// place to see even the smallest; with it off, the whole board stays in view and places only light
 /// up. Only a country's main body lights up, never its far-flung territories. Answers colour the
-/// board as you go, and a wrong one just says so. Learn browses every place instead, as a row of
-/// glass cards to swipe through, the map lighting up each in turn. The map fills the screen and can
+/// board as you go, and a wrong one just says so. The lobby's Learn tile leaves the quiz for the
+/// collection's full map, to browse every place there instead. The map fills the screen and can
 /// be dragged past its edges; the World wraps around as you drag it sideways. Flag sets each flag
 /// large and waving over the names instead of the map. On iPhone Duo the map carries on under both
 /// sides of the fold, the camera keeping to the far side, and the card sits on the near side, above
@@ -16,8 +16,14 @@ import SwiftUI
 /// countries outside them veiled, and add Member?, asking whether a country lit up is in or out.
 struct GameScreen: View {
     var onClose: () -> Void
+    /// Leaves the quiz for Learn on a collection's full map, once the quiz has closed; false where
+    /// there turns out to be no list to learn in, so the quiz comes back rather than vanishing.
+    var onLearn: (LearnDeck.Request) -> Bool
     @Environment(CountingPreferences.self) private var counting
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// Whether decoration may move by itself, as the lobby's twinkles do: not in Low Power Mode,
+    /// with Reduce Motion, nor while the app isn't in front.
+    @Environment(\.allowsAmbientMotion) private var allowsAmbientMotion
     @AppStorage("localLanguage") private var localLanguage = false
     /// Whether the camera flies to each place in turn, or keeps the whole board in view.
     @AppStorage(MapGame.autoZoomKey) private var autoZoom = true
@@ -25,25 +31,49 @@ struct GameScreen: View {
     @State private var game: MapGame
     @State private var navigator: MapNavigator
     @State private var isExpanded = false
+    /// The lobby tile whose second level is open, so Escape steps back out of it before leaving.
+    @State private var openTile: MapGameMode?
+    /// Whether leaving a round partly played is waiting for the person to confirm it.
+    @State private var isConfirmingEnd = false
     @State private var isClosing = false
     @State private var panelFrame: CGRect = .zero
     @State private var flash: GameFlash?
     /// Places twinkling in the lobby, each lighting up and fading in turn.
     @State private var twinkles: [GameSpotlight] = []
+    /// Whether the lobby's twinkling has come to rest, after a while with nothing done.
+    @State private var twinklesRest = false
+    /// Counts the times the person moves the map while the twinkling rests, to start it again.
+    @State private var lobbyNudges = 0
     /// A place from the results being looked at again.
     @State private var reviewID: String?
     /// In Find, the place tapped on the map, waiting to be confirmed.
     @State private var selection: AdministrativeDivision?
+    /// In Find with the borders hidden, where the place waiting to be confirmed was tapped, in map
+    /// units: a dot marks the spot, as Dot marks its place, since lighting up the place's outline
+    /// would give the borders away.
+    @State private var selectionDot: CGPoint?
+    /// When the dot marking the place tapped in Find, with the borders hidden, last dropped in, so
+    /// it lands rather than appearing; let go once it's landed, so the board rests again.
+    @State private var markerStart: Date?
+    /// When the glow around a place last lit up: a place chosen in Find, an answer given, or one
+    /// looked at again from the results, so the glow comes up and sends a ring out rather than
+    /// appearing; let go once it's come up, so the board rests again.
+    @State private var glowStart: Date?
+    /// When the place in question lights up: as the camera lands on it, or at once where the board
+    /// stays put, so its candy comes up and sends a ring out rather than appearing; let go once
+    /// it's come up, so the board rests again.
+    @State private var questionLitAt: Date?
     /// In Find, the last place tapped and when, so a second tap straight after answers with it.
     @State private var lastTap: MapTap?
     /// Counts camera flights, so a flight in two legs can tell when another has taken over.
     @State private var flights = 0
+    /// When the camera's flight under way lands, the World's turn before it included, so the
+    /// board isn't reframed under it partway.
+    @State private var flightEnds = Date.distantPast
     /// Whether the board is fitted to the places in play and hasn't been moved since, so it can be
     /// fitted again as the room for it changes.
     @State private var isBoardFitted = false
     @State private var haptic: GameHaptic?
-    /// Whether the map has pulled out to the whole board while Learn's scrubber is dragged.
-    @State private var isScrubbingOut = false
     @State private var pendingReframe: Task<Void, Never>?
     /// In Outline, the box the shape is set in, in global coordinates, for it to fly from.
     @State private var outlineBox: CGRect = .zero
@@ -57,12 +87,10 @@ struct GameScreen: View {
     /// While iPhone Duo is partly folded, its two sides, measured as if the keyboard weren't up, so
     /// typing never flips the layout; the card on the near side keeps above the keyboard instead.
     @State private var fold: FoldRegions?
-    /// The Learns opened into from another's, such as Japan's prefectures from the World's Japan,
-    /// newest last, each with the place it was opened from, for going back to it.
-    @State private var learnTrail: [LearnStop] = []
 
-    init(game: MapGame, onClose: @escaping () -> Void) {
+    init(game: MapGame, onClose: @escaping () -> Void, onLearn: @escaping (LearnDeck.Request) -> Bool = { _ in false }) {
         self.onClose = onClose
+        self.onLearn = onLearn
         _game = State(initialValue: game)
         _navigator = State(initialValue: MapNavigator(collection: game.collection, map: game.map))
     }
@@ -93,22 +121,57 @@ struct GameScreen: View {
             .containerBackground(.clear, for: .navigation)
             .navigationTitle(game.collection.name)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarTitleMenu { collectionPicker }
+            // Other places are chosen between rounds, not partway through one, which would lose it.
+            .toolbarTitleMenu {
+                if game.phase == .lobby || game.phase == .finished { collectionPicker }
+            }
             // The bar is always there, so the room it takes never changes under the board as the
             // quiz opens; only its buttons fade in.
             .toolbar { toolbar }
             .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+            .confirmationDialog("End this round?", isPresented: $isConfirmingEnd, titleVisibility: .visible) {
+                Button("End round", role: .destructive, action: backToLobby)
+                Button("Keep playing", role: .cancel) {}
+            }
         }
-        .overlay { flightLayer }
+        .overlay {
+            flightLayer
+        }
         .task { await open() }
         .onChange(of: game.scopeID) { frameScope() }
         .onChange(of: game.placeSetID) { frameScope() }
         .onChange(of: panelFrame.minY) { reframeOnceTheCardSettles() }
         .onChange(of: panelFrame.minX) { reframeOnceTheCardSettles() }
         .onChange(of: autoZoom) { followAutoZoom() }
-        .task(id: game.phase == .lobby && isExpanded) { await twinkleWhileWaiting() }
+        .task(id: TwinkleRun(
+            isOn: game.phase == .lobby && isExpanded && allowsAmbientMotion, collectionID: game.collection.id,
+            scopeID: game.scopeID, nudges: lobbyNudges)
+        ) { await twinkleWhileWaiting() }
         .task(id: game.deadline) { await countDown() }
         .task(id: game.questionDeadline) { await countDownQuestion() }
+        .task(id: markerStart) {
+            // Once Find's dot has landed and its ring has faded, the board can rest again.
+            guard markerStart != nil else { return }
+            try? await Task.sleep(for: .seconds(GameSpotlight.markerDrop + GameSpotlight.markerRing + 0.1))
+            guard !Task.isCancelled else { return }
+            markerStart = nil
+        }
+        .task(id: glowStart) {
+            // Likewise once a glow has come up and its ring has faded.
+            guard glowStart != nil else { return }
+            try? await Task.sleep(for: .seconds(GameSpotlight.markerDrop + GameSpotlight.markerRing + 0.1))
+            guard !Task.isCancelled else { return }
+            glowStart = nil
+        }
+        .task(id: questionLitAt) {
+            // And once the place in question has come up, which waits for the camera to land, and
+            // its ring has faded.
+            guard let questionLitAt else { return }
+            let wait = max(questionLitAt.timeIntervalSinceNow, 0)
+            try? await Task.sleep(for: .seconds(wait + GameSpotlight.markerDrop + GameSpotlight.markerRing + 0.1))
+            guard !Task.isCancelled else { return }
+            self.questionLitAt = nil
+        }
         .sensoryFeedback(trigger: haptic) { _, event in event?.feedback }
         .accessibilityAction(.escape, back)
     }
@@ -136,7 +199,7 @@ struct GameScreen: View {
             outlineArrangement(for: place, size: size, fold: fold, bottomInset: bottomInset)
                 .transition(.opacity)
         } else {
-            mapArrangement(size: size, origin: origin, fold: fold)
+            mapArrangement(size: size, origin: origin, fold: fold, bottomInset: bottomInset)
                 .transition(.opacity)
         }
     }
@@ -152,7 +215,7 @@ struct GameScreen: View {
 
     /// The map always fills the screen, so on iPhone Duo its sea carries on under the near side
     /// beneath the card; only the camera keeps to the far side.
-    private func mapArrangement(size: CGSize, origin: CGPoint, fold: FoldRegions?) -> some View {
+    private func mapArrangement(size: CGSize, origin: CGPoint, fold: FoldRegions?, bottomInset: CGFloat) -> some View {
         let bounds = CGRect(origin: .zero, size: size)
         let panelRect = fold?.near ?? bounds
         let isBeside = fold == nil && isWide(size)
@@ -163,7 +226,7 @@ struct GameScreen: View {
                 .frame(width: bounds.width, height: bounds.height)
             panel(
                 isSeparate: fold != nil, isBeside: isBeside, isTall: size.height >= 600, height: panelRect.height,
-                columnWidth: columnWidth(for: size))
+                columnWidth: columnWidth(for: size), safeBottom: bottomInset)
                 .frame(width: panelRect.width, height: panelRect.height, alignment: isBeside ? .bottomTrailing : .bottom)
                 .position(x: panelRect.midX, y: panelRect.midY)
         }
@@ -252,7 +315,7 @@ struct GameScreen: View {
                 .position(x: namesRect.midX, y: namesRect.midY)
         }
         .opacity(isExpanded ? 1 : 0)
-        .animation(.bouncy(duration: 0.5), value: place.id)
+        .animation(roundChange, value: place.id)
     }
 
     /// Outline in place of the map: the shape alone, large on a plain grey ground above the card,
@@ -277,7 +340,8 @@ struct GameScreen: View {
                     .frame(width: shapeRect.width, height: shapeRect.height)
                     .position(x: shapeRect.midX, y: shapeRect.midY)
                     .id(place.id)
-                    .transition(.asymmetric(
+                    // Each shape grows into place; with Reduce Motion it only fades in.
+                    .transition(reduceMotion ? .opacity : .asymmetric(
                         insertion: .scale(scale: 0.6).combined(with: .opacity),
                         removal: .opacity))
             }
@@ -287,7 +351,7 @@ struct GameScreen: View {
                 .position(x: cardRect.midX, y: cardRect.midY)
         }
         .opacity(isExpanded ? 1 : 0)
-        .animation(.bouncy(duration: 0.5), value: place.id)
+        .animation(roundChange, value: place.id)
     }
 
     /// The question card beside or below a hero. A list of names fills its room and scrolls itself;
@@ -297,7 +361,7 @@ struct GameScreen: View {
     private func questionBesideHero(bottomInset: CGFloat, height: CGFloat) -> some View {
         let card = GameQuestionCard(
             game: game, localLanguage: localLanguage, isRoomy: true, selection: nil, onAnswer: answer,
-            onTyped: answer(typed:), onDecoy: answer(decoy:), onReveal: reveal, onNext: next,
+            onTyped: answer(typed:), onDecoy: answer(decoy:), onReveal: reveal, onNext: next, onSkip: skip,
             bottomInset: bottomInset)
         if game.answerMethod == .list {
             card
@@ -343,102 +407,99 @@ struct GameScreen: View {
         return GameMapStage(
             navigator: navigator, map: turningMap ?? game.map, statuses: game.statuses, labels: labels,
             veiled: game.veiledRegionIDs, veilID: "\(game.scopeID ?? "everywhere")-\(game.placeSetID ?? "all")-\(game.isMembershipRound)",
-            ringed: isFindingRound ? game.openRegionIDs.subtracting(tried) : [], tried: tried, plain: plainRegionIDs,
+            // With the borders hidden, rings around the smallest places would give them away.
+            ringed: isFindingRound && game.showsBorders ? game.openRegionIDs.subtracting(tried) : [], tried: tried,
+            plain: plainRegionIDs,
             // Lights keep to places as they rest, so they wait while the World turns beneath them.
             spotlights: turningMap == nil ? spotlights : [], flash: turningMap == nil ? flash : nil, wrapPeriod: wrapPeriod,
-            isExpanded: isExpanded, tapsAnswer: isFindingRound || game.phase == .learning, panelFrame: panelFrame,
+            isExpanded: isExpanded, tapsAnswer: isFindingRound, panelFrame: panelFrame,
             farSide: farSide,
             accessibilityLabel: mapLabel, accessibilityValue: mapValue, accessibilityHint: mapHint, onTap: tap(at:),
             onMove: movedByHand)
     }
 
-    /// The card over the board. Learn brings its own row of glass cards, spanning its side of the
-    /// screen so the cards either side can peek in; everything else sits in one glass panel.
+    /// The card over the board, in one glass panel, standing off the screen's foot by the app's
+    /// shared rule: a little above the home indicator, or a margin's width where there's none.
     private func panel(
-        isSeparate: Bool, isBeside: Bool, isTall: Bool, height: CGFloat, columnWidth: CGFloat
+        isSeparate: Bool, isBeside: Bool, isTall: Bool, height: CGFloat, columnWidth: CGFloat, safeBottom: CGFloat
     ) -> some View {
         let isAnswering = game.phase == .asking || game.phase == .answered
-        // Beside the map, a list of names to pick from takes the column's full height.
+        // Beside the map, a list of names or pictures to pick from takes the column's full height.
         let fillsColumn = isBeside && isAnswering && game.answerMethod == .list
-        // A list of names scrolls itself; every other card keeps to its own height, and scrolls
-        // within the glass only where the screen is too short for it, rather than running off the top.
+        // A list of names or pictures scrolls itself; every other card keeps to its own height, and
+        // scrolls within the glass only where the screen is too short for it, rather than running
+        // off the top.
         let fitsItself = isAnswering && game.answerMethod == .list
+        // The gap beneath the glass, by the app's shared rule, and the room left above it, less a
+        // little at the top, for a card that keeps to its own height.
+        let foot: CGFloat = safeBottom > 0 ? 10 : 16
+        let room = max(height - foot - 6, 0)
+        let swap = AnyTransition.slotSwap(reduceMotion: reduceMotion)
         return ZStack(alignment: .bottom) {
-            if game.phase == .learning {
-                // Learn keeps within the height there is: beside the map or on the near side of the
-                // fold, all of it; over the foot of the map, enough to leave the map in view.
-                let subcollection = game.learnPlace.flatMap(learnableSubcollection(of:))
-                GameLearnCard(
-                    game: game, localLanguage: localLanguage, isRoomy: isSeparate,
-                    maxHeight: isBeside || isSeparate ? height - 12 : height * 0.78, onStep: step, onShow: show, onScrub: scrub,
-                    subcollectionLabel: subcollection?.divisionLabel
-                ) {
-                    if let subcollection { learnSubdivisions(of: subcollection) }
-                }
-                    // A fresh row of cards for each set of places.
-                    .id(game.collection.id)
-                    .frame(maxWidth: isBeside ? columnWidth + 80 : .infinity)
-                    // The cards either side fade away at the row's ends, rather than being cut off
-                    // there or running on under the bar beside it on iPhone Duo.
-                    .mask {
-                        HStack(spacing: 0) {
-                            LinearGradient(colors: [.clear, .black], startPoint: .leading, endPoint: .trailing)
-                                .frame(width: 22)
-                            Color.black
-                            LinearGradient(colors: [.black, .clear], startPoint: .leading, endPoint: .trailing)
-                                .frame(width: 22)
-                        }
+            // One glass throughout. As a round of a list begins or ends, only what's in it trades
+            // places, the card that scrolls itself and the one that keeps to its own height, in one
+            // slot pinned to the foot, and the glass reshapes around them rather than giving way to
+            // another.
+            ZStack(alignment: .bottom) {
+                if fitsItself {
+                    card(isRoomy: isSeparate || fillsColumn, isWide: isBeside && isTall)
+                        .transition(swap)
+                } else {
+                    FittedScroll(maxHeight: room) {
+                        // Short of height, as on the near side of iPhone Duo's fold when it's set
+                        // down like a laptop, the lobby leaves its name to the title bar so every
+                        // tile fits without scrolling.
+                        card(isRoomy: false, isWide: isBeside && isTall, isShort: height < 520, maxHeight: room)
                     }
-                    .transition(.blurReplace)
-            } else {
-                Group {
-                    if fitsItself {
-                        card(isRoomy: isSeparate || fillsColumn, isWide: isBeside && isTall)
-                    } else {
-                        FittedScroll(maxHeight: max(height - 12, 0)) {
-                            card(isRoomy: false, isWide: isBeside && isTall)
-                        }
-                    }
+                    .transition(swap)
                 }
-                .frame(maxWidth: isBeside ? columnWidth : 600)
-                // Whatever comes and goes inside stays inside the glass.
-                .clipShape(.rect(cornerRadius: 28))
-                .glassPanel(in: .rect(cornerRadius: 28))
-                .padding(.horizontal, 10)
-                .transition(.blurReplace)
             }
+            .frame(maxWidth: isBeside ? columnWidth : 600)
+            // Whatever comes and goes inside stays inside the glass.
+            .clipShape(.rect(cornerRadius: 28))
+            .glassPanel(in: .rect(cornerRadius: 28))
+            .padding(.horizontal, 10)
         }
         .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { panelFrame = $0 }
-        // Learn's row keeps room for its cards' shadows itself.
-        .padding(.bottom, game.phase == .learning ? 0 : 6)
+        .padding(.bottom, foot)
         .padding(.top, isSeparate || fillsColumn ? 6 : 0)
         .frame(maxHeight: isSeparate || fillsColumn ? .infinity : nil, alignment: .bottom)
         .opacity(isExpanded ? 1 : 0)
-        .offset(y: isExpanded || isSeparate ? 0 : 80)
+        // It rises into place as the quiz opens and sinks as it closes; with Reduce Motion it only fades.
+        .offset(y: isExpanded || isSeparate || reduceMotion ? 0 : 80)
     }
 
-    @ViewBuilder
-    private func card(isRoomy: Bool, isWide: Bool) -> some View {
-        switch game.phase {
-        case .lobby:
-            GameLobbyCard(
-                game: game, localLanguage: localLanguage, isRoomy: isWide, onPlay: start, onLearn: startLearning
-            ) { collectionPicker }
-                .transition(.blurReplace)
-        case .asking, .answered:
-            GameQuestionCard(
-                game: game, localLanguage: localLanguage, isRoomy: isRoomy, selection: selection, onAnswer: answer,
-                onTyped: answer(typed:), onDecoy: answer(decoy:), onReveal: reveal, onNext: next,
-                onMembership: answer(isMember:))
-                .transition(.blurReplace)
-        case .finished:
-            GameResultsCard(
-                game: game, localLanguage: localLanguage, reviewID: reviewID, onReview: review,
-                onPlayAgain: { start(game.mode) }, onChangeGame: backToLobby)
-                .transition(.blurReplace)
-        case .learning:
-            // Learn's cards are its own; see `panel`.
-            EmptyView()
+    /// The card for where the quiz is: the lobby, a question, or the results. The one going and the
+    /// one coming share one slot, pinned to the glass's foot, so as they trade places the glass
+    /// takes the taller of the two rather than both stacked, and never swells and snaps back.
+    private func card(isRoomy: Bool, isWide: Bool, isShort: Bool = false, maxHeight: CGFloat? = nil) -> some View {
+        let swap = AnyTransition.slotSwap(reduceMotion: reduceMotion)
+        return ZStack(alignment: .bottom) {
+            switch game.phase {
+            case .lobby:
+                GameLobbyCard(
+                    game: game, localLanguage: localLanguage, isRoomy: isWide, isShortOfHeight: isShort, maxHeight: maxHeight,
+                    glowing: twinkles.compactMap { $0.regionIDs.first.flatMap(game.place(id:)) }, canLearn: learnRequest != nil,
+                    openTile: $openTile, onPlay: start, onLearn: learn
+                ) { collectionPicker }
+                    .transition(swap)
+            case .asking, .answered:
+                if game.mode == .listAll {
+                    GameListAllCard(game: game, localLanguage: localLanguage, onTyped: name(listAll:), onGiveUp: giveUp)
+                        .transition(swap)
+                } else {
+                    GameQuestionCard(
+                        game: game, localLanguage: localLanguage, isRoomy: isRoomy, selection: selection, onAnswer: answer,
+                        onTyped: answer(typed:), onDecoy: answer(decoy:), onReveal: reveal, onNext: next, onSkip: skip,
+                        onMembership: answer(isMember:), listFoot: 8)
+                        .transition(swap)
+                }
+            case .finished:
+                GameResultsCard(
+                    game: game, localLanguage: localLanguage, reviewID: reviewID, onLookAgain: review,
+                    onReview: reviewMisses, onReplay: { start(game.mode) }, onBack: backToLobby)
+                    .transition(swap)
+            }
         }
     }
 
@@ -448,29 +509,26 @@ struct GameScreen: View {
     /// in it, so the long list keeps its grouping; the World first, on its own.
     @ViewBuilder
     private var collectionPicker: some View {
-        // Choosing another set of places starts afresh, leaving any way back behind.
-        let selection = Binding(get: { game.collection.id }, set: { id in
-            learnTrail = []
-            switchCollection(to: id)
-        })
+        // Choosing another set of places starts afresh.
+        let selection = Binding(get: { game.collection.id }, set: { id in switchCollection(to: id) })
         ForEach(MapGame.sections(applying: counting.rules)) { section in
             if let title = section.title {
                 Menu {
                     Picker(title, selection: selection) {
                         ForEach(section.countries) { collection in
-                            Text(collection.name).tag(collection.id)
+                            Text(collection.distinctName).tag(collection.id)
                         }
                     }
                 } label: {
                     Text(title)
                     if let chosen = section.countries.first(where: { $0.id == game.collection.id }) {
-                        Text(chosen.name)
+                        Text(chosen.distinctName)
                     }
                 }
             } else {
                 Picker("Places", selection: selection) {
                     ForEach(section.countries) { collection in
-                        Text(collection.name).tag(collection.id)
+                        Text(collection.distinctName).tag(collection.id)
                     }
                 }
             }
@@ -482,14 +540,12 @@ struct GameScreen: View {
         ToolbarItem(placement: .cancellationAction) {
             Group {
                 if game.phase == .lobby {
+                    // With a tile's second level open, Escape steps back to the tiles instead.
                     Button("Close", systemImage: "xmark", action: close)
-                        .keyboardShortcut(.cancelAction)
-                } else if game.phase == .learning, let stop = learnTrail.last {
-                    // Out of a Learn opened from another's, back to that one, at the place it was opened from.
-                    Button("Back to \(stop.name)", systemImage: "chevron.backward", action: learnBack)
-                        .keyboardShortcut(.cancelAction)
+                        .keyboardShortcut(openTile == nil ? .cancelAction : nil)
                 } else {
-                    Button("Back to Quizzes", systemImage: "chevron.backward", action: backToLobby)
+                    Button("Quizzes", systemImage: "chevron.backward", action: back)
+                        .accessibilityLabel("Back to quizzes")
                         .keyboardShortcut(.cancelAction)
                 }
             }
@@ -499,20 +555,29 @@ struct GameScreen: View {
         if game.phase != .lobby, !isFlagRound {
             // Zoom out and in by hand, a step at a time, around the middle of the map.
             ToolbarItemGroup(placement: .primaryAction) {
-                Button("Zoom Out", systemImage: "minus") { zoom(by: 1 / 1.8) }
+                Button("Zoom out", systemImage: "minus") { zoom(by: 1 / 1.8) }
                     .disabled(!canZoomByHand || navigator.camera.zoom <= 1.01)
                     .opacity(isExpanded ? 1 : 0)
-                Button("Zoom In", systemImage: "plus") { zoom(by: 1.8) }
+                Button("Zoom in", systemImage: "plus") { zoom(by: 1.8) }
                     .disabled(!canZoomByHand || navigator.camera.zoom >= navigator.maximumZoom - 0.01)
                     .opacity(isExpanded ? 1 : 0)
+                // Back out to the whole board in one go, as the full map's Show all does.
+                Button("Show all", systemImage: "arrow.down.right.and.arrow.up.left", action: showAll)
+                    .disabled(!canZoomByHand || navigator.camera.zoom <= 1.01)
+                    .opacity(isExpanded ? 1 : 0)
             }
+            // A pinch does the same, so where room runs short, as in iPhone Duo's side bar on its
+            // short outer display, these go into the overflow menu before Auto Zoom, the one place
+            // to turn it on or off mid-round.
+            .overflowsFirst()
             ToolbarItem(placement: .primaryAction) {
-                Toggle("Auto Zoom", systemImage: "location.viewfinder", isOn: $autoZoom)
+                Toggle("Auto zoom", systemImage: "location.viewfinder", isOn: $autoZoom)
                     .toggleStyle(.button)
                     .disabled(!autoZoomApplies)
                     .opacity(isExpanded ? 1 : 0)
                     .accessibilityHint("When on, the map flies in to each place. When off, the whole map stays in view.")
             }
+            .overflowsLast()
         }
     }
 
@@ -528,11 +593,19 @@ struct GameScreen: View {
         haptic = GameHaptic(feedback: .selection)
     }
 
+    /// Back out to the whole board, by hand as a step of zoom is, so Auto Zoom doesn't fly straight
+    /// back in; at once with Reduce Motion.
+    private func showAll() {
+        movedByHand()
+        navigator.showAll(animation: reduceMotion ? nil : .smooth(duration: 0.45))
+        haptic = GameHaptic(feedback: .selection)
+    }
+
     /// Whether Auto Zoom has anything to do just now. Find keeps the camera where you put it, and
     /// Outline and Code have nothing on the board to fly to until they're answered.
     private var autoZoomApplies: Bool {
-        if isFindingRound { return false }
-        if game.phase == .asking, game.mode == .outline || game.mode == .code { return false }
+        if isFindingRound || game.mode == .listAll { return false }
+        if game.phase == .asking, [.outline, .code, .whoseCapital, .pickOutline].contains(game.mode) { return false }
         return true
     }
 
@@ -544,46 +617,61 @@ struct GameScreen: View {
     }
 
     /// The place lit up on the board: the place in question in Identify and Capital, the answer
-    /// once it's given, a place looked at again from the results, and in Learn, the place being browsed.
+    /// once it's given, and a place looked at again from the results.
     private var spotlight: GameSpotlight? {
         switch game.phase {
         case .lobby:
             return nil
         case .asking:
             if game.mode == .findIt, let selection {
-                return lit(selection.id, style: .answer, color: game.mode.color)
+                // With the borders hidden, only a dot where it was tapped: the place's outline lit
+                // up would show where its borders run before it's answered.
+                guard game.showsBorders else {
+                    return selectionDot.map {
+                        GameSpotlight(regionIDs: [], style: .marker, color: game.mode.color, marker: $0, start: markerStart)
+                    }
+                }
+                return lit(selection.id, style: .answer, color: game.mode.color, litAt: glowStart)
             }
             if game.mode == .dot, let place = game.current, let point = game.dotPoint(of: place) {
                 return GameSpotlight(regionIDs: [], style: .marker, color: game.mode.color, marker: point)
             }
-            guard [.nameIt, .capitals, .member].contains(game.mode), let place = game.current else { return nil }
-            return lit(place.id, style: .question, color: game.mode.color)
+            guard lightsQuestion, let place = game.current else { return nil }
+            return lit(place.id, style: .question, color: game.mode.color, litAt: questionLitAt)
         case .answered:
             guard let place = game.current, let outcome = game.outcomes[place.id] else { return nil }
-            return lit(place.id, style: .answer, color: MapGame.level(for: outcome).color, cities: capitalCities(of: place))
+            return lit(
+                place.id, style: .answer, color: MapGame.level(for: outcome).color, cities: capitalCities(of: place),
+                litAt: glowStart)
         case .finished:
+            // A place looked at again, with its capitals marked where they're the answer.
             guard let reviewID, let outcome = game.outcomes[reviewID] else { return nil }
-            return lit(reviewID, style: .answer, color: MapGame.level(for: outcome).color)
-        case .learning:
-            guard let place = game.learnPlace else { return nil }
-            return lit(place.id, style: .answer, color: MapGame.learnColor, cities: capitalCities(of: place))
+            let cities = game.place(id: reviewID).map(capitalCities(of:)) ?? []
+            return lit(reviewID, style: .answer, color: MapGame.level(for: outcome).color, cities: cities, litAt: glowStart)
         }
     }
 
+    /// Whether the place in question is lit up on the board while it's asked about, striped like
+    /// candy: in Identify, Capital, Member?, Flag's and Code's Find, and Everything.
+    private var lightsQuestion: Bool {
+        [.nameIt, .capitals, .member, .pickFlag, .pickCode, .everything].contains(game.mode)
+    }
+
     /// A place lit up: its own outline only, keeping to its main body, so a country's far-flung
-    /// territories and overseas departments stay dark.
+    /// territories and overseas departments stay dark. `litAt` is when its light came on, the place
+    /// in question's or an answer's glow, for it to come up rather than appear.
     private func lit(
-        _ placeID: String, style: GameSpotlight.Style, color: Color, cities: [GameSpotlight.City] = []
+        _ placeID: String, style: GameSpotlight.Style, color: Color, cities: [GameSpotlight.City] = [], litAt: Date? = nil
     ) -> GameSpotlight {
         GameSpotlight(
             regionIDs: game.mainRegions(of: placeID), style: style, color: color, cities: cities,
-            mainBody: game.mainBody(of: placeID))
+            mainBody: game.mainBody(of: placeID), litAt: litAt)
     }
 
-    /// A place's capitals to mark on the map, where it's known where they are: in Capitals once
-    /// it's answered, and in Learn.
+    /// A place's capitals to mark on the map, where it's known where they are: in Capital either
+    /// way round once it's answered.
     private func capitalCities(of place: AdministrativeDivision) -> [GameSpotlight.City] {
-        guard game.mode == .capitals || game.phase == .learning else { return [] }
+        guard game.mode == .capitals || game.mode == .whoseCapital else { return [] }
         return (game.capitals[place.id] ?? []).compactMap { capital in
             game.mapPoint(of: capital).map { GameSpotlight.City(name: capital.name, point: $0) }
         }
@@ -592,7 +680,8 @@ struct GameScreen: View {
     /// In Dot, the regions not answered yet, drawn as plain land; each one's borders
     /// and colour bloom in as it's answered.
     private var plainRegionIDs: Set<String> {
-        guard game.mode == .dot, game.phase == .asking || game.phase == .answered else { return [] }
+        let isPlain = game.mode == .dot || game.mode == .findIt && !game.showsBorders
+        guard isPlain, game.phase == .asking || game.phase == .answered else { return [] }
         return Set(game.regionPlaces.filter { game.outcomes[$0.value.id] == nil }.keys)
     }
 
@@ -603,8 +692,7 @@ struct GameScreen: View {
         return Set(game.wrongGuesses.flatMap { game.placeRegions[$0.id] ?? [] })
     }
 
-    /// Each place's name, once it's been answered, so the board fills in as you learn it. Learn's
-    /// card already names the place being browsed, so the board leaves it to the card.
+    /// Each place's name, once it's been answered, so the board fills in as you learn it.
     private var labels: [String: MapLabel] {
         var labels: [String: MapLabel] = [:]
         for (id, outcome) in game.outcomes {
@@ -618,9 +706,6 @@ struct GameScreen: View {
 
     private var mapLabel: String {
         let map = "Map of \(game.collection.name)"
-        if let place = game.learnPlace {
-            return "\(map), showing \(place.displayName(localLanguage: localLanguage))"
-        }
         guard game.phase == .asking, let place = game.current else { return map }
         switch game.mode {
         case .nameIt:
@@ -630,14 +715,17 @@ struct GameScreen: View {
             return "\(map). The \(game.collection.placeNoun) lit up is in \(group.name)."
         case .findIt:
             return "\(map). Find \(place.name)."
-        case .capitals, .member:
+        case .capitals, .member, .pickFlag, .pickCode:
             return "\(map). \(place.name) is lit up."
         case .dot:
             guard let group = game.collection.groups.first(where: { $0.id == place.groupID }), !game.scopes.isEmpty else {
                 return "\(map), with one \(game.collection.placeNoun) marked with a dot"
             }
             return "\(map). The \(game.collection.placeNoun) marked with a dot is in \(group.name)."
-        case .flags, .outline, .code:
+        case .everything:
+            guard let country = game.countryName(of: place) else { return "\(map), with one place lit up" }
+            return "\(map). The place lit up is in \(country)."
+        case .flags, .outline, .code, .whoseCapital, .listAll, .pickOutline:
             return map
         }
     }
@@ -651,14 +739,20 @@ struct GameScreen: View {
 
     private var mapHint: String {
         switch (game.phase, game.mode) {
-        case (.asking, .findIt): "Tap a place to choose it, then confirm, or double-tap it to answer straight away. Pinch to zoom."
+        case (.asking, .findIt):
+            game.showsBorders
+                ? "Tap a place to choose it, then confirm, or double-tap it to answer straight away. Pinch to zoom."
+                : "Tap a place to mark it with a dot, then confirm, or tap it again to answer. Pinch to zoom."
         case (.asking, .nameIt): game.answerMethod == .typing ? "Type its name below the map." : "Choose its name below the map."
         case (.asking, .flags): "Choose its name below the map."
-        case (.asking, .outline), (.asking, .code), (.asking, .dot):
+        case (.asking, .pickFlag): "Choose its flag below the map."
+        case (.asking, .pickOutline): "Choose its outline below the map."
+        case (.asking, .pickCode): game.answerMethod == .typing ? "Type its code below the map." : "Choose its code below the map."
+        case (.asking, .outline), (.asking, .code), (.asking, .dot), (.asking, .whoseCapital), (.asking, .everything):
             game.answerMethod == .typing ? "Type its name below the map." : "Choose its name below the map."
         case (.asking, .capitals): game.answerMethod == .typing ? "Type its capital below the map." : "Choose its capital below the map."
         case (.asking, .member): "Answer in or out below the map."
-        case (.learning, _): "Tap a place to learn about it. Pinch to zoom."
+        case (.asking, .listAll): "Type the names below the map. Each one fills in as it’s named. Pinch to zoom."
         default: "Pinch to zoom."
         }
     }
@@ -689,65 +783,102 @@ struct GameScreen: View {
 
     private func start(_ mode: MapGameMode) {
         clearRound()
-        withAnimation(.bouncy(duration: 0.5)) {
+        withAnimation(roundChange) {
             game.mode = mode
             game.start()
         }
+        roundBegan()
+    }
+
+    /// From the results, a round of only the places worth another look, in the same mode.
+    private func reviewMisses() {
+        clearRound()
+        withAnimation(roundChange) { game.startReview() }
+        roundBegan()
+    }
+
+    /// A round has begun: a thump, and the camera to its first place, or the whole board.
+    private func roundBegan() {
+        let mode = game.mode
         haptic = GameHaptic(feedback: .impact(weight: .medium))
-        // Find leaves the camera where it is: the map only moves when you move it.
-        guard mode != .findIt else { return }
-        // The first question's clock waits for the camera to arrive, so the flight doesn't eat into it.
-        if autoZoom {
-            game.holdQuestionClock(for: frameQuestion())
-        } else {
+        // Find starts with the whole board in view, in the room the question card leaves it, rather
+        // than wherever the lobby left the camera; from then on the map only moves when you move it.
+        guard mode != .findIt else {
             game.holdQuestionClock(for: frameScope())
+            return
         }
+        // The first question's clock waits for the camera to arrive, and the question itself, so
+        // neither eats into it. List All keeps the whole board in view, to watch it fill in.
+        let flight = followsQuestion ? frameQuestion() : frameScope()
+        lightQuestion(after: flight)
+        game.holdQuestionClock(for: max(flight, questionEntrance))
     }
 
-    /// Learn: every place in play, one card at a time, the map lighting up each in turn.
-    private func startLearning() {
-        clearRound()
-        withAnimation(.bouncy(duration: 0.5)) { game.startLearning() }
+    /// Lights up the place in question as the camera lands on it, or at once where the camera stays
+    /// put, so it comes up with its ring on a board that's come to rest, as its clock starts. A
+    /// flight has all but come to rest a quarter of a second before its end, so the light starts
+    /// then, and is up as the camera settles rather than a beat after.
+    private func lightQuestion(after flight: TimeInterval) {
+        questionLitAt = lightsQuestion && game.phase == .asking ? .now.addingTimeInterval(max(flight - 0.25, 0)) : nil
+    }
+
+    /// How long a question takes to arrive, for its clock to wait on: Flag's flag and Outline's
+    /// shape growing in over half a second, four to pick from dealt one after another in about
+    /// 0.7, anything else at once; nothing to wait on with Reduce Motion, where they only fade.
+    private var questionEntrance: TimeInterval {
+        guard !reduceMotion else { return 0 }
+        let hero: TimeInterval = game.mode == .flags || game.mode == .outline ? 0.5 : 0
+        let dealt: TimeInterval = game.answerMethod == .four ? 0.68 : 0
+        return max(hero, dealt)
+    }
+
+    /// Brings the camera to the question just come up, as Auto Zoom has it, and holds its clock
+    /// until both the camera and the question have arrived. Find leaves the camera where you put it.
+    private func frameNewQuestion() {
+        var flight: TimeInterval = 0
+        if followsQuestion {
+            flight = frameQuestion()
+        } else if game.mode != .findIt, !isBoardFitted {
+            // Nothing on the board to fly to yet, as in Code: the camera pulls back out from the
+            // last answer rather than lingering on it.
+            flight = frameScope()
+        }
+        lightQuestion(after: flight)
+        game.holdQuestionClock(for: max(flight, questionEntrance))
+    }
+
+    /// Where the lobby's Atlas tile leads: the collection's full map, at the first place in the
+    /// region or set the quiz was set to, or else at its first. A group of countries, such as the EU
+    /// or one of the person's own, stays itself: its own list and its own map, the World zoomed to
+    /// its members, with a deck of just its members, starting at its first country in play. Nil
+    /// where there's no map to learn on, so the lobby leaves the Atlas out rather than only closing.
+    private var learnRequest: LearnDeck.Request? {
+        let collection = game.collection
+        let inPlay = Set(game.placesInPlay.map(\.id))
+        let isNarrowed = game.scopeID != nil || game.placeSetID != nil
+        let start = isNarrowed ? collection.divisions.first { inPlay.contains($0.id) }?.id : nil
+        if collection.isGroupOfCountries {
+            let first = start ?? collection.divisions.first(where: { inPlay.contains($0.id) })?.id ?? collection.divisions.first?.id
+            guard let first, TravelMap.named(collection.id) != nil else { return nil }
+            return LearnDeck.Request(collectionID: collection.id, placeID: first)
+        }
+        guard TravelMap.named(collection.id) != nil else { return nil }
+        return LearnDeck.Request(collectionID: collection.id, placeID: start)
+    }
+
+    /// Learn, from the lobby's tile: the quiz closes, and the collection's full map opens in Learn,
+    /// at the first place in the region or set the quiz was set to, or else at its first.
+    private func learn() {
+        guard !isClosing, let request = learnRequest else { return }
         haptic = GameHaptic(feedback: .impact(weight: .medium))
-        if autoZoom {
-            frameLearnPlace()
-        } else {
-            frameScope()
-        }
-    }
-
-    /// What a place has of its own to learn, such as Japan's prefectures for Japan, where there's a
-    /// map to learn them on.
-    private func learnableSubcollection(of place: AdministrativeDivision) -> Country? {
-        guard let collection = CountryCatalog.collection(for: place), TravelMap.named(collection.id) != nil else { return nil }
-        return MapGame.collections(applying: counting.rules).first { $0.id == collection.id }
-    }
-
-    /// Opens Learn for a place's own places, such as Japan's prefectures from the World's Japan,
-    /// keeping the way back to it.
-    private func learnSubdivisions(of collection: Country) {
-        guard let place = game.learnPlace else { return }
-        let stop = LearnStop(collectionID: game.collection.id, placeID: place.id, name: game.collection.name)
-        switchCollection(to: collection.id)
-        guard game.collection.id == collection.id else { return }
-        learnTrail.append(stop)
-        startLearning()
-    }
-
-    /// Back to the Learn this one was opened from, at the place it was opened from.
-    private func learnBack() {
-        guard let stop = learnTrail.popLast() else { return }
-        switchCollection(to: stop.collectionID)
-        clearRound()
-        withAnimation(.bouncy(duration: 0.5)) {
-            game.startLearning()
-            if let place = game.learnPlaces.first(where: { $0.id == stop.placeID }) { game.learn(place) }
-        }
-        haptic = GameHaptic(feedback: .impact(weight: .medium))
-        if autoZoom {
-            frameLearnPlace()
-        } else {
-            frameScope()
+        isClosing = true
+        withAnimation(closingAnimation) {
+            isExpanded = false
+        } completion: {
+            guard !onLearn(request) else { return }
+            isClosing = false
+            // Back again where there's nothing to learn on, it pops up as it first opened.
+            withAnimation(openingAnimation) { isExpanded = true }
         }
     }
 
@@ -758,22 +889,40 @@ struct GameScreen: View {
         reviewID = nil
         flash = nil
         selection = nil
+        selectionDot = nil
+        markerStart = nil
+        glowStart = nil
+        questionLitAt = nil
         lastTap = nil
+    }
+
+    /// Answers, the card springing along, and where that settles the question, lights the answer's
+    /// glow on the board from this moment, so it comes up rather than appearing.
+    private func settling<Result>(_ answer: () -> Result) -> Result {
+        let wasAsking = game.phase == .asking
+        let result = withAnimation(settle) { answer() }
+        if wasAsking, game.phase == .answered { glowStart = .now }
+        return result
+    }
+
+    /// Lets go of the mistake's name over the map, fading it out rather than dropping it.
+    private func clearFlash() {
+        guard flash != nil else { return }
+        withAnimation(.smooth(duration: 0.2)) { flash = nil }
     }
 
     /// Answers with a name chosen, or a place tapped in Find. Correct stays on the answer until
     /// Next is pressed; wrong says so, and shows where the wrong place is.
     private func answer(_ place: AdministrativeDivision) {
         guard let current = game.current else { return }
-        let result = withAnimation(.snappy) { game.answer(place) }
-        let name = current.displayName(localLanguage: localLanguage)
+        let result = settling { game.answer(place) }
         let guess = place.displayName(localLanguage: localLanguage)
         selection = nil
         switch result {
         case .right:
             haptic = GameHaptic(feedback: .success)
-            announce(game.mode == .capitals ? "Correct! \(capitalNames(of: current))." : "Correct! \(name).")
-            if [.outline, .code, .dot].contains(game.mode) { showAnswer() }
+            announce("Correct! \(spokenAnswerName(of: current)).")
+            if [.outline, .code, .dot, .whoseCapital, .pickOutline].contains(game.mode) { showAnswer() }
         case .wrong, .again:
             haptic = GameHaptic(feedback: result == .wrong ? .error : .impact(weight: .light))
             showMistake(place)
@@ -787,23 +936,46 @@ struct GameScreen: View {
         }
     }
 
-    /// A tap on the board. In Learn it shows the place tapped. In Find it chooses a place to
-    /// confirm, so a slip of the finger doesn't count, and tapping it again lets it go; a second tap
-    /// straight after the first answers with it. A place already tried stays faded, and a tap on it
-    /// only brings a soft bump and, for VoiceOver, a reminder.
+    /// A tap on the board, in Find, chooses a place to confirm, so a slip of the finger doesn't
+    /// count, and tapping it again lets it go; a second tap straight after the first answers with
+    /// it. With the borders hidden, the place chosen is only marked with a dot where it was tapped,
+    /// in Dot's own style, as its outline would show where the borders run: a second tap on the
+    /// dot, or anywhere else in the same place, answers with it, and a tap on another place moves
+    /// the dot there. A place already tried stays faded, and a tap on it only brings a soft bump
+    /// and, for VoiceOver, a reminder.
     private func tap(at location: CGPoint) {
-        guard turningMap == nil, game.phase == .learning || (game.mode == .findIt && game.phase == .asking),
-              let region = game.map.place(at: wrapped(location), geometry: navigator.geometry, among: game.scopedRegionIDs),
+        guard turningMap == nil, game.mode == .findIt, game.phase == .asking else { return }
+        let spot = wrapped(location)
+        let geometry = navigator.geometry
+        // On the dot, or a fingertip from it, the tap means the place the dot marks, whichever
+        // side of a hidden border it lands.
+        if !game.showsBorders, let selection, let selectionDot {
+            let dot = geometry.toScreen(selectionDot)
+            if hypot(spot.x - dot.x, spot.y - dot.y) <= MapTap.dotReach {
+                answer(selection)
+                return
+            }
+        }
+        guard let region = game.map.place(at: spot, geometry: geometry, among: game.scopedRegionIDs),
               let place = game.regionPlaces[region.id]
         else { return }
-        if game.phase == .learning {
-            guard game.learnPlaces.contains(place) else { return }
-            show(place)
-            return
-        }
         guard !game.wrongGuesses.contains(place) else {
             haptic = GameHaptic(feedback: .impact(flexibility: .soft, intensity: 0.5))
             announce("Already tried \(place.displayName(localLanguage: localLanguage)).")
+            return
+        }
+        guard game.showsBorders else {
+            if place == selection {
+                answer(place)
+            } else {
+                withAnimation(settle) {
+                    selection = place
+                    selectionDot = geometry.toMap(spot)
+                }
+                // The dot drops in where the finger was, swelling a touch and settling with a ring.
+                markerStart = .now
+                haptic = GameHaptic(feedback: .selection)
+            }
             return
         }
         let thisTap = MapTap(placeID: place.id, date: .now)
@@ -813,7 +985,9 @@ struct GameScreen: View {
             answer(place)
             return
         }
-        withAnimation(.snappy) { selection = selection == place ? nil : place }
+        withAnimation(settle) { selection = selection == place ? nil : place }
+        // The place chosen glows up and sends a ring out, as the dot lands where borders are hidden.
+        if selection != nil { glowStart = .now }
         haptic = GameHaptic(feedback: .selection)
     }
 
@@ -840,17 +1014,17 @@ struct GameScreen: View {
     /// in play, it shows where that place is, as a wrong pick does.
     private func answer(typed: String) {
         guard let place = game.current else { return }
-        let result = withAnimation(.snappy) { game.answer(typed: typed) }
+        let result = settling { game.answer(typed: typed) }
         switch result {
         case .right:
             haptic = GameHaptic(feedback: .success)
-            let answer = game.mode == .capitals ? capitalNames(of: place) : place.displayName(localLanguage: localLanguage)
+            let answer = spokenAnswerName(of: place)
             if let correction = game.correction {
                 announce("Correct! \(answer). It’s spelt \(correction).")
             } else {
                 announce("Correct! \(answer).")
             }
-            if [.outline, .code, .dot].contains(game.mode) { showAnswer() }
+            if [.outline, .code, .dot, .whoseCapital].contains(game.mode) { showAnswer() }
         case .other(let other), .again(let other):
             if case .other = result {
                 haptic = GameHaptic(feedback: .error)
@@ -865,7 +1039,7 @@ struct GameScreen: View {
             announce("\(city) is in \(place.displayName(localLanguage: localLanguage)), but it isn’t the capital.")
         case .wrong:
             haptic = GameHaptic(feedback: .error)
-            announce("Not quite.")
+            announce("Incorrect.")
         case .ignored:
             break
         }
@@ -875,9 +1049,9 @@ struct GameScreen: View {
     /// in the colour it went.
     private func answer(isMember guess: Bool) {
         guard let place = game.current else { return }
-        let result = withAnimation(.snappy) { game.answer(isMember: guess) }
+        let result = settling { game.answer(isMember: guess) }
         let name = place.displayName(localLanguage: localLanguage)
-        let group = game.collection.worldGroup?.nameInSentence ?? game.collection.name
+        let group = game.groupNameInSentence ?? game.collection.name
         let fact = game.isMember(place) ? "\(name) is in \(group)." : "\(name) isn’t in \(group)."
         switch result {
         case .right:
@@ -885,7 +1059,7 @@ struct GameScreen: View {
             announce("Correct! \(fact)")
         case .wrong:
             haptic = GameHaptic(feedback: .error)
-            announce("Not quite. \(fact)")
+            announce("Incorrect. \(fact)")
         case .again, .ignored:
             break
         }
@@ -894,7 +1068,7 @@ struct GameScreen: View {
     /// In Capital, picks a well-known city in the place that isn't its capital: wrong, gently.
     private func answer(decoy city: String) {
         guard let place = game.current else { return }
-        let result = withAnimation(.snappy) { game.answer(decoy: city) }
+        let result = withAnimation(settle) { game.answer(decoy: city) }
         guard result == .wrong else { return }
         haptic = GameHaptic(feedback: .error)
         announce("\(city) is in \(place.displayName(localLanguage: localLanguage)), but it isn’t the capital.")
@@ -905,46 +1079,18 @@ struct GameScreen: View {
         (game.capitals[place.id] ?? []).map(\.name).formatted(.list(type: .and))
     }
 
-    /// Steps through Learn, by the arrows, the arrow keys or VoiceOver, and flies to the place.
-    private func step(_ offset: Int) {
-        let before = game.learnIndex
-        withAnimation(.snappy) { game.step(by: offset) }
-        guard game.learnIndex != before else { return }
-        haptic = GameHaptic(feedback: .selection)
-        frameLearnPlace()
-    }
-
-    /// Scrubbing through Learn's places: the map pulls all the way out so each place can be seen
-    /// lighting up as it passes, with a tick at each new region, and once you let go, the camera
-    /// flies to where you stopped. A place picked from the list goes straight there.
-    private func scrub(to index: Int, isFinished: Bool) {
-        guard game.learnPlaces.indices.contains(index) else { return }
-        if !isFinished, !isScrubbingOut {
-            isScrubbingOut = true
-            frameScope()
+    /// The answer as VoiceOver says it's right: the place's name, or its capitals, or its code.
+    private func spokenAnswerName(of place: AdministrativeDivision) -> String {
+        switch game.mode {
+        case .capitals: capitalNames(of: place)
+        case .pickCode: game.code(of: place).map(CodeBadge.spoken) ?? place.displayName(localLanguage: localLanguage)
+        default: place.displayName(localLanguage: localLanguage)
         }
-        if index != game.learnIndex {
-            let crossesRegion = game.learnPlace?.groupID != game.learnPlaces[index].groupID
-            game.learn(game.learnPlaces[index])
-            if crossesRegion || isFinished { haptic = GameHaptic(feedback: .selection) }
-        }
-        if isFinished {
-            isScrubbingOut = false
-            frameLearnPlace()
-        }
-    }
-
-    /// Shows a place in Learn, swiped to in the row of cards or tapped on the map, and flies there
-    /// with Auto Zoom on.
-    private func show(_ place: AdministrativeDivision) {
-        withAnimation(.snappy) { game.learn(place) }
-        haptic = GameHaptic(feedback: .selection)
-        frameLearnPlace()
     }
 
     private func reveal() {
         guard let place = game.current else { return }
-        withAnimation(.snappy) { game.reveal() }
+        settling { game.reveal() }
         haptic = GameHaptic(feedback: .impact(weight: .light))
         announce(spokenAnswer(for: place))
         showAnswer()
@@ -954,50 +1100,95 @@ struct GameScreen: View {
     private func spokenAnswer(for place: AdministrativeDivision) -> String {
         let name = place.displayName(localLanguage: localLanguage)
         guard game.mode == .member else { return "It’s \(name)." }
-        let group = game.collection.worldGroup?.nameInSentence ?? game.collection.name
+        let group = game.groupNameInSentence ?? game.collection.name
         return game.isMember(place) ? "\(name) is in \(group)." : "\(name) isn’t in \(group)."
     }
 
+    /// Names a place in List All from what's typed, the moment it's spelt out in full: it fills in
+    /// on the map with a soft tap, and naming the last one ends the round.
+    private func name(listAll typed: String) -> AdministrativeDivision? {
+        guard let place = withAnimation(settle, { game.answer(listAll: typed) }) else { return nil }
+        let name = place.displayName(localLanguage: localLanguage)
+        if game.phase == .finished {
+            haptic = finishedHaptic
+            announce("\(name). That’s all \(game.questions.count)!")
+        } else {
+            haptic = GameHaptic(feedback: .impact(flexibility: .soft, intensity: 0.7))
+            announce("\(name). \(game.named.count) of \(game.questions.count).")
+        }
+        return place
+    }
+
+    /// Gives up on List All: the places not named are shown, and the round's over.
+    private func giveUp() {
+        withAnimation(roundChange) { game.giveUp() }
+        haptic = finishedHaptic
+        frameScope()
+        announce("\(game.rightCount) of \(game.questions.count) named.")
+    }
+
+    /// Leaves this question for later: whatever was in hand is let go, and the next one comes up,
+    /// the camera flying to it as Next would.
+    private func skip() {
+        guard game.canSkip else { return }
+        clearFlash()
+        selection = nil
+        lastTap = nil
+        withAnimation(.swap(reduceMotion: reduceMotion)) { game.skip() }
+        haptic = GameHaptic(feedback: .impact(flexibility: .soft, intensity: 0.6))
+        announce("Skipped. It comes back at the end.")
+        frameNewQuestion()
+    }
+
     private func next() {
-        flash = nil
+        clearFlash()
         selection = nil
         lastTap = nil
         // A shape still landing from the last question stays with it.
         outlineFlight = nil
-        withAnimation(.snappy) { game.advance() }
+        // One question gives way to the next in its slot; the last gives way to the results as
+        // giving up or running out of time does.
+        let into: Animation = game.isLastQuestion ? roundChange : .swap(reduceMotion: reduceMotion)
+        withAnimation(into) { game.advance() }
         switch game.phase {
         case .asking:
-            game.holdQuestionClock(for: frameQuestion())
+            frameNewQuestion()
         case .finished:
             frameScope()
             haptic = finishedHaptic
             announce("Round over: \(game.rightCount) of \(game.questions.count) right first time.")
-        case .lobby, .answered, .learning:
+        case .lobby, .answered:
             break
         }
     }
 
     private func backToLobby() {
-        learnTrail = []
         clearRound()
-        withAnimation(.bouncy(duration: 0.5)) { game.returnToLobby() }
+        withAnimation(roundChange) { game.returnToLobby() }
         frameScope()
     }
 
-    /// Escape goes back a step: out of a round to the quizzes, or out of the quiz.
+    /// Escape goes back a step: out of a tile to the quizzes, out of a round to the quizzes, asking
+    /// first where some of it has been played, or out of the quiz.
     private func back() {
         if game.phase == .lobby {
-            close()
-        } else if game.phase == .learning, !learnTrail.isEmpty {
-            learnBack()
+            if openTile != nil { openTile = nil } else { close() }
+        } else if hasProgress {
+            isConfirmingEnd = true
         } else {
             backToLobby()
         }
     }
 
+    /// Whether a round under way has been partly played, so leaving it would lose something.
+    private var hasProgress: Bool {
+        (game.phase == .asking || game.phase == .answered) && (game.index > 0 || !game.named.isEmpty)
+    }
+
     /// Lights up a place from the results again, flying to it with Auto Zoom on.
     private func review(_ place: AdministrativeDivision) {
-        withAnimation(.snappy) { reviewID = place.id }
+        withAnimation(settle) { reviewID = place.id }
+        glowStart = .now
         haptic = GameHaptic(feedback: .selection)
         if autoZoom { whole(place.id) { fly(to: $0, margin: 2.2) } }
     }
@@ -1005,14 +1196,16 @@ struct GameScreen: View {
     // MARK: The camera
 
     /// The place the camera keeps framed while Auto Zoom is on: the place in question in Identify,
-    /// Capital and Dot, the answer once it's given in Outline and Code too, and the place being
-    /// browsed in Learn.
+    /// Capital and Dot, and the answer once it's given in Outline and Code too.
     private var followedPlace: AdministrativeDivision? {
         guard autoZoom else { return nil }
         switch game.phase {
-        case .asking: return [.nameIt, .capitals, .dot, .member].contains(game.mode) ? game.current : nil
-        case .answered: return [.nameIt, .capitals, .dot, .outline, .code, .member].contains(game.mode) ? game.current : nil
-        case .learning: return game.learnPlace
+        case .asking: return [.nameIt, .capitals, .dot, .member, .pickFlag, .pickCode, .everything].contains(game.mode) ? game.current : nil
+        case .answered:
+            let followed: [MapGameMode] = [
+                .nameIt, .capitals, .dot, .outline, .code, .member, .pickFlag, .whoseCapital, .everything, .pickOutline, .pickCode,
+            ]
+            return followed.contains(game.mode) ? game.current : nil
         case .lobby, .finished: return nil
         }
     }
@@ -1023,15 +1216,21 @@ struct GameScreen: View {
         game.mode == .dot && game.phase == .asking ? 3.5 : 2.2
     }
 
-    /// With Auto Zoom on, Identify, Capital, Dot and Member? fly to each place in turn. Returns
+    /// With Auto Zoom on, Identify, Capital, Dot, Member?, Flag's Find and Everything fly to each place in turn. Returns
     /// about how long the camera takes to get there, the World's turn included.
     @discardableResult
     private func frameQuestion() -> TimeInterval {
-        guard autoZoom, [.nameIt, .capitals, .dot, .member].contains(game.mode), let place = game.current else { return 0 }
+        guard followsQuestion, let place = game.current else { return 0 }
         let turning = turnDuration(to: game.wholeLongitude(for: place.id) ?? game.centerLongitude)
         let flying = game.frames[place.id].map(flightDuration(to:)) ?? 0
         whole(place.id) { fly(to: $0, margin: cameraMargin) }
         return turning + flying
+    }
+
+    /// Whether the camera flies to each question's place: with Auto Zoom on, where the place is lit
+    /// up or marked on the board while it's asked about.
+    private var followsQuestion: Bool {
+        autoZoom && [.nameIt, .capitals, .dot, .member, .pickFlag, .pickCode, .everything].contains(game.mode)
     }
 
     /// How long the World takes to turn to a new middle, as `turnWorld` turns it.
@@ -1054,26 +1253,28 @@ struct GameScreen: View {
     }
 
     /// The card changes height as a question comes and goes, which changes the room left for the
-    /// map. Once it settles, the place being followed is framed again in the room there now is, or
-    /// a board fitted to the screen is fitted again, unless it's been moved by hand since.
+    /// map. Once it settles, and any flight under way has landed, so a flight in two legs is never
+    /// cut off partway, the place being followed is framed again in the room there now is, or a
+    /// board fitted to the screen is fitted again, unless it's been moved by hand since, Find's
+    /// included, as its round starts.
     private func reframeOnceTheCardSettles() {
         pendingReframe?.cancel()
         pendingReframe = Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(180))
+            // A flight may be followed by another as it lands, so wait until none is under way.
+            while !Task.isCancelled, flightEnds.timeIntervalSinceNow > 0 {
+                try? await Task.sleep(for: .seconds(flightEnds.timeIntervalSinceNow + 0.02))
+            }
             guard !Task.isCancelled else { return }
             if let place = followedPlace, outlineFlight == nil {
+                // A reframe is a flight of its own: any leg of an earlier one still to come stands down.
+                flights += 1
                 isBoardFitted = false
                 whole(place.id) { navigator.frame($0, margin: cameraMargin, animation: reduceMotion ? nil : .smooth(duration: 0.5)) }
-            } else if isBoardFitted, !isFindingRound {
+            } else if isBoardFitted {
                 frameScope()
             }
         }
-    }
-
-    /// With Auto Zoom on, Learn flies to the place being browsed.
-    private func frameLearnPlace() {
-        guard autoZoom, let place = game.learnPlace else { return }
-        whole(place.id) { fly(to: $0, margin: 2.2) }
     }
 
     /// Turning Auto Zoom on flies to the place in view; turning it off fits the board back on the
@@ -1088,8 +1289,6 @@ struct GameScreen: View {
             } else if let place = followedPlace {
                 whole(place.id) { fly(to: $0, margin: cameraMargin) }
             }
-        case .learning:
-            if autoZoom { frameLearnPlace() } else { frameScope() }
         case .finished:
             if !autoZoom {
                 frameScope()
@@ -1110,6 +1309,7 @@ struct GameScreen: View {
             isBoardFitted = true
         }
         let duration = animated ? turnDuration(to: game.homeLongitude) + (reduceMotion ? 0 : 0.8) : 0
+        flightEnds = .now.addingTimeInterval(duration)
         turnWorld(to: game.homeLongitude, instantly: !animated) {
             let animation: Animation? = animated && !reduceMotion ? .smooth(duration: 0.8) : nil
             if let frame = game.scopeFrame {
@@ -1126,6 +1326,8 @@ struct GameScreen: View {
     /// whole too leave the World where it is.
     private func whole(_ placeID: String, instantly: Bool = false, then focus: @escaping (CGRect) -> Void) {
         let target = game.wholeLongitude(for: placeID) ?? game.centerLongitude
+        // The turn is part of the journey: nothing reframes the board until it's done.
+        if !instantly { flightEnds = max(flightEnds, .now.addingTimeInterval(turnDuration(to: target))) }
         turnWorld(to: target, instantly: instantly) {
             if let frame = game.frames[placeID] { focus(frame) }
         }
@@ -1165,14 +1367,19 @@ struct GameScreen: View {
         }
     }
 
-    /// The camera was moved by hand, so the board is no longer fitted for it.
+    /// The camera was moved by hand, so the board is no longer fitted for it. In the lobby, a
+    /// twinkling that's come to rest starts again.
     private func movedByHand() {
         if isBoardFitted { isBoardFitted = false }
+        if twinklesRest, game.phase == .lobby {
+            twinklesRest = false
+            lobbyNudges += 1
+        }
     }
 
     /// Whether this round's camera follows places, as every mode but Find and Flag does.
     private var followsPlaces: Bool {
-        game.mode != .findIt && game.mode != .flags
+        game.mode != .findIt && game.mode != .flags && game.mode != .listAll
     }
 
     /// Brings the answer into view with Auto Zoom on. Outline's shape flies into its place; Find
@@ -1185,12 +1392,15 @@ struct GameScreen: View {
             return
         }
         guard game.mode == .findIt else {
-            if autoZoom { whole(place.id) { fly(to: $0, margin: 2.5) } }
+            // At the margin the board keeps the place followed in, so a reframe as the card
+            // settles doesn't nudge the zoom again straight after.
+            if autoZoom { whole(place.id) { fly(to: $0, margin: cameraMargin) } }
             return
         }
         whole(place.id) { frame in
             flights += 1
             isBoardFitted = false
+            flightEnds = .now.addingTimeInterval(reduceMotion ? 0 : 0.7)
             let center = CGPoint(x: frame.midX, y: frame.midY)
             withAnimation(reduceMotion ? nil : .smooth(duration: 0.7)) {
                 navigator.camera = navigator.geometry.camera(centering: center, zoom: navigator.camera.zoom)
@@ -1250,6 +1460,7 @@ struct GameScreen: View {
     private func fly(to frame: CGRect, margin: CGFloat) {
         flights += 1
         isBoardFitted = false
+        flightEnds = .now.addingTimeInterval(flightDuration(to: frame))
         guard !reduceMotion else {
             navigator.frame(frame, margin: margin, animation: nil)
             return
@@ -1297,14 +1508,18 @@ struct GameScreen: View {
 
     /// In the lobby, places in view light up in candy colours, as a taste of the quiz, each with its
     /// name floating beside it: one after another, and on a big map several at once, staggered and
-    /// spread well apart. With Reduce Motion they only fade in and out.
+    /// spread well apart. After half a minute they come to rest, until the map's moved or other
+    /// places or a region are chosen; in Low Power Mode, with Reduce Motion, or with the app in
+    /// the background, they don't twinkle at all.
     private func twinkleWhileWaiting() async {
         twinkles = []
-        guard game.phase == .lobby, isExpanded else { return }
+        twinklesRest = false
+        guard game.phase == .lobby, isExpanded, allowsAmbientMotion else { return }
         let colors = MapGameMode.allCases.map(\.color).shuffled()
         var count = 0
         try? await Task.sleep(for: .seconds(0.6))
-        while !Task.isCancelled {
+        let restsAt = Date.now.addingTimeInterval(Self.twinklingTime)
+        while !Task.isCancelled, Date.now < restsAt {
             let now = Date.now
             twinkles.removeAll { ($0.start ?? now).addingTimeInterval(GameSpotlight.twinkleDuration) <= now }
             let geometry = navigator.geometry
@@ -1316,12 +1531,12 @@ struct GameScreen: View {
                 let center = CGPoint(x: frame.midX, y: frame.midY)
                 return clear.contains(center) ? (place, center) : nil
             }
-            // More at once the more there is to see: up to four on the World.
-            let most = min(max(inView.count / 14, 1), 4)
+            // More at once the more there is to see: up to seven on the World.
+            let most = min(max(inView.count / 8, 1), 7)
             let lit = twinkles.compactMap { twinkle in
                 twinkle.caption.map { CGPoint(x: $0.frame.midX, y: $0.frame.midY).applying(geometry.transform) }
             }
-            let apart = max(min(clear.width, clear.height) * 0.3, 90)
+            let apart = max(min(clear.width, clear.height) * 0.22, 70)
             let candidates = inView.filter { candidate in
                 !twinkles.contains { $0.regionIDs.contains(candidate.place.id) }
                     && lit.allSatisfy { hypot($0.x - candidate.center.x, $0.y - candidate.center.y) >= apart }
@@ -1340,13 +1555,21 @@ struct GameScreen: View {
             // Staggered, so they come and go one after another rather than all together.
             try? await Task.sleep(for: .seconds(most > 1 ? GameSpotlight.twinkleDuration / Double(most) + 0.15 : GameSpotlight.twinkleDuration + 0.25))
         }
+        // At rest: the last ones fade out, then the board has nothing left to draw them for.
+        try? await Task.sleep(for: .seconds(GameSpotlight.twinkleDuration))
+        guard !Task.isCancelled else { return }
+        twinkles = []
+        twinklesRest = true
     }
+
+    /// How long the lobby twinkles before it comes to rest.
+    private static let twinklingTime: TimeInterval = 30
 
     /// Waits a moment for the board to learn its size, fills the screen with the map, then pops it up.
     private func open() async {
         try? await Task.sleep(for: .milliseconds(30))
         frameScope(animated: false)
-        withAnimation(reduceMotion ? .easeOut(duration: 0.25) : .bouncy(duration: 0.6, extraBounce: 0.12)) {
+        withAnimation(openingAnimation) {
             isExpanded = true
         }
     }
@@ -1354,11 +1577,35 @@ struct GameScreen: View {
     private func close() {
         guard !isClosing else { return }
         isClosing = true
-        withAnimation(reduceMotion ? .easeOut(duration: 0.25) : .smooth(duration: 0.4)) {
+        withAnimation(closingAnimation) {
             isExpanded = false
         } completion: {
             onClose()
         }
+    }
+
+    /// How the quiz moves on from one part to the next, the lobby, a round and its results, the
+    /// glass reshaping around each: a candy bounce, or with Reduce Motion, a short fade, so nothing
+    /// overshoots.
+    private var roundChange: Animation {
+        Motion.moving(.bouncy(duration: 0.5), reduceMotion: reduceMotion)
+    }
+
+    /// How an answer, a place chosen or one looked at again settles in, the card springing along:
+    /// a snappy spring, or with Reduce Motion, a short fade.
+    private var settle: Animation {
+        Motion.moving(.snappy, reduceMotion: reduceMotion)
+    }
+
+    /// How the quiz pops up, as it opens and as it comes back from a Learn with nowhere to go: a
+    /// lively spring, or with Reduce Motion, a short fade.
+    private var openingAnimation: Animation {
+        reduceMotion ? .easeOut(duration: 0.25) : .bouncy(duration: 0.6, extraBounce: 0.12)
+    }
+
+    /// How it drops away as it closes, or leaves for Learn: smoothly, or with Reduce Motion, a short fade.
+    private var closingAnimation: Animation {
+        reduceMotion ? .easeOut(duration: 0.25) : .smooth(duration: 0.4)
     }
 
     /// Counts down a round against the clock: VoiceOver hears a minute, thirty seconds and ten
@@ -1414,8 +1661,8 @@ struct GameScreen: View {
     private func questionTimeRanOut() {
         guard game.phase == .asking, let place = game.current else { return }
         selection = nil
-        flash = nil
-        withAnimation(.snappy) { game.runOutOfQuestionTime() }
+        clearFlash()
+        settling { game.runOutOfQuestionTime() }
         haptic = GameHaptic(feedback: .warning)
         announce("Time’s up. \(spokenAnswer(for: place))")
         showAnswer()
@@ -1425,11 +1672,11 @@ struct GameScreen: View {
     private func runOutOfTime() {
         guard game.phase == .asking || game.phase == .answered else { return }
         selection = nil
-        flash = nil
-        withAnimation(.bouncy(duration: 0.5)) { game.runOutOfTime() }
+        clearFlash()
+        withAnimation(roundChange) { game.runOutOfTime() }
         haptic = finishedHaptic
         frameScope()
-        announce("Time’s up. \(game.rightCount) of \(game.questions.count) right first time.")
+        announce("Time’s up. \(game.rightCount) of \(game.questions.count) \(game.mode == .listAll ? "named" : "right first time").")
     }
 
     private func announce(_ message: String) {
@@ -1514,13 +1761,17 @@ private struct GameHaptic: Equatable {
     var feedback: SensoryFeedback
 }
 
-/// A tap on a place in Find, kept to tell a double tap from two single ones.
+/// A tap on a place in Find, kept to tell a double tap from two single ones; and with the borders
+/// hidden, how close to the dot a tap must come to be a second tap on it.
 private struct MapTap {
     var placeID: String
     var date: Date
 
     /// How soon a second tap on the same place must follow the first to answer with it.
     static let doubleTapInterval: TimeInterval = 0.35
+    /// With the borders hidden, how near the dot a second tap must land, in points, to answer with
+    /// the place it marks: about a fingertip's breadth either side of it.
+    static let dotReach: CGFloat = 30
 }
 
 /// A flag set large in Flags, still, in its true shape with nothing around it, that gives a little
@@ -1558,9 +1809,11 @@ private struct FittedScroll<Content: View>: View {
     }
 }
 
-/// A Learn left for another opened from it, such as the World's, left at Japan for its prefectures.
-private struct LearnStop {
+/// What the lobby's twinkling runs for: whether it may, and the places, region and nudges that
+/// start it afresh.
+private struct TwinkleRun: Hashable {
+    var isOn: Bool
     var collectionID: String
-    var placeID: String
-    var name: String
+    var scopeID: String?
+    var nudges: Int
 }

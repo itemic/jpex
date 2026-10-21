@@ -27,45 +27,89 @@ struct GameQuestionCard: View {
     var onDecoy: (String) -> Void
     var onReveal: () -> Void
     var onNext: () -> Void
+    /// Leaves the question for later, to come back at the end of the round.
+    var onSkip: () -> Void = {}
     /// In Member?, answers in, or out.
     var onMembership: (Bool) -> Void = { _ in }
     /// Room beneath the card for the home indicator, where the card runs to the foot of the screen,
     /// so a list can scroll beneath it and still come to rest clear of it.
     var bottomInset: CGFloat = 0
+    /// Room beneath a list's last row where the card floats in the glass panel, so the last name or
+    /// picture comes to rest as far off the glass's foot as the cards keep from its sides, rather
+    /// than all but touching it.
+    var listFoot: CGFloat = 0
     @State private var query = ""
     @FocusState private var isSearching: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     /// Whether the keyboard was up when the last question was answered, so it stays up for the next.
     @State private var keepsKeyboard = false
+    /// Counts the typed answers that missed, or tried a name again, for the field to shake and
+    /// flash its red edge at each one.
+    @State private var fieldShakes = 0
+    /// The width Skip and Reveal take beside the question, kept while they're away.
+    @State private var revealRoom: CGFloat = 88
+
+    /// The question's misses and retries, with the place they're for.
+    private struct FieldShakes: Equatable {
+        var placeID: String?
+        var count: Int
+    }
+
+    private static let confettiColors: [Color] = [LevelColor.lightBlue, .pink, .green, .yellow, .orange].map(\.color)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             header
             if let place = game.current {
-                if game.answerMethod == .four {
-                    // Four to pick from has no field or hint line, so Reveal sits beside the question.
+                if game.answerMethod == .four || picture != nil && game.answerMethod != .typing {
+                    // Pictures and four to pick from have no field or hint line, so Reveal sits
+                    // beside the question.
+                    // Reveal's room is kept once it has gone, as the question's answered, so the
+                    // question never rewraps, its words sliding over one another, as it leaves.
                     HStack(alignment: .top, spacing: 8) {
                         prompt(for: place)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                        Color.clear
+                            .frame(width: revealRoom, height: 0)
+                    }
+                    .overlay(alignment: .topTrailing) {
                         revealButton
                             .padding(.top, -6)
+                            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width in
+                                if width > 0 { revealRoom = width }
+                            }
                     }
                 } else {
                     prompt(for: place)
                 }
                 switch game.answerMethod {
                 case .four:
-                    ChoiceGrid(game: game, localLanguage: localLanguage, onAnswer: onAnswer, onDecoy: onDecoy)
-                        .id(place.id)
+                    // Each question's four are dealt afresh, the last question's fading away in the
+                    // same slot rather than standing above them while they go.
+                    ZStack(alignment: .top) {
+                        if let picture {
+                            PictureChoiceGrid(game: game, picture: picture, onAnswer: onAnswer)
+                                .id(place.id)
+                        } else {
+                            ChoiceGrid(game: game, localLanguage: localLanguage, onAnswer: onAnswer, onDecoy: onDecoy)
+                                .id(place.id)
+                        }
+                    }
                     choiceFoot(for: place)
+                case .list where picture != nil:
+                    // Every flag, shape or code in play to pick from, with nothing to type: names
+                    // would give it away.
+                    pictureChoices(for: place, picture: picture ?? .flag)
                 case .list:
                     answerSlot(for: place)
                     CardChoices(
-                        game: game, query: query, localLanguage: localLanguage, bottomInset: bottomInset, onAnswer: onAnswer)
+                        game: game, query: query, localLanguage: localLanguage, bottomInset: bottomInset + listFoot, onAnswer: onAnswer)
                         .frame(maxHeight: isRoomy ? .infinity : 168)
                 case .inOrOut:
-                    MembershipChoices(game: game, onAnswer: onMembership)
-                        .id(place.id)
+                    ZStack(alignment: .top) {
+                        MembershipChoices(game: game, onAnswer: onMembership)
+                            .id(place.id)
+                    }
                     membershipFoot(for: place)
                 case .typing, .map:
                     answerSlot(for: place)
@@ -75,20 +119,30 @@ struct GameQuestionCard: View {
                             .foregroundStyle(.secondary)
                             .transition(.opacity)
                     }
+                    if game.autoFill, game.offersAutoFill(for: game.mode), game.phase == .asking {
+                        SuggestionRow(game: game, query: query, localLanguage: localLanguage, onAnswer: onAnswer)
+                    }
                 }
             }
         }
         .padding(.horizontal, 16)
         .padding(.top, 16)
+        // A list of names or pictures runs on to the card's foot, under the home indicator where
+        // the card reaches the screen's; pictures' verdict keeps its own room above it.
         .padding(.bottom, game.answerMethod == .list ? 0 : 16 + bottomInset)
         .frame(maxHeight: isRoomy ? .infinity : nil, alignment: .top)
         .fontDesign(.rounded)
-        .animation(.snappy, value: game.phase)
+        // What's inside moves on the same curve as whatever moved it, so it keeps in step with the
+        // glass around it: an answer settling on its spring, the next question trading places on
+        // the swap; with Reduce Motion, short fades.
+        .animation(
+            game.phase == .answered ? Motion.moving(.snappy, reduceMotion: reduceMotion) : .swap(reduceMotion: reduceMotion),
+            value: game.phase)
         .onChange(of: game.phase) {
             if game.phase == .answered { keepsKeyboard = isSearching }
         }
-        .onChange(of: game.index) { query = "" }
-        .task(id: game.index) {
+        .onChange(of: game.current?.id) { query = "" }
+        .task(id: game.current?.id) {
             // The field comes back with the next question; the keyboard comes back with it.
             guard keepsKeyboard, game.answerMethod != .four else { return }
             try? await Task.sleep(for: .milliseconds(120))
@@ -96,6 +150,21 @@ struct GameQuestionCard: View {
         }
         .onChange(of: game.misses) {
             if game.answerMethod == .typing, game.misses > 0 { query = "" }
+        }
+        // Only a miss or a retry on this question shakes the field: not its count falling back to
+        // nothing as the next comes up, nor a skipped one coming back with its misses.
+        .onChange(of: FieldShakes(placeID: game.current?.id, count: game.shakes)) { old, new in
+            if new.placeID == old.placeID, new.count > old.count { fieldShakes += 1 }
+        }
+    }
+
+    /// What the answers show, where they're pictures: flags, shapes or codes, identifying a place's.
+    private var picture: ChoicePicture? {
+        switch game.mode {
+        case .pickFlag: .flag
+        case .pickOutline: .outline
+        case .pickCode: .code
+        default: nil
         }
     }
 
@@ -132,17 +201,25 @@ struct GameQuestionCard: View {
     /// around it draining under a time limit for each question.
     @ViewBuilder
     private var revealButton: some View {
+        // Each pops in as the question comes up and fades as it's answered; with Reduce Motion, they
+        // only fade.
         if game.phase == .asking {
-            RevealButton(
-                deadline: game.questionDeadline, total: TimeInterval(game.timeLimit.seconds ?? 0), action: onReveal)
-                .transition(.scale(scale: 0.6).combined(with: .opacity))
+            HStack(spacing: 2) {
+                if game.canSkip {
+                    SkipButton(action: onSkip)
+                        .transition(.arrive(reduceMotion: reduceMotion))
+                }
+                RevealButton(
+                    deadline: game.questionDeadline, total: TimeInterval(game.questionSeconds ?? 0), action: onReveal)
+            }
+            .transition(.arrive(reduceMotion: reduceMotion))
         }
     }
 
     @ViewBuilder
     private func prompt(for place: AdministrativeDivision) -> some View {
         switch game.mode {
-        case .nameIt:
+        case .nameIt, .dot, .everything:
             Text("Where is this?")
                 .font(.title2.weight(.light))
         case .flags:
@@ -151,40 +228,64 @@ struct GameQuestionCard: View {
         case .outline:
             Text("Which \(game.collection.placeNoun) is this?")
                 .font(.title2.weight(.light))
-        case .dot:
-            Text("Where is this?")
-                .font(.title2.weight(.light))
         case .code:
             codePrompt(for: place)
-        case .findIt, .capitals, .member:
+        case .whoseCapital:
+            capitalPrompt(for: place)
+        case .listAll:
+            // List All asks about every place at once, on a card of its own.
+            EmptyView()
+        case .findIt, .capitals, .member, .pickFlag, .pickOutline, .pickCode:
             let name = place.displayName(localLanguage: localLanguage)
-            HStack(alignment: .top, spacing: 12) {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(eyebrow(for: name))
+            // One slot for the place going and the place coming, so the card never holds both at once.
+            ZStack(alignment: .topLeading) {
+                namedPrompt(for: place, name: name)
+                    .id(place.id)
+                    .transition(.slotSwap(reduceMotion: reduceMotion))
+            }
+        }
+    }
+
+    /// The place named large, with what's asked about it above, its formal name beneath where it
+    /// has one, and its flag beside it where that doesn't give the answer away.
+    private func namedPrompt(for place: AdministrativeDivision, name: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 0) {
+                // Each on one line, a long one, as Saint Vincent and the Grenadines, gliding to show
+                // the rest, never wrapping or shrunk.
+                ScrollingText {
+                    Text(eyebrow)
                         .typeStyle(.eyebrow)
                         .foregroundStyle(.secondary)
+                }
+                // Member?'s eyebrow only names the group; VoiceOver hears the question itself,
+                // which names the country, so the name beneath isn't read again.
+                .accessibilityLabel(game.mode == .member ? "Is \(name) in \(groupInSentence)?" : eyebrow)
+                ScrollingText {
                     Text(name)
                         .typeStyle(.placeName, language: place.language(of: name))
                         .fontDesign(.default)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.6)
-                    if let subtitle = place.subtitle(localLanguage: localLanguage) {
-                        // A long formal name glides to its end now and then rather than being cut short.
-                        ScrollingText {
-                            Text(subtitle)
-                                .typeStyle(.compactPlaceSubtitle, language: place.language(of: subtitle))
-                                .fontDesign(.default)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    if let note = capitalsNote(for: place) {
-                        Label(note, systemImage: "building.columns.fill")
-                            .font(.caption.weight(.medium))
-                            .foregroundStyle(game.mode.color)
-                            .padding(.top, 4)
+                }
+                .accessibilityHidden(game.mode == .member)
+                if let subtitle = place.subtitle(localLanguage: localLanguage) {
+                    // A long formal name glides to its end now and then rather than being cut short.
+                    ScrollingText {
+                        Text(subtitle)
+                            .typeStyle(.compactPlaceSubtitle, language: place.language(of: subtitle))
+                            .fontDesign(.default)
+                            .foregroundStyle(.secondary)
                     }
                 }
-                Spacer(minLength: 0)
+                if let note = capitalsNote(for: place) {
+                    Label(note, systemImage: "building.columns.fill")
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(game.mode.color)
+                        .padding(.top, 4)
+                }
+            }
+            Spacer(minLength: 0)
+            // Identifying its flag, the flag would give it away.
+            if game.mode != .pickFlag {
                 Image(place.flagAssetName)
                     .resizable()
                     .scaledToFit()
@@ -192,31 +293,70 @@ struct GameQuestionCard: View {
                     .shadow(color: .black.opacity(0.15), radius: 3, y: 1)
                     .accessibilityHidden(true)
             }
-            .id(place.id)
-            .transition(.blurReplace)
         }
     }
 
-    /// What's asked about the place named: to find it, its capital, or whether it's in the group,
-    /// such as "Is Spain in the G7?".
-    private func eyebrow(for name: String) -> String {
+    /// Whose capital?'s question: the capital, large, and where it's one of several, its part in
+    /// governing, such as Pretoria's executive. Each capital gives way to the next in one slot.
+    private func capitalPrompt(for place: AdministrativeDivision) -> some View {
+        let capital = game.capitals[place.id]?.first
+        return ZStack(alignment: .topLeading) {
+            VStack(alignment: .leading, spacing: 0) {
+                ScrollingText {
+                    Text("Capital of which \(game.collection.placeNoun)?")
+                        .typeStyle(.eyebrow)
+                        .foregroundStyle(.secondary)
+                }
+                ScrollingText {
+                    Text(capital?.name ?? "")
+                        .typeStyle(.placeName)
+                        .fontDesign(.default)
+                }
+                if let role = capital?.role {
+                    ScrollingText {
+                        Text(role.prefix(1).uppercased() + role.dropFirst())
+                            .typeStyle(.compactPlaceSubtitle)
+                            .fontDesign(.default)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .id(place.id)
+            .transition(.slotSwap(reduceMotion: reduceMotion))
+            .accessibilityElement(children: .combine)
+        }
+    }
+
+    /// What's asked about the place named: to find it, its flag, its capital, or whether it's in
+    /// the group, such as "G20 membership".
+    private var eyebrow: String {
         switch game.mode {
         case .findIt: "Find"
-        case .member: "Is \(name) in \(game.collection.worldGroup?.nameInSentence ?? game.collection.name)?"
+        case .pickFlag: "Flag of"
+        case .pickOutline: "Outline of"
+        case .pickCode: game.shownCodeKind.placeQuestion
+        case .member: "\(game.countryGroup?.name ?? game.collection.name) membership"
         default: "What’s the capital of"
         }
     }
 
+    /// The group as it sits in a sentence, such as "the G20" or "NATO".
+    private var groupInSentence: String {
+        game.groupNameInSentence ?? game.collection.name
+    }
+
     /// Member?: how it went, with the way on, in the room the hint took while the question waited,
-    /// so the card keeps its height.
+    /// so the card keeps its height. The two share one slot, cross-fading as they trade places.
     private func membershipFoot(for place: AdministrativeDivision) -> some View {
-        Group {
+        ZStack(alignment: .leading) {
             if let outcome = game.outcomes[place.id] {
                 verdictRow(for: place, outcome: outcome)
+                    .transition(.opacity)
             } else {
                 // Only Reveal while it waits; the question above says what to do.
                 revealButton
                     .frame(maxWidth: .infinity, alignment: .trailing)
+                    .transition(.opacity)
             }
         }
         .frame(minHeight: 44)
@@ -229,40 +369,45 @@ struct GameQuestionCard: View {
         let kind = game.shownCodeKind
         let sharing = game.answerPlaces.count
         let code = game.code(of: place) ?? ""
-        return VStack(alignment: .leading, spacing: 8) {
-            Text(kind.question(placeNoun: game.collection.shortPlaceNoun, isSeveral: code.contains(PlaceCodes.separator)))
-                .typeStyle(.eyebrow)
-                .foregroundStyle(.secondary)
-            HStack(alignment: .center, spacing: 12) {
-                CodeBadge(code: code, kind: kind)
-                if sharing > 1, game.answerMethod != .typing {
-                    Text(game.answerMethod == .list ? "\(sharing) places use this code: any one counts" : "\(sharing) places use this code")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
+        // Each code gives way to the next in one slot, so the card never holds both at once.
+        return ZStack(alignment: .topLeading) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(kind.question(isSeveral: code.contains(PlaceCodes.separator)))
+                    .typeStyle(.eyebrow)
+                    .foregroundStyle(.secondary)
+                HStack(alignment: .center, spacing: 12) {
+                    CodeBadge(code: code, kind: kind)
+                    if sharing > 1, game.answerMethod != .typing {
+                        Text(game.answerMethod == .list ? sharing == 2 ? "Choose either of the 2 places" : "Choose any of the \(sharing) places" : "\(sharing) places use this code")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
             }
+            .id(place.id)
+            .transition(.slotSwap(reduceMotion: reduceMotion))
+            .accessibilityElement(children: .combine)
         }
-        .id(place.id)
-        .transition(.blurReplace)
-        .accessibilityElement(children: .combine)
     }
 
     /// In Capital, where a place has several capitals and any of them is offered, such as
-    /// "3 capitals: any one counts". Four dealt only ever offer one of them.
+    /// "Choose any of the 3 capitals". Four dealt only ever offer one of them.
     private func capitalsNote(for place: AdministrativeDivision) -> String? {
         let count = game.capitals[place.id]?.count ?? 0
         guard game.mode == .capitals, count > 1, game.answerMethod != .four, game.outcomes[place.id] == nil else { return nil }
-        return count == 2 ? "2 capitals: either counts" : "\(count) capitals: any one counts"
+        let verb = game.answerMethod == .typing ? "Type" : "Choose"
+        return count == 2 ? "\(verb) either of the 2 capitals" : "\(verb) any of the \(count) capitals"
     }
 
     /// While the question waits, the field to type in or to narrow the list, or in Find, Confirm;
     /// then the answer, with the way on. Typed answers keep their field, hidden under the answer and
-    /// still taking the keyboard, so Return goes on to the next question.
+    /// still taking the keyboard, so Return goes on to the next question. Whatever's there shares
+    /// one slot with what comes next, so the two cross-fade rather than stand one above the other.
     @ViewBuilder
     private func answerSlot(for place: AdministrativeDivision) -> some View {
         let outcome = game.outcomes[place.id]
-        Group {
+        ZStack(alignment: .leading) {
             if game.answerMethod == .typing {
                 ZStack {
                     HStack(spacing: 8) {
@@ -291,9 +436,12 @@ struct GameQuestionCard: View {
                         Button {
                             if let selection { onAnswer(selection) }
                         } label: {
-                            Label(selection == nil ? "Tap a place on the map" : "Confirm", systemImage: "checkmark")
-                                .font(.subheadline.weight(.semibold))
-                                .frame(maxWidth: .infinity)
+                            ScrollingText {
+                                Label(selection == nil ? "Tap a place on the map" : "Confirm", systemImage: "checkmark")
+                                    .font(.subheadline.weight(.semibold))
+                            }
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity)
                                 .padding(.vertical, 11)
                         }
                         .buttonStyle(CandyButtonStyle(color: game.mode.color, pattern: .candyStripes, isLit: selection != nil))
@@ -309,6 +457,31 @@ struct GameQuestionCard: View {
         }
         .frame(minHeight: 44)
         .transition(.opacity)
+    }
+
+    /// The room a grid of pictures and its verdict share where the card keeps to its own height, as
+    /// it floats over the foot of the map: what the grid, the gap and the foot beneath it always had
+    /// between them, so the map's share of the screen is just as it was.
+    private static let pictureRoom: CGFloat = 272
+
+    /// Every flag, shape or code in play to pick from. While the question waits, the grid runs right
+    /// down to the card's foot, with no band of empty glass held beneath it, and fades away softly
+    /// wherever it carries on out of sight. Once it's answered, the grid gives up its foot to how it
+    /// went and the way on, the two sharing one height, so the card never changes height.
+    private func pictureChoices(for place: AdministrativeDivision, picture: ChoicePicture) -> some View {
+        let outcome = game.outcomes[place.id]
+        return VStack(spacing: 12) {
+            PictureCardChoices(
+                game: game, picture: picture, bottomInset: outcome == nil ? bottomInset + listFoot : 0, onAnswer: onAnswer)
+                .frame(maxHeight: .infinity)
+            if let outcome {
+                verdictRow(for: place, outcome: outcome)
+                    .frame(minHeight: 44)
+                    .padding(.bottom, 16 + bottomInset)
+                    .transition(.opacity)
+            }
+        }
+        .frame(maxHeight: isRoomy ? .infinity : Self.pictureRoom)
     }
 
     /// Four to pick from: once answered, how it went, with the way on, in room kept for it while
@@ -336,26 +509,33 @@ struct GameQuestionCard: View {
         let language = game.mode == .capitals ? nil : place.language(of: name)
         return HStack(spacing: 10) {
             Label {
+                // Each line stays one line, gliding to its end where it's too long, as names do
+                // elsewhere, rather than wrapping onto a second.
                 VStack(alignment: .leading, spacing: 1) {
-                    verdictText(for: outcome, name: name)
-                        .typeStyle(.compactPlaceName, language: language)
-                        .fontDesign(.default)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.6)
-                        // The tick says it's right on screen; VoiceOver says so in words.
-                        .accessibilityLabel(isPlainlyRight(outcome) ? Text("Correct, \(verdict(for: outcome, name: name))") : verdictText(for: outcome, name: name))
+                    ScrollingText {
+                        verdictText(for: outcome, name: name)
+                            .typeStyle(.compactPlaceName, language: language)
+                            .fontDesign(.default)
+                    }
+                    // The tick says it's right on screen; VoiceOver says so in words.
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(
+                        isPlainlyRight(outcome) ? Text("Correct, \(verdict(for: outcome, name: name))")
+                            : isSilentlyShown(outcome) ? Text("Shown, \(name)") : verdictText(for: outcome, name: name))
                     if let correction = game.correction {
                         // Taken as right; the spelling, as it is, simply shown.
-                        Text("Spelt “\(correction)”")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
+                        ScrollingText {
+                            Text("Spelt “\(correction)”")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     } else if game.mode == .capitals, let roles = capitalRoles(of: place) {
                         // Where a place shares its capital's role, what each one does, in the same order.
-                        Text(roles)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
+                        ScrollingText {
+                            Text(roles)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             } icon: {
@@ -363,6 +543,16 @@ struct GameQuestionCard: View {
                     .font(.title3)
                     .foregroundStyle(MapGame.level(for: outcome).color)
                     .accessibilityHidden(true)
+                    .overlay {
+                        // Right first time throws confetti from the tick, as four to pick from throw it
+                        // from the name picked; Reduce Motion leaves it out.
+                        if game.answerMethod != .four {
+                            CelebrationBurst(
+                                trigger: outcome == .right(tries: 1) ? 1 : 0, colors: Self.confettiColors, pieceCount: 24,
+                                burstsOnAppear: true)
+                                .frame(width: 220, height: 220)
+                        }
+                    }
             }
             Spacer(minLength: 0)
             NextButton(isLast: game.isLastQuestion, color: game.mode.color, action: onNext)
@@ -376,26 +566,33 @@ struct GameQuestionCard: View {
     }
 
     /// How the answer went: right, the answer alone beside its tick; a shown answer's own words;
-    /// or when time ran out, "Time’s up", then the answer.
+    /// or when time ran out, "Time’s up, it’s Spain". Member? says how the answer went, then
+    /// whether the country's in, such as "Correct, Spain isn’t in the G20".
     private func verdictText(for outcome: MapGame.Outcome, name: String) -> Text {
         let answer = verdict(for: outcome, name: name)
         let timedOut = game.current.map(game.ranOutOfTime) ?? false
-        // Find names the place on the card already, so its verdict doesn't say it again.
+        // Find names the place on the card already, so its verdict doesn't say it again; an answer
+        // shown is simply its eye, the map lighting it up, with nothing to read beside it.
         if game.mode == .findIt {
-            return Text(timedOut ? "Time’s up" : outcome == .shown ? "Here it is" : "Correct")
+            return Text(timedOut ? "Time’s up" : outcome == .shown ? "" : "Correct")
         }
         if timedOut {
-            return Text("Time’s up") + Text(" · \(game.mode == .member ? answer : verdict(for: .right(tries: 1), name: name))")
-                .foregroundStyle(.secondary)
+            let shown = game.mode == .member ? answer : "it’s \(verdict(for: .right(tries: 1), name: name))"
+            return Text("Time’s up, ") + Text(shown).foregroundStyle(.secondary)
         }
         if game.mode == .member, outcome == .shown, game.memberGuess != nil {
-            return Text("Not quite") + Text(" · \(answer)").foregroundStyle(.secondary)
+            return Text("No, ") + Text(answer).foregroundStyle(.secondary)
         }
-        // Member? names the country on the card already, so it's "Correct", then whether it's in.
         if game.mode == .member, case .right = outcome {
-            return Text("Correct") + Text(" · \(answer)").foregroundStyle(.secondary)
+            return Text("Correct, ") + Text(answer).foregroundStyle(.secondary)
         }
         return Text(answer)
+    }
+
+    /// Whether the answer was shown in Find, where the verdict is its eye alone; VoiceOver still
+    /// says it was shown.
+    private func isSilentlyShown(_ outcome: MapGame.Outcome) -> Bool {
+        game.mode == .findIt && outcome == .shown && !(game.current.map(game.ranOutOfTime) ?? false)
     }
 
     /// Whether the verdict is a right answer named beside its tick, with no word to say it's right.
@@ -404,15 +601,17 @@ struct GameQuestionCard: View {
         return !(game.current.map(game.ranOutOfTime) ?? false)
     }
 
-    /// How the answer went: the name, in Capital every one of the place's capitals, and in Code
-    /// every place that shares the code.
+    /// How the answer went: the name, in Capital every one of the place's capitals, in Code every
+    /// place that shares the code, and in Member? whether the country's in the group, such as
+    /// "Spain isn’t in the G20".
     private func verdict(for outcome: MapGame.Outcome, name: String) -> String {
+        // Identifying a place's code, the code, as several codes are listed.
+        if game.mode == .pickCode, let place = game.current, let code = game.code(of: place) {
+            let codes = code.components(separatedBy: PlaceCodes.separator).joined(separator: ", ")
+            return outcome == .shown ? "It’s \(codes)" : codes
+        }
         if game.mode == .member, let place = game.current {
-            // The country's named on the card already, so only whether it's in.
-            if outcome == .shown, game.memberGuess == nil, !game.ranOutOfTime(place) {
-                return game.isMember(place) ? "It’s a member" : "It isn’t a member"
-            }
-            return game.isMember(place) ? "A member" : "Not a member"
+            return game.isMember(place) ? "\(name) is in \(groupInSentence)" : "\(name) isn’t in \(groupInSentence)"
         }
         if game.mode == .capitals, let place = game.current {
             return (game.capitals[place.id] ?? []).map(\.name).joined(separator: ", ")
@@ -434,10 +633,14 @@ struct GameQuestionCard: View {
     /// clears for another go.
     private var typedField: some View {
         let isCapital = game.mode == .capitals
+        let isCode = game.mode == .pickCode
+        let prompt = isCapital ? "Type the capital"
+            : isCode ? "Type the code"
+            : game.mode == .whoseCapital ? "Type the \(game.collection.placeNoun)" : "Type its name"
         return HStack(spacing: 6) {
-            Image(systemName: isCapital ? "building.columns" : "character.cursor.ibeam")
+            Image(systemName: isCapital ? "building.columns" : isCode ? "barcode" : "character.cursor.ibeam")
                 .foregroundStyle(.secondary)
-            TextField(isCapital ? "Type the capital" : "Type its name", text: $query)
+            TextField(prompt, text: $query)
                 .focused($isSearching)
                 .textInputAutocapitalization(.words)
                 .autocorrectionDisabled()
@@ -472,24 +675,15 @@ struct GameQuestionCard: View {
         .overlay {
             Capsule()
                 .strokeBorder(LevelColor.red.color, lineWidth: 1.5)
-                .keyframeAnimator(initialValue: 0.0, trigger: game.shakes) { content, opacity in
+                .keyframeAnimator(initialValue: 0.0, trigger: fieldShakes) { content, opacity in
                     content.opacity(opacity)
                 } keyframes: { _ in
                     CubicKeyframe(1, duration: 0.1)
                     CubicKeyframe(0, duration: 0.8)
                 }
         }
-        // With Reduce Motion, the red edge alone says so.
-        .keyframeAnimator(initialValue: 0.0, trigger: game.shakes) { content, offset in
-            content.offset(x: reduceMotion ? 0 : offset)
-        } keyframes: { _ in
-            KeyframeTrack {
-                CubicKeyframe(-8, duration: 0.06)
-                CubicKeyframe(7, duration: 0.08)
-                CubicKeyframe(-4, duration: 0.08)
-                CubicKeyframe(0, duration: 0.07)
-            }
-        }
+        // With Reduce Motion, the red edge and a nod say so.
+        .shake(on: fieldShakes, amplitude: 8)
     }
 
     /// The parts several capitals play, such as "executive, legislative, judicial", or nil when there's one.
@@ -543,9 +737,65 @@ struct GameQuestionCard: View {
     }
 }
 
+/// Auto-fill's names beneath the field, as you type: the ten nearest what's typed, best first, as
+/// cards like a list's, in one line that scrolls sideways out to the card's edges. Each carries
+/// its flag where that doesn't give the answer away, and in Everything, its country's, which tells
+/// apart places sharing a name, such as the two Limburgs. A tap answers with it, as picking it
+/// from a list would. The line comes in with the first letter typed and goes once there's nothing
+/// close to it.
+private struct SuggestionRow: View {
+    var game: MapGame
+    var query: String
+    var localLanguage: Bool
+    var onAnswer: (AdministrativeDivision) -> Void
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        let suggestions = game.suggestions(for: query)
+        VStack(spacing: 0) {
+            if !suggestions.isEmpty {
+                ScrollView(.horizontal) {
+                    HStack(spacing: 8) {
+                        ForEach(suggestions) { suggestion in
+                            let state = ChoiceState(of: suggestion.place, in: game)
+                            ChoiceCard(entry: entry(for: suggestion), state: state) {
+                                onAnswer(suggestion.place)
+                            }
+                            .frame(minWidth: 110, maxWidth: 220)
+                            .allowsHitTesting(state == .open)
+                        }
+                    }
+                    // Room for a lit card's glow and shake, which the scroll view would cut off.
+                    .padding(.vertical, 8)
+                }
+                .scrollIndicators(.hidden)
+                .contentMargins(.horizontal, 16, for: .scrollContent)
+                .padding(.horizontal, -16)
+                .padding(.vertical, -8)
+                // It slides down into place; with Reduce Motion, it only fades.
+                .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
+            }
+        }
+        .animation(.smooth(duration: 0.25), value: suggestions.isEmpty)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Suggestions")
+    }
+
+    /// A suggestion as a list's card shows it.
+    private func entry(for suggestion: MapGame.Suggestion) -> ChoiceEntry {
+        let place = suggestion.place
+        let flag = game.mode == .everything
+            ? game.countryFlagAssetName(of: place)
+            : [.nameIt, .outline, .dot, .whoseCapital].contains(game.mode) ? place.flagAssetName : nil
+        return ChoiceEntry(
+            id: suggestion.id, name: suggestion.name, language: place.language(of: suggestion.name), flagAssetName: flag,
+            places: [place], searchNames: [])
+    }
+}
+
 /// The time left in a round against the clock, beside the count, such as 2:41, warming to orange
 /// and then red over its last ten seconds.
-private struct Countdown: View {
+struct Countdown: View {
     var deadline: Date
 
     var body: some View {
@@ -566,6 +816,31 @@ private struct Countdown: View {
             .accessibilityLabel("Time left")
             .accessibilityValue(Duration.seconds(remaining).formatted(.units(allowed: [.minutes, .seconds], width: .wide)))
         }
+    }
+}
+
+/// Skip: an arrow on in a soft circle, beside Reveal, a full 44 points to tap. The question goes to
+/// the end of the round, to come back to with whatever time it had left.
+private struct SkipButton: View {
+    var action: () -> Void
+    @ScaledMetric(relativeTo: .body) private var side = 36
+
+    var body: some View {
+        Button(action: action) {
+            ZStack {
+                Circle()
+                    .fill(.primary.opacity(0.07))
+                Image(systemName: "forward.fill")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+            }
+            .frame(width: side, height: side)
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(PillButtonStyle())
+        .accessibilityLabel("Skip")
+        .accessibilityHint("Leaves it for later. It comes back at the end, with the time it had left.")
     }
 }
 
@@ -646,7 +921,6 @@ private struct MembershipChoices: View {
         let isLit = outcome == nil || isPicked || (game.memberGuess == nil && isAnswer)
         let color = outcome.map { MapGame.level(for: $0).color } ?? game.mode.color
         let mark: String? = outcome == nil ? nil : isPicked ? (isAnswer ? "checkmark" : "xmark") : (isLit ? "eye" : nil)
-        let shakes = !reduceMotion
         return Button {
             onAnswer(isIn)
         } label: {
@@ -666,17 +940,9 @@ private struct MembershipChoices: View {
         .scaleEffect(isDealt || reduceMotion ? 1 : 0.4)
         .opacity(isDealt ? (isLit ? 1 : 0.6) : 0)
         .animation(.bouncy(duration: 0.5, extraBounce: 0.2).delay(Double(index) * 0.06), value: isDealt)
-        .keyframeAnimator(initialValue: 0.0, trigger: isPicked && !isAnswer) { content, offset in
-            content.offset(x: shakes ? offset : 0)
-        } keyframes: { _ in
-            KeyframeTrack {
-                CubicKeyframe(-10, duration: 0.06)
-                CubicKeyframe(9, duration: 0.08)
-                CubicKeyframe(-6, duration: 0.08)
-                CubicKeyframe(0, duration: 0.07)
-            }
-        }
-        .animation(.snappy, value: outcome)
+        // Picked wrongly, it shakes, once; with Reduce Motion, it nods.
+        .shake(onRiseOf: isPicked && !isAnswer ? 1 : 0, amplitude: 10)
+        .animation(ChoiceState.lighting(reduceMotion: reduceMotion), value: outcome)
         .keyboardShortcut(KeyEquivalent(isIn ? "1" : "2"), modifiers: [])
         .accessibilityLabel(isIn ? "In" : "Out")
         .accessibilityHint(isIn ? "It’s a member." : "It isn’t a member.")
@@ -727,6 +993,9 @@ struct CodeBadge: View {
     var code: String
     var kind: MapGame.CodeKind
     var size: CGFloat = 34
+    /// Whether it's pared down to the code itself where there's more around it, as a domain's
+    /// address is, for a small badge that needs to read at a glance.
+    var isCompact = false
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
@@ -746,7 +1015,7 @@ struct CodeBadge: View {
                     Image(systemName: "lock.fill")
                         .font(.system(size: size * 0.36))
                         .foregroundStyle(.secondary)
-                    (Text("www.example").foregroundStyle(Color(uiColor: .tertiaryLabel))
+                    (Text(isCompact ? "" : "www.example").foregroundStyle(Color(uiColor: .tertiaryLabel))
                         + Text(code).foregroundStyle(Color(uiColor: .label)))
                         .font(.system(size: size * 0.7, weight: .regular, design: .monospaced))
                         .lineLimit(1)
@@ -874,6 +1143,8 @@ struct CodeBadge: View {
                 BanknoteCorner(code: code, size: size)
             case .postcode:
                 PostcodeBoxes(digits: code, size: size)
+            case .timeZone:
+                WorldClockTag(zone: code, size: size)
             case .fifa:
                 // The UK's four teams on one line where there's room, otherwise two to a line.
                 let teams = code.components(separatedBy: PlaceCodes.separator)
@@ -890,7 +1161,8 @@ struct CodeBadge: View {
     /// Read out letter by letter, so DE isn't read as a word; several codes, one after another.
     static func spoken(_ code: String) -> String {
         code.components(separatedBy: PlaceCodes.separator).map { single in
-            single.map { $0 == "." ? "dot" : $0 == "+" ? "plus" : $0 == "-" ? "dash" : String($0) }.joined(separator: " ")
+            single.map { $0 == "." ? "dot" : $0 == "+" ? "plus" : $0 == "-" ? "dash" : $0 == "−" ? "minus" : $0 == "±" ? "plus or minus" : String($0) }
+                .joined(separator: " ")
         }
         .joined(separator: ", ")
     }
@@ -1060,6 +1332,62 @@ private struct BanknoteCorner: View {
     }
 }
 
+/// A time zone as a world clock shows it: a small clock face, its hands at ten past ten as clocks
+/// are pictured, beside the zone's offset from UTC, such as UTC+9, on a night-blue
+/// tile the same in any light.
+private struct WorldClockTag: View {
+    var zone: String
+    var size: CGFloat
+
+    private static let night = Color(red: 0.09, green: 0.12, blue: 0.24)
+
+    var body: some View {
+        HStack(spacing: size * 0.26) {
+            ZStack {
+                Circle()
+                    .fill(.white)
+                Circle()
+                    .strokeBorder(Color(white: 0.75), lineWidth: max(size * 0.03, 0.75))
+                ForEach(0..<12, id: \.self) { hour in
+                    Capsule()
+                        .fill(Color(white: 0.55))
+                        .frame(width: max(size * 0.025, 0.5), height: size * (hour % 3 == 0 ? 0.1 : 0.06))
+                        .offset(y: -size * 0.27)
+                        .rotationEffect(.degrees(Double(hour) * 30))
+                }
+                Capsule()
+                    .fill(Self.night)
+                    .frame(width: max(size * 0.05, 1), height: size * 0.18)
+                    .offset(y: -size * 0.09)
+                    .rotationEffect(.degrees(-60))
+                Capsule()
+                    .fill(Self.night)
+                    .frame(width: max(size * 0.04, 1), height: size * 0.26)
+                    .offset(y: -size * 0.13)
+                    .rotationEffect(.degrees(60))
+                Circle()
+                    .fill(LevelColor.orange.color)
+                    .frame(width: size * 0.08, height: size * 0.08)
+            }
+            .frame(width: size * 0.72, height: size * 0.72)
+            Text(zone)
+                .font(.system(size: size * 0.72, weight: .semibold, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(.white)
+                .lineLimit(1)
+        }
+        .padding(.leading, size * 0.24)
+        .padding(.trailing, size * 0.38)
+        .padding(.vertical, size * 0.2)
+        .background(Self.night.gradient, in: RoundedRectangle(cornerRadius: size * 0.28, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: size * 0.28, style: .continuous)
+                .strokeBorder(.white.opacity(0.16), lineWidth: 1)
+        }
+        .fixedSize()
+    }
+}
+
 /// A postcode's first digit written into the first of the four boxes printed for it on Australian
 /// envelopes, in Australia Post's red, the other three left to fill, a dim dot in each.
 private struct PostcodeBoxes: View {
@@ -1181,7 +1509,7 @@ private extension DynamicTypeSize {
 /// Where a name to choose stands: waiting to be chosen, chosen wrongly, the answer once it's been
 /// given, or passed over. Both ways of choosing wear it the same way, in the board's colours and
 /// textures for how answers went, with a mark beside the name so it reads without colour too.
-private enum ChoiceState: Equatable {
+enum ChoiceState: Equatable {
     case open
     case wrong
     case answer(MapGame.Outcome)
@@ -1227,6 +1555,13 @@ private enum ChoiceState: Equatable {
 
     var isAnswer: Bool {
         if case .answer = self { true } else { false }
+    }
+
+    /// How a choice lights up as it's answered, in the colour it went or red when it's chosen
+    /// wrongly: a lively spring, or with Reduce Motion, a short fade. Names, pictures, In and Out
+    /// and a list's cards all light on it, so the moment feels the same however a round's answered.
+    static func lighting(reduceMotion: Bool) -> Animation {
+        reduceMotion ? .easeInOut(duration: 0.2) : .bouncy(duration: 0.4, extraBounce: 0.12)
     }
 
     /// Its colour: red when chosen wrongly, and the answer in the colour it went on the board.
@@ -1279,8 +1614,8 @@ private struct ChoiceGrid: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isDealt = false
-    /// Every button's height: room for a name on two lines, so a long name never makes its button
-    /// taller than the rest.
+    /// Every button's height: room for a name and the line beneath saying whose it is, so every
+    /// button stands the same.
     @ScaledMetric(relativeTo: .title3) private var height = 74
 
     private static let confettiColors: [Color] = [LevelColor.lightBlue, .pink, .green, .yellow, .orange].map(\.color)
@@ -1311,8 +1646,15 @@ private struct ChoiceGrid: View {
         let name = place.displayName(localLanguage: localLanguage)
         let label = choice.decoy ?? (isCapital ? game.capitalName(of: place) ?? name : name)
         // Once a capital is out of play, it says whose it is; a city that isn't one says where it is.
-        let owner = isCapital && state != .open ? (choice.decoy == nil ? name : "City in \(name)") : nil
-        let shakes = !reduceMotion
+        // In Whose capital?, each place out of play shows its own capital; in Everything, each place
+        // its country, to tell apart places sharing a name, such as the two Limburgs.
+        let owner: String? = if isCapital, state != .open {
+            choice.decoy == nil ? name : "City in \(name)"
+        } else if game.mode == .whoseCapital, state != .open {
+            game.capitalName(of: place)
+        } else {
+            game.countryName(of: place)
+        }
         return Button {
             if let city = choice.decoy {
                 onDecoy(city)
@@ -1325,26 +1667,25 @@ private struct ChoiceGrid: View {
                     if let symbol = state.symbolName {
                         Image(systemName: symbol)
                             .fontWeight(.semibold)
-                            .transition(.scale.combined(with: .opacity))
+                            .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
                     }
-                    Text(label)
-                        .placeName(isCapital ? nil : place.language(of: label))
-                        .fontWeight(PlaceTypesetting.weight(.regular, for: isCapital ? nil : place.language(of: label)))
-                        .strikethrough(state == .wrong)
-                        // With a line beneath saying whose it is, the name keeps to one.
-                        .lineLimit(owner == nil ? 2 : 1)
-                        .minimumScaleFactor(0.7)
-                        .multilineTextAlignment(.center)
+                    // On one line, a long name gliding to show the rest, never wrapped or shrunk.
+                    ScrollingText {
+                        Text(label)
+                            .placeName(isCapital ? nil : place.language(of: label))
+                            .fontWeight(PlaceTypesetting.weight(.regular, for: isCapital ? nil : place.language(of: label)))
+                            .strikethrough(state == .wrong)
+                    }
                 }
                 .font(.title3)
                 if let owner {
-                    Text(owner)
-                        .placeName(choice.decoy == nil ? place.language(of: owner) : nil)
-                        .font(.caption.weight(.medium))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                        .opacity(0.9)
-                        .transition(.opacity)
+                    ScrollingText {
+                        Text(owner)
+                            .placeName(choice.decoy == nil ? place.language(of: owner) : nil)
+                            .font(.caption.weight(.medium))
+                    }
+                    .opacity(0.9)
+                    .transition(.opacity)
                 }
             }
             .padding(.horizontal, 12)
@@ -1356,23 +1697,14 @@ private struct ChoiceGrid: View {
             color: state.color(open: game.mode.color), pattern: state.pattern(open: .candyStripes),
             shape: RoundedRectangle(cornerRadius: 18, style: .continuous), isLit: state != .passed))
         .allowsHitTesting(state == .open && game.phase == .asking)
-        .keyframeAnimator(initialValue: 0.0, trigger: state == .wrong) { content, offset in
-            content.offset(x: shakes ? offset : 0)
-        } keyframes: { _ in
-            KeyframeTrack {
-                CubicKeyframe(-10, duration: 0.06)
-                CubicKeyframe(9, duration: 0.08)
-                CubicKeyframe(-6, duration: 0.08)
-                CubicKeyframe(4, duration: 0.07)
-                CubicKeyframe(0, duration: 0.07)
-            }
-        }
+        // Picked wrongly, it shakes, once; with Reduce Motion, it nods.
+        .shake(onRiseOf: state == .wrong ? 1 : 0, amplitude: 10)
         .overlay {
             // Right first time throws confetti from the name.
             CelebrationBurst(trigger: state == .answer(.right(tries: 1)) ? 1 : 0, colors: Self.confettiColors, pieceCount: 30)
                 .frame(width: 280, height: 280)
         }
-        .animation(.snappy, value: state)
+        .animation(ChoiceState.lighting(reduceMotion: reduceMotion), value: state)
         .keyboardShortcut(KeyEquivalent(Character(String(number))), modifiers: [])
         .accessibilityLabel(owner.map { "\(label), \($0)" } ?? label)
         .accessibilityValue(state.accessibilityValue)
@@ -1400,8 +1732,9 @@ private struct ChoiceEntry: Identifiable {
 /// Every place still in play as a grid of cards to tap, like the boards in Countries settings, or
 /// in Capital every one of their capitals, narrowed by what's been typed and fading out at an edge
 /// only where it carries on. It keeps what matters in view by itself: back to the top for each new
-/// question, to the first match as you type, to a wrong pick, and to the answer once it's given. Only Identify's cards carry flags: in Flag they'd give the
-/// answer away, and in Capital so would the flag beside the place asked about.
+/// question, to the first match as you type, to a wrong pick, and to the answer once it's given.
+/// Flags go with the names where they don't give the answer away: not in Flag, nor in Capital,
+/// where the flag beside the place asked about would match one.
 private struct CardChoices: View {
     var game: MapGame
     var query: String
@@ -1409,8 +1742,6 @@ private struct CardChoices: View {
     /// Room beneath the last card for the home indicator, where the list runs to the foot of the screen.
     var bottomInset: CGFloat = 0
     var onAnswer: (AdministrativeDivision) -> Void
-    /// Whether there's more to scroll to above and below, so the list only fades where it carries on.
-    @State private var edges = ScrollEdges()
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     /// The narrowest a card can be, so names have room, growing with the text.
     @ScaledMetric(relativeTo: .subheadline) private var cardWidth = 150
@@ -1439,40 +1770,19 @@ private struct CardChoices: View {
                     }
                 }
             }
-            .contentMargins(.top, 8, for: .scrollContent)
-            .contentMargins(.bottom, 8 + bottomInset, for: .scrollContent)
-            // Room either side for a lit card's glow and its pop, which the scroll view would cut off.
-            .contentMargins(.horizontal, 12, for: .scrollContent)
-            .padding(.horizontal, -12)
-            .scrollIndicators(.hidden)
-            .scrollBounceBehavior(.basedOnSize)
             .scrollDismissesKeyboard(.interactively)
-            .onScrollGeometryChange(for: ScrollEdges.self) { geometry in
-                ScrollEdges(
-                    hasMoreAbove: geometry.contentOffset.y > -geometry.contentInsets.top + 1,
-                    hasMoreBelow: geometry.contentOffset.y + geometry.containerSize.height
-                        < geometry.contentSize.height + geometry.contentInsets.bottom - 1)
-            } action: { _, edges in
-                withAnimation(.easeOut(duration: 0.2)) { self.edges = edges }
-            }
-            .mask {
-                // A soft edge only where the list carries on out of sight.
-                VStack(spacing: 0) {
-                    LinearGradient(colors: [.black.opacity(edges.hasMoreAbove ? 0 : 1), .black], startPoint: .top, endPoint: .bottom)
-                        .frame(height: 22)
-                    Color.black
-                    LinearGradient(colors: [.black, .black.opacity(edges.hasMoreBelow ? 0 : 1)], startPoint: .top, endPoint: .bottom)
-                        .frame(height: 30 + bottomInset * 0.5)
-                }
-            }
-            .animation(.snappy, value: matches.map(\.id))
+            // The card grids' own scrolling chrome: room for a lit card's glow and pop, and a soft
+            // edge only where the list carries on out of sight.
+            .cardGridScrolling(bottomInset: bottomInset)
+            // The cards close up as they narrow, springing, or with Reduce Motion, easing quickly.
+            .animation(Motion.moving(.snappy, reduceMotion: reduceMotion), value: matches.map(\.id))
             .onChange(of: game.phase) {
                 // A shown answer may be out of sight further down.
                 guard game.phase == .answered, let place = game.current,
                       let entry = matches.first(where: { $0.places.contains(place) }) else { return }
                 withAnimation(scrolling) { proxy.scrollTo(entry.id, anchor: .center) }
             }
-            .onChange(of: game.index) {
+            .onChange(of: game.current?.id) {
                 withAnimation(scrolling) { proxy.scrollTo(Self.topID, anchor: .top) }
             }
             .onChange(of: query) {
@@ -1512,7 +1822,10 @@ private struct CardChoices: View {
                 let name = place.displayName(localLanguage: localLanguage)
                 return ChoiceEntry(
                     id: place.id, name: name, language: place.language(of: name),
-                    flagAssetName: [.nameIt, .outline, .dot].contains(game.mode) ? place.flagAssetName : nil, places: [place],
+                    flagAssetName: game.mode == .everything
+                        ? game.countryFlagAssetName(of: place)
+                        : [.nameIt, .outline, .dot, .whoseCapital].contains(game.mode) ? place.flagAssetName : nil,
+                    places: [place],
                     searchNames: Set([place.name, place.localName].compactMap { $0 }.map(folded)))
             }
         }
@@ -1539,12 +1852,6 @@ private struct CardChoices: View {
     }
 }
 
-/// Whether a list has more to scroll to above and below what's in view.
-private struct ScrollEdges: Equatable {
-    var hasMoreAbove = false
-    var hasMoreBelow = false
-}
-
 /// A name to choose from a list of all, as a card like the boards in Countries settings: the
 /// place's flag, where it doesn't give the answer away, and its name, gliding across to show the
 /// rest when it's too long to fit. Chosen wrongly, it turns to red candy, struck through, with a
@@ -1559,7 +1866,6 @@ private struct ChoiceCard: View {
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
         let color = state.color(open: .secondary)
-        let shakes = !reduceMotion
         Button {
             pops += 1
             onChoose()
@@ -1584,7 +1890,7 @@ private struct ChoiceCard: View {
                 if let symbol = state.symbolName {
                     Image(systemName: symbol)
                         .font(.subheadline.weight(.semibold))
-                        .transition(.scale.combined(with: .opacity))
+                        .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
                 }
             }
             .padding(.horizontal, 10)
@@ -1604,17 +1910,10 @@ private struct ChoiceCard: View {
             .contentShape(shape)
         }
         .buttonStyle(PillButtonStyle())
-        .keyframeAnimator(initialValue: 0.0, trigger: state == .wrong) { content, offset in
-            content.offset(x: shakes ? offset : 0)
-        } keyframes: { _ in
-            KeyframeTrack {
-                CubicKeyframe(-7, duration: 0.06)
-                CubicKeyframe(6, duration: 0.08)
-                CubicKeyframe(-3, duration: 0.08)
-                CubicKeyframe(0, duration: 0.07)
-            }
-        }
-        .animation(reduceMotion ? .easeInOut(duration: 0.2) : .bouncy(duration: 0.4, extraBounce: 0.12), value: state)
+        // Picked wrongly, it shakes, once: not again as it's set right for the next question, the
+        // cards staying on from one question to the next. With Reduce Motion, it nods.
+        .shake(onRiseOf: state == .wrong ? 1 : 0, amplitude: 8)
+        .animation(ChoiceState.lighting(reduceMotion: reduceMotion), value: state)
         .accessibilityLabel(entry.name)
         .accessibilityValue(state.accessibilityValue)
     }

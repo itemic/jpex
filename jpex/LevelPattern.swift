@@ -83,8 +83,8 @@ enum LevelPatternStyle: String, CaseIterable, Identifiable, Codable, Sendable {
     /// The pattern's name, for a picker and VoiceOver.
     var name: String {
         switch self {
-        case .dots: "Polka Dots"
-        case .candyStripes: "Candy Stripes"
+        case .dots: "Polka dots"
+        case .candyStripes: "Candy stripes"
         case .checkerboard: "Checkerboard"
         case .holes: "Holes"
         case .bands: "Bands"

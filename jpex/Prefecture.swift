@@ -13,39 +13,7 @@ struct Prefecture: Identifiable, Hashable, Sendable {
     var name: String
     var localName: String
     var region: Region
-    
-    static var hokkaidoPrefectures: [Prefecture] {
-        allPrefectures.filter {$0.region == .hokkaido}
-    }
-    
-    static var tohokuPrefectures: [Prefecture] {
-        allPrefectures.filter {$0.region == .tohoku}
-    }
-    
-    static var kantoPrefectures: [Prefecture] {
-        allPrefectures.filter {$0.region == .kanto}
-    }
-    
-    static var chubuPrefectures: [Prefecture] {
-        allPrefectures.filter {$0.region == .chubu}
-    }
-    
-    static var kansaiPrefectures: [Prefecture] {
-        allPrefectures.filter {$0.region == .kansai}
-    }
-    
-    static var chugokuPrefectures: [Prefecture] {
-        allPrefectures.filter {$0.region == .chugoku}
-    }
-    
-    static var shikokuPrefectures: [Prefecture] {
-        allPrefectures.filter {$0.region == .shikoku}
-    }
-    
-    static var kyushuPrefectures: [Prefecture] {
-        allPrefectures.filter {$0.region == .kyushu}
-    }
-    
+
     static func prefecturesFrom(_ region: Region) -> [Prefecture] {
         return allPrefectures.filter {$0.region == region}
     }

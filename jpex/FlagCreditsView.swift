@@ -9,7 +9,7 @@ struct FlagCreditsView: View {
   var body: some View {
     List {
       ForEach(credits) { credit in
-        Section(credit.name) {
+        Section {
           Text(credit.author)
             .font(.footnote)
             .foregroundStyle(.secondary)
@@ -26,6 +26,8 @@ struct FlagCreditsView: View {
           } else {
             Text(credit.license)
           }
+        } header: {
+          ScrollingName(text: credit.name)
         }
       }
       if loadFailed {
@@ -40,8 +42,6 @@ struct FlagCreditsView: View {
           loadFailed = true
           return
         }
-        let accessing = url.startAccessingSecurityScopedResource()
-        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
         credits = try JSONDecoder().decode([FlagArtworkCredit].self, from: Data(contentsOf: url))
       } catch {
         loadFailed = true

@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// A striped progress bar. The stripes drift until every place is counted,
-/// then the bar settles to solid colour with a single shine.
+/// A striped progress bar. The stripes drift for a moment each time it grows, then slow to a stop,
+/// until every place is counted and the bar settles to solid colour with a single shine.
 struct ProgressBarView: View {
     var percentage: Double
     var color: Color
@@ -19,7 +19,8 @@ struct ProgressBarView: View {
                     Rectangle()
                         .fill(color)
                         .overlay {
-                            StripeOverlay(isMoving: progress > 0 && !isComplete && !reduceMotion)
+                            StripeOverlay(
+                                isMoving: progress > 0 && !isComplete && !reduceMotion, trigger: Int((progress * 1000).rounded()))
                                 .opacity(isComplete ? 0 : 1)
                         }
                         .overlay(alignment: .leading) {

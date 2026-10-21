@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Malampa",
+    "author": "MacedonianBoy; current version by 7bdIa9",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Malampa_Province.svg",
+    "license": "CC BY-SA 3.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Shefa",
+    "author": "MacedonianBoy",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Flag_of_Shefa_Province.svg",
+    "license": "CC BY-SA 3.0",
+    "licenseURL": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "note": "PNG rendering of the source SVG; artwork unchanged."
+  },
+  {
+    "name": "Tafea",
+    "author": "Germenfer; revised by 7bdIa9",
+    "sourceURL": "https://commons.wikimedia.org/wiki/File:Tafea_Province_Flag.svg",
+    "license": "CC0 1.0",
+    "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "note": "Drawn from a 2018 photograph of the flag. PNG rendering of the source SVG; artwork unchanged."
+  }
+]

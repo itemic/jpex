@@ -28,12 +28,6 @@ extension Country {
         "divisions", "dependencies", "parishes", "voivodeships", "län", "communities", "entities",
     ]
 
-    /// The first kind of place it lists, for a title with no room for "or": "state" for States &
-    /// territories, "prefecture" for Prefectures.
-    var shortPlaceNoun: String {
-        placeNoun.components(separatedBy: " or ").first ?? placeNoun
-    }
-
     private static func singular(of plural: String) -> String {
         if plural.hasSuffix("ies") { return String(plural.dropLast(3)) + "y" }
         if ["ches", "shes", "sses", "xes"].contains(where: plural.hasSuffix) { return String(plural.dropLast(2)) }

@@ -10,6 +10,9 @@ struct LevelsView: View {
   @State private var pendingDeletion: VisitLevel?
   @State private var isConfirmingRestore = false
   @State private var saveError: String?
+  /// How many times each level has just been added, by its ID, for its symbol to bounce as the
+  /// list comes back from the editor.
+  @State private var arrivals: [String: Int] = [:]
   @AppStorage(JapanExMapping.storageKey) private var japanExMapping = JapanExMapping()
 
   var body: some View {
@@ -29,15 +32,17 @@ struct LevelsView: View {
               update(edited)
             }
           } label: {
-            LevelRow(level: level, value: ladder.rank(of: level), pattern: ladder.patternStyle(of: level))
+            LevelRow(
+              level: level, value: ladder.rank(of: level), pattern: ladder.patternStyle(of: level),
+              arrivals: arrivals[level.id, default: 0])
           }
           .deleteDisabled(ladder.levels.count == 1)
           .accessibilityActions {
             if level.id != ladder.levels.first?.id {
-              Button("Move Up") { move(level, by: -1) }
+              Button("Move up") { move(level, by: -1) }
             }
             if level.id != ladder.levels.last?.id {
-              Button("Move Down") { move(level, by: 1) }
+              Button("Move down") { move(level, by: 1) }
             }
           }
         }
@@ -56,15 +61,13 @@ struct LevelsView: View {
           }
         }
         if canAddLevel {
-          NavigationLink("Add Level…") {
+          NavigationLink("Add level…") {
             LevelEditorView(newLevelFor: ladder) { add($0) }
           }
         }
       } footer: {
-        if canAddLevel {
-          Text("Each tap on a place’s pill moves it up to the next level.")
-        } else {
-          Text("Each tap on a place’s pill moves it up to the next level. You can have up to \(VisitLadder.maximumCount) levels.")
+        if !canAddLevel {
+          Text("You can have up to \(VisitLadder.maximumCount) levels.")
         }
       }
       // JapanEx has the original five levels; any others show as whichever of those are chosen.
@@ -81,7 +84,7 @@ struct LevelsView: View {
       }
       if ladder != .standard {
         Section {
-          Button("Restore Default Levels") { isConfirmingRestore = true }
+          Button("Restore default levels") { isConfirmingRestore = true }
         }
       }
     }
@@ -98,13 +101,13 @@ struct LevelsView: View {
       titleVisibility: .visible,
       presenting: pendingDeletion
     ) { level in
-      Button("Delete Level", role: .destructive) { delete(level) }
+      Button("Delete level", role: .destructive) { delete(level) }
     } message: { level in
       let destination = ladder.lower(than: level) ?? .never
       Text("^[\(placeCounts[level.id, default: 0]) place](inflect: true) at \(level.name) will move down to \(destination.name).")
     }
     .confirmationDialog("Restore the default levels?", isPresented: $isConfirmingRestore, titleVisibility: .visible) {
-      Button("Restore Defaults", role: .destructive) {
+      Button("Restore defaults", role: .destructive) {
         withAnimation { save(.standard) }
       }
     } message: {
@@ -131,11 +134,17 @@ struct LevelsView: View {
     return Text("Your levels go back to \(names). ^[\(moving) place](inflect: true) at levels you added will move down to the nearest default level.")
   }
 
+  /// Adds a level, its symbol bouncing once the editor has slid away and its row can be seen.
   private func add(_ level: VisitLevel) {
     var ladder = saveModel.ladder
     guard ladder.levels.count < VisitLadder.maximumCount, ladder.level(id: level.id) == nil else { return }
     ladder.levels.append(level)
     save(ladder)
+    guard saveModel.ladder.level(id: level.id) != nil else { return }
+    Task {
+      try? await Task.sleep(for: .milliseconds(450))
+      arrivals[level.id, default: 0] += 1
+    }
   }
 
   private func update(_ level: VisitLevel) {
@@ -181,20 +190,25 @@ struct LevelsView: View {
   }
 }
 
-/// A level's symbol, name and value: 1 for the lowest level, counting up the ladder.
+/// A level's symbol, name and value: 1 for the lowest level, counting up the ladder. A level just
+/// added bounces its symbol as it arrives.
 private struct LevelRow: View {
   var level: VisitLevel
   var value: Int
   var pattern: LevelPatternStyle?
+  /// Counts each time the level has just been added, for its symbol to bounce.
+  var arrivals = 0
   @ScaledMetric(relativeTo: .body) private var iconSize = 30
   @AppStorage(LevelPattern.storageKey) private var showsPatterns = true
   @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   var body: some View {
     HStack(spacing: 12) {
       Image(systemName: level.symbolName)
         .font(.subheadline.weight(.semibold))
         .foregroundStyle(.white)
+        .symbolEffect(.bounce, value: reduceMotion ? 0 : arrivals)
         .frame(width: iconSize, height: iconSize)
         .background {
           ZStack {
@@ -205,7 +219,7 @@ private struct LevelRow: View {
           }
           .clipShape(.circle)
         }
-      Text(level.name)
+      ScrollingName(text: level.name)
       Spacer(minLength: 8)
       Text(value, format: .number)
         .font(.title3.weight(.light))
@@ -214,7 +228,7 @@ private struct LevelRow: View {
         .frame(minWidth: iconSize)
         .contentTransition(.numericText(value: Double(value)))
     }
-    .animation(.snappy, value: value)
+    .animation(Motion.count, value: value)
     .accessibilityElement(children: .ignore)
     .accessibilityLabel(level.name)
     .accessibilityValue("Level \(value)")

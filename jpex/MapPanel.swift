@@ -1,8 +1,10 @@
 import SwiftUI
 
 /// The panel over the foot of the map: how many places count, a pill per level that brings
-/// those places forward, and, opened up, every place with a level set as type.
-/// Where the device folds, the panel gets a region of its own and the names fill it.
+/// those places forward, and, opened up, every place with a level set as type. A place rising on
+/// the map sends its ripple on through the panel too, each pill lifting in turn as it passes.
+/// Where the device folds, the panel gets a region of its own and the names fill it. It sits on
+/// the full map's glass, which it shares with the map's layer chooser and keys.
 struct MapPanel: View {
     var collection: Country
     var statuses: [String: VisitLevel]
@@ -42,6 +44,7 @@ struct MapPanel: View {
                             .foregroundStyle(.secondary)
                     }
                     .matchedGeometryEffect(id: "count", in: count, properties: .position, anchor: .leading)
+                    .feelsRipples()
                     .padding(.leading, 18)
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel("\(counted) of \(collection.divisions.count) counted")
@@ -60,19 +63,18 @@ struct MapPanel: View {
         }
         .padding(.vertical, isOpen ? 16 : 6)
         .frame(maxWidth: isSeparate ? .infinity : 600, maxHeight: isSeparate ? .infinity : nil, alignment: .top)
-        // Bringing a level forward tints the glass with that level's colour.
-        .glassPanel(in: .rect(cornerRadius: 28), tint: highlight?.color)
-        .padding(.horizontal, 12)
-        .padding(.bottom, 8)
-        .frame(maxHeight: isSeparate ? .infinity : nil, alignment: .bottom)
+        // The glass is the full map's, shared with its layer chooser and keys so it can reshape
+        // from one into another; it takes the colour of a level brought forward here.
         .sensoryFeedback(.selection, trigger: highlight)
     }
 
     private var header: some View {
         VStack(alignment: .leading, spacing: -2) {
-            Text(collection.divisionLabel)
-                .typeStyle(.eyebrow)
-                .foregroundStyle(.secondary)
+            ScrollingText {
+                Text(collection.divisionLabel)
+                    .typeStyle(.eyebrow)
+                    .foregroundStyle(.secondary)
+            }
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(counted, format: .number)
                     .typeStyle(.panelCount)
@@ -101,28 +103,34 @@ struct MapPanel: View {
 
     private func legendPills(compact: Bool) -> some View {
         HStack(spacing: compact ? 6 : 8) {
-            ForEach(ladder.levels) { level in
-                let count = tally[level.id, default: 0]
-                let isHighlighted = highlight?.id == level.id
-                Button {
-                    withAnimation(.snappy) { highlight = isHighlighted ? nil : level }
-                } label: {
-                    if compact {
-                        VisitPillLabel(status: countOnly(level, count), isLit: highlight == nil || isHighlighted)
-                            .frame(minWidth: 34)
-                    } else {
-                        VisitPillLabel(status: level, suffix: " \(count)", isLit: highlight == nil || isHighlighted)
-                    }
-                }
-                .buttonStyle(PillButtonStyle())
-                .accessibilityLabel("\(level.name), \(count)")
-                .accessibilityHint(isHighlighted ? "Shows every level." : "Brings these places forward.")
-                .accessibilityAddTraits(isHighlighted ? .isSelected : [])
-            }
+            levelPills(compact: compact)
         }
         .fixedSize()
         .padding(.horizontal, isOpen ? 18 : 8)
         .padding(.vertical, 10)
+    }
+
+    /// A pill for every level, that brings its places forward.
+    private func levelPills(compact: Bool) -> some View {
+        ForEach(ladder.levels) { level in
+            let count = tally[level.id, default: 0]
+            let isHighlighted = highlight?.id == level.id
+            Button {
+                withAnimation(.snappy) { highlight = isHighlighted ? nil : level }
+            } label: {
+                if compact {
+                    VisitPillLabel(status: countOnly(level, count), isLit: highlight == nil || isHighlighted)
+                        .frame(minWidth: 34)
+                } else {
+                    VisitPillLabel(status: level, suffix: " \(count)", isLit: highlight == nil || isHighlighted)
+                }
+            }
+            .buttonStyle(PillButtonStyle())
+            .feelsRipples()
+            .accessibilityLabel("\(level.name), \(count)")
+            .accessibilityHint(isHighlighted ? "Shows every level." : "Brings these places forward.")
+            .accessibilityAddTraits(isHighlighted ? .isSelected : [])
+        }
     }
 
     /// The level wearing just its count as a name, for the compact closed bar.

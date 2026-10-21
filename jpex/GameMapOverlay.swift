@@ -2,7 +2,8 @@ import SwiftUI
 
 /// Game Mode's lights over its board. The place in question is striped like a stick of candy, the
 /// stripes drifting and its glow breathing; an answer being pointed out glows in the colour it
-/// went; a place too small to see sends out rings; a place tapped by mistake flashes red and fades.
+/// went; either comes up as it lights rather than appearing, sending one ring out; a place too
+/// small to see sends out rings; a place tapped by mistake flashes red and fades.
 /// Cities are marked with dots, their names set where they keep clear of each other and of the
 /// places' names on the board. Moves with the camera exactly as the map does.
 struct GameMapOverlay: View, Animatable {
@@ -18,8 +19,13 @@ struct GameMapOverlay: View, Animatable {
     /// Whether copies of the World sit side by side, so outlines aren't traced down the joins.
     var wrapsAround = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// Whether decoration may move by itself, as a glow breathing does: not in Low Power Mode, nor
+    /// while the app isn't in front.
+    @Environment(\.allowsAmbientMotion) private var allowsAmbientMotion
     /// Cities' names follow the text size, within reason for a map.
     @ScaledMetric(relativeTo: .footnote) private var cityNameSize = 14
+    /// The places' names' frames, kept while the view of the board and the names stay the same.
+    @State private var nameFrames = NameFrames()
 
     var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGSize.AnimatableData>, EdgeInsets.AnimatableData> {
         get { AnimatablePair(AnimatablePair(zoom, pan.animatableData), insets.animatableData) }
@@ -31,7 +37,9 @@ struct GameMapOverlay: View, Animatable {
     }
 
     var body: some View {
-        TimelineView(.animation(paused: !isMoving)) { timeline in
+        // The lights breathe and drift slowly, so a gentler pace than the display's is plenty; the
+        // camera's own moves still redraw at full speed, as they change the view itself.
+        TimelineView(.animation(minimumInterval: 1.0 / 30, paused: !isMoving)) { timeline in
             Canvas { context, size in
                 let geometry = MapGeometry(focus: focus, size: size, zoom: zoom, pan: pan, insets: insets)
                 let seams = seamEdges
@@ -43,7 +51,7 @@ struct GameMapOverlay: View, Animatable {
                 }
                 let cities = spotlights.flatMap { spotlight in spotlight.cities.map { ($0, spotlight.color) } }
                 if !cities.isEmpty {
-                    let names = MapLabels.frames(labels, regions: map.regions, in: context, geometry: geometry)
+                    let names = nameFrames.frames(of: labels, regions: map.regions, in: context, geometry: geometry)
                     draw(cities, avoiding: names, in: context, geometry: geometry)
                 }
             }
@@ -58,15 +66,18 @@ struct GameMapOverlay: View, Animatable {
         return [box.minX, box.maxX]
     }
 
-    /// Still lights only need drawing again when the camera moves.
+    /// Still lights only need drawing again when the camera moves. A flash and a twinkle fade, and a
+    /// glow comes up, whatever happens; the place in question's breath and stripes rest where
+    /// decoration may not move.
     private var isMoving: Bool {
-        flash != nil || spotlights.contains { $0.start != nil } || (!spotlights.isEmpty && !reduceMotion)
+        flash != nil || spotlights.contains { $0.start != nil || $0.litAt != nil }
+            || (!spotlights.isEmpty && !reduceMotion && allowsAmbientMotion)
     }
 
     private func draw(_ spotlight: GameSpotlight, in context: GraphicsContext, geometry: MapGeometry, now: Date, seams: [CGFloat]) {
         if spotlight.style == .marker {
             if let marker = spotlight.marker {
-                drawMarker(at: geometry.toScreen(marker), color: spotlight.color, now: now, in: context)
+                drawMarker(at: geometry.toScreen(marker), color: spotlight.color, start: spotlight.start, now: now, in: context)
             }
             return
         }
@@ -79,6 +90,22 @@ struct GameMapOverlay: View, Animatable {
             let progress = now.timeIntervalSince(start) / GameSpotlight.twinkleDuration
             guard progress < 1 else { return }
             lit.opacity = sin(.pi * min(max(progress, 0), 1))
+        }
+        // An answer's glow, or the place in question's candy, comes up rather than appearing:
+        // swelling in over a marker's drop and sending one ring out as it lands, as the dot does, or
+        // with Reduce Motion, fading in quickly. Until it's time to light, as while the camera is
+        // still flying there, it stays dark.
+        var rise = 1.0
+        var ring: Double?
+        if spotlight.style == .answer || spotlight.style == .question, let litAt = spotlight.litAt {
+            let age = max(now.timeIntervalSince(litAt), 0)
+            if reduceMotion {
+                lit.opacity *= min(age / 0.15, 1)
+            } else {
+                let t = min(age / GameSpotlight.markerDrop, 1)
+                rise = 1 - (1 - t) * (1 - t)
+                ring = Self.landingRing(age: age)
+            }
         }
         let visible = CGRect(origin: .zero, size: geometry.size)
         // A place with a main body keeps its lights there: far-flung islands drawn as part of it,
@@ -100,28 +127,64 @@ struct GameMapOverlay: View, Animatable {
                 let edge = Self.outline(of: region.path, without: seams).applying(geometry.transform)
                 switch spotlight.style {
                 case .question, .twinkle:
+                    // The candy fades in as it lights, its colour blooming once off the outline as
+                    // an answer's glow does.
+                    if let ring { drawBloom(edge, color: spotlight.color, ring: ring, in: kept) }
+                    var candy = kept
+                    candy.opacity *= rise
                     drawCandy(
                         path, edge: edge, box: box, visible: visible, color: spotlight.color, breath: breath, seconds: seconds,
-                        in: kept)
+                        in: candy)
                 case .answer:
-                    drawGlow(edge, color: spotlight.color, breath: breath, in: kept)
+                    drawGlow(edge, color: spotlight.color, breath: breath, rise: rise, ring: ring, in: kept)
                 case .marker:
                     break
                 }
             }
             if spotlight.style != .twinkle, max(size.width, size.height) < 28 {
                 let center = body.map { CGPoint(x: $0.midX, y: $0.midY) } ?? geometry.toScreen(region.center)
-                drawRings(around: center, color: spotlight.color, seconds: seconds, marksSpot: isTiny, in: lit)
+                var rings = lit
+                rings.opacity *= rise
+                drawRings(around: center, color: spotlight.color, seconds: seconds, marksSpot: isTiny, in: rings)
+                if let ring { drawLandingRing(around: center, color: spotlight.color, phase: ring, in: lit) }
             }
         }
     }
 
-    /// Dot's marker: a candy dot ringed in white, with rings spreading from it so it's found at a glance.
-    private func drawMarker(at center: CGPoint, color: Color, now: Date, in context: GraphicsContext) {
+    /// Dot's marker, which also marks where a place was tapped in Find with the borders hidden: a
+    /// candy dot ringed in white, with rings spreading from it so it's found at a glance. Given when
+    /// it dropped in, it lands rather than appearing: it swells from nothing a touch past its size
+    /// and settles, sending one ring out as it lands, before the steady rings take over. With
+    /// Reduce Motion, it only fades in.
+    private func drawMarker(at center: CGPoint, color: Color, start: Date?, now: Date, in context: GraphicsContext) {
         let seconds = now.timeIntervalSinceReferenceDate
-        drawRings(around: center, color: color, seconds: seconds, marksSpot: false, in: context)
+        let age = start.map { max(now.timeIntervalSince($0), 0) } ?? .infinity
+        var context = context
+        var scale = 1.0
+        if reduceMotion {
+            context.opacity = min(age / 0.15, 1)
+        } else if age < GameSpotlight.markerDrop {
+            // Out to 1.15 over the first 60%, easing out, then back to 1, easing in and out.
+            let progress = age / GameSpotlight.markerDrop
+            if progress < 0.6 {
+                let t = progress / 0.6
+                scale = 1.15 * (1 - (1 - t) * (1 - t))
+            } else {
+                let t = (progress - 0.6) / 0.4
+                scale = 1.15 - 0.15 * (t * t * (3 - 2 * t))
+            }
+        }
+        let landing = GameSpotlight.markerDrop * 0.6
+        if !reduceMotion, let phase = Self.landingRing(age: age) {
+            drawLandingRing(around: center, color: color, phase: phase, in: context)
+        }
+        // The steady rings wait until it's landed, so the drop reads on its own.
+        if reduceMotion || age >= landing {
+            drawRings(around: center, color: color, seconds: seconds, marksSpot: false, in: context)
+        }
         let breath = reduceMotion ? 0.5 : (sin(seconds * 2 * .pi / 1.6) + 1) / 2
-        let radius = 7 + 1.2 * breath
+        let radius = (7 + 1.2 * breath) * scale
+        guard radius > 0.5 else { return }
         let dot = Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2))
         context.drawLayer { glow in
             glow.addFilter(.shadow(color: color.opacity(0.6), radius: 6))
@@ -160,13 +223,48 @@ struct GameMapOverlay: View, Animatable {
         context.stroke(edge, with: .color(.white.opacity(0.9)), style: StrokeStyle(lineWidth: 1.5, lineJoin: .round))
     }
 
-    /// A glow around an answer, over its colour on the board.
-    private func drawGlow(_ path: Path, color: Color, breath: Double, in context: GraphicsContext) {
+    /// Where the one ring a dot or a glow sends out on landing has got to, from 0 to 1, `age`
+    /// seconds after the dot began to drop in or the glow to come up; nil before it lands and once
+    /// it's faded.
+    private static func landingRing(age: Double) -> Double? {
+        let landing = GameSpotlight.markerDrop * 0.6
+        guard age >= landing, age < landing + GameSpotlight.markerRing else { return nil }
+        return (age - landing) / GameSpotlight.markerRing
+    }
+
+    /// The one ring sent out as a dot lands, or a small place's glow comes up: wider and quicker
+    /// than the steady ones, `phase` running from 0 as it leaves to 1 as it fades away.
+    private func drawLandingRing(around center: CGPoint, color: Color, phase: Double, in context: GraphicsContext) {
+        let eased = 1 - (1 - phase) * (1 - phase)
+        let reach = 8 + 44 * eased
+        let ring = Path(ellipseIn: CGRect(x: center.x - reach, y: center.y - reach, width: reach * 2, height: reach * 2))
+        context.stroke(ring, with: .color(color.opacity(0.95 * (1 - phase))), lineWidth: 3 * (1 - phase) + 1)
+    }
+
+    /// A glow around an answer, over its colour on the board. Coming up, it swells in as `rise`
+    /// runs from 0 to 1; while `ring` runs from 0 to 1, its colour blooms once off the outline and
+    /// fades, as the ring a dot sends out on landing.
+    private func drawGlow(
+        _ path: Path, color: Color, breath: Double, rise: Double = 1, ring: Double? = nil, in context: GraphicsContext
+    ) {
+        if let ring { drawBloom(path, color: color, ring: ring, in: context) }
+        var context = context
+        context.opacity *= rise
         context.drawLayer { glow in
             glow.addFilter(.blur(radius: 5 + 4 * breath))
-            glow.stroke(path, with: .color(color), lineWidth: 6 + 3 * breath)
+            glow.stroke(path, with: .color(color), lineWidth: (6 + 3 * breath) * (0.5 + 0.5 * rise))
         }
         context.stroke(path, with: .color(.white), style: StrokeStyle(lineWidth: 2, lineJoin: .round))
+    }
+
+    /// A place's colour blooming once off its outline and fading as it lights, as `ring` runs from
+    /// 0 to 1, as the ring a dot sends out on landing.
+    private func drawBloom(_ path: Path, color: Color, ring: Double, in context: GraphicsContext) {
+        let eased = 1 - (1 - ring) * (1 - ring)
+        context.drawLayer { bloom in
+            bloom.addFilter(.blur(radius: 2 + 6 * eased))
+            bloom.stroke(path, with: .color(color.opacity(0.7 * (1 - ring))), lineWidth: 4 + 18 * eased)
+        }
     }
 
     /// Rings spreading from a place too small to find at a glance, with a dot to mark the spot
@@ -327,5 +425,35 @@ struct GameMapOverlay: View, Animatable {
             x += period
         }
         return stripes
+    }
+}
+
+/// The frames of the places' names on the board, for cities' names to keep clear of: worked out once
+/// for each view of the board and set of names, rather than every name measured again at every
+/// frame while the lights breathe.
+private final class NameFrames {
+    private var key: Key?
+    private var frames: [CGRect] = []
+
+    private struct Key: Equatable {
+        var labels: [String: MapLabel]
+        var regionCount: Int
+        var focus: CGRect
+        var size: CGSize
+        var zoom: CGFloat
+        var pan: CGSize
+        var insets: EdgeInsets
+    }
+
+    func frames(
+        of labels: [String: MapLabel], regions: [MapRegion], in context: GraphicsContext, geometry: MapGeometry
+    ) -> [CGRect] {
+        let key = Key(
+            labels: labels, regionCount: regions.count, focus: geometry.focus, size: geometry.size, zoom: geometry.zoom,
+            pan: geometry.pan, insets: geometry.insets)
+        if key == self.key { return frames }
+        frames = MapLabels.frames(labels, regions: regions, in: context, geometry: geometry)
+        self.key = key
+        return frames
     }
 }

@@ -8,5 +8,5 @@ struct CollectionSection: Identifiable {
     var id: String { title ?? "Pinned" }
 
     /// The title of the section of groups of countries, such as the EU, which can be folded away.
-    static let worldGroupsTitle = "World Groups"
+    static let worldGroupsTitle = "Groups"
 }

@@ -1,12 +1,54 @@
 import Foundation
 
 extension CountryCatalog {
-    // INSEE Code officiel géographique, 1 January 2026: 101 departments.
-    // Department IDs are stable COG codes, including Corsica and overseas departments.
-    // Mayotte’s territorial authority is now 976R; its department code remains 976.
+    // INSEE Code officiel géographique, 1 January 2026: 18 regions and 101 departments.
+    // France opens on its regions, its first level; its departments are a further level of their
+    // own, and each department's region rises with it. Region IDs follow ISO 3166-2:FR.
+    // Each overseas region is a single department, so both lists share its record, under the
+    // department's code, as Countries does.
     // Source: https://www.insee.fr/fr/information/8740222
     static let france = Country(
         id: "FR",
+        name: "France",
+        localName: "France",
+        divisionLabel: "Regions",
+        groups: [
+            DivisionGroup(
+                id: "FR-metropolitan",
+                name: "Metropolitan regions",
+                divisions: [
+                    frenchRegion("ARA", name: "Auvergne-Rhône-Alpes"),
+                    frenchRegion("BFC", name: "Bourgogne-Franche-Comté"),
+                    frenchRegion("BRE", name: "Bretagne"),
+                    frenchRegion("CVL", name: "Centre-Val de Loire"),
+                    frenchRegion("20R", name: "Corse"),
+                    frenchRegion("GES", name: "Grand Est"),
+                    frenchRegion("HDF", name: "Hauts-de-France"),
+                    frenchRegion("IDF", name: "Île-de-France"),
+                    frenchRegion("NOR", name: "Normandie"),
+                    frenchRegion("NAQ", name: "Nouvelle-Aquitaine"),
+                    frenchRegion("OCC", name: "Occitanie"),
+                    frenchRegion("PDL", name: "Pays de la Loire"),
+                    frenchRegion("PAC", name: "Provence-Alpes-Côte d'Azur")
+                ]
+            ),
+            DivisionGroup(
+                id: "FR-overseas",
+                name: "Overseas regions",
+                // The departments that lie within no region are regions of their own.
+                divisions: frenchDepartments.divisions.filter { $0.parentID == nil }.map { department in
+                    var region = department
+                    region.groupID = "FR-overseas"
+                    return region
+                }
+            )
+        ]
+    )
+
+    // Department IDs are stable COG codes, including Corsica and overseas departments.
+    // Mayotte’s territorial authority is now 976R; its department code remains 976.
+    static let frenchDepartments = Country(
+        id: "FR-departments",
         name: "France",
         localName: "France",
         divisionLabel: "Departments",
@@ -220,9 +262,24 @@ extension CountryCatalog {
                     frenchDepartment("976", name: "Mayotte", region: "06")
                 ]
             )
-        ]
+        ],
+        firstLevelID: "FR"
     )
 
+    private static func frenchRegion(_ code: String, name: String) -> AdministrativeDivision {
+        let flag = frenchRegionFlags[code]
+        return AdministrativeDivision(
+            id: "FR-\(code)",
+            countryID: "FR",
+            name: name,
+            abbreviation: code,
+            groupID: "FR-metropolitan",
+            flagAssetName: flag?.asset ?? "fr_flag",
+            flagNote: flag?.note ?? "The French national tricolor is shown for this region."
+        )
+    }
+
+    /// `region` is the INSEE code the departments' groups go by.
     private static func frenchDepartment(_ code: String, name: String, region: String) -> AdministrativeDivision {
         let flag = frenchFlags[code]
         return AdministrativeDivision(
@@ -232,9 +289,31 @@ extension CountryCatalog {
             abbreviation: code,
             groupID: "FR-region-\(region)",
             flagAssetName: flag?.asset ?? "fr_flag",
-            flagNote: flag?.note ?? "The French national tricolor is shown for this department."
+            flagNote: flag?.note ?? "The French national tricolor is shown for this department.",
+            parentID: metropolitanRegionCodes[region].map { "FR-\($0)" }
         )
     }
+
+    /// Each metropolitan region's ISO 3166-2 code by its INSEE code. The overseas regions aren't
+    /// here: each is a single department, a region of its own.
+    private static let metropolitanRegionCodes: [String: String] = [
+        "84": "ARA", "27": "BFC", "53": "BRE", "24": "CVL", "94": "20R", "44": "GES", "32": "HDF",
+        "11": "IDF", "28": "NOR", "75": "NAQ", "76": "OCC", "52": "PDL", "93": "PAC",
+    ]
+
+    // Regional council flags, banners of regional arms and traditional flags, as for the
+    // departments; regions whose councils fly only their logos show the tricolor. Corsica's flag
+    // is the one its two departments share. Sources are in FR_FLAG_SOURCES.md.
+    private static let frenchRegionFlags: [String: (asset: String, note: String)] = [
+        "ARA": ("fr_flag_ara", "Banner of arms used by the Auvergne-Rhône-Alpes regional council, though the arms were never formally adopted."),
+        "BFC": ("fr_flag_bfc", "Banner of the regional coat of arms presented by Bourgogne-Franche-Comté in 2017."),
+        "BRE": ("fr_flag_bre", "Traditional flag of Brittany, the Gwenn-ha-du."),
+        "20R": ("fr_flag_2a", "The flag of Corsica, with the Moor’s head."),
+        "NOR": ("fr_flag_nor", "Traditional flag of Normandy, with two gold leopards on red."),
+        "OCC": ("fr_flag_occ", "The Occitan cross, traditional flag of Languedoc and the counts of Toulouse."),
+        "PDL": ("fr_flag_pdl", "Unofficial heraldic flag of the region, flown at the regional council in Nantes in the 1980s and 1990s."),
+        "PAC": ("fr_flag_pac", "Regional flag presented by the regional council in 1999, combining Provence, Dauphiné and Nice."),
+    ]
 
     // Artwork licenses and sources are bundled in FranceFlagCredits.json.
     // Heraldic banners, council flags and national fallbacks are identified in each note.

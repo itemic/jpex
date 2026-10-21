@@ -26,6 +26,9 @@ struct TravelMap: Sendable {
     /// bundled ready-projected, and for one partway between projections.
     var projection: MapProjection? = nil
     var centerLongitude: Double? = nil
+    /// For a list of one place's own subdivisions, such as Tasmania's local government areas, how
+    /// its map's units fall on its country's map, for flying from one to the other.
+    var parentTransform: CGAffineTransform? = nil
 
     func region(id: String) -> MapRegion? {
         regions.first { $0.id == id }
@@ -122,6 +125,37 @@ extension MapRegion {
         return core
     }
 
+    /// The pieces of a place's outline that make up its main body, each whole, for lifting it off
+    /// the map without far-flung islands swinging out with it, as French Guiana would with France.
+    var mainBody: Path {
+        let core = coreBounds
+        let reach = max(core.width, core.height) * 0.1
+        let area = core.insetBy(dx: -reach, dy: -reach)
+        var body = Path()
+        var piece = Path()
+        func keepPiece() {
+            if !piece.isEmpty, piece.boundingRect.intersects(area) { body.addPath(piece) }
+            piece = Path()
+        }
+        path.forEach { element in
+            switch element {
+            case .move(let point):
+                keepPiece()
+                piece.move(to: point)
+            case .line(let point):
+                piece.addLine(to: point)
+            case .quadCurve(let point, let control):
+                piece.addQuadCurve(to: point, control: control)
+            case .curve(let point, let control1, let control2):
+                piece.addCurve(to: point, control1: control1, control2: control2)
+            case .closeSubpath:
+                piece.closeSubpath()
+            }
+        }
+        keepPiece()
+        return body.isEmpty ? path : body
+    }
+
     private func gap(between a: CGRect, and b: CGRect) -> CGFloat {
         let dx = max(0, max(a.minX - b.maxX, b.minX - a.maxX))
         let dy = max(0, max(a.minY - b.maxY, b.minY - a.maxY))
@@ -157,6 +191,10 @@ extension TravelMap {
         if collectionID == CountryCatalog.world.id, let world = Geography.world?.map(projection, center: center) {
             return world
         }
+        // So are the seas, which run all the way round the World too.
+        if collectionID == CountryCatalog.seas.id {
+            return Geography.subdivisions(of: collectionID)?.map(projection, center: center)
+        }
         // A group of countries, such as the EU, is the World map zoomed to its members.
         if WorldGroup(collectionID: collectionID) != nil {
             let key = "\(collectionID)-\(projection.rawValue)-\(center.rawValue)"
@@ -165,6 +203,16 @@ extension TravelMap {
                   let group = WorldGroup.collections.first(where: { $0.id == collectionID })
             else { return nil }
             world.focusOverride = world.focus(onMembers: Set(group.divisions.map(\.id)))
+            cache[key] = world
+            return world
+        }
+        // So is one the person made, zoomed to its members as they are now.
+        if let group = CustomWorldGroups.shared.group(collectionID: collectionID) {
+            let members = group.memberIDs.sorted()
+            let key = "\(collectionID)-\(projection.rawValue)-\(center.rawValue)-\(members.joined(separator: ","))"
+            if let map = cache[key] { return map }
+            guard var world = Geography.world?.map(projection, center: center) else { return nil }
+            world.focusOverride = world.focus(onMembers: Set(members))
             cache[key] = world
             return world
         }
@@ -202,7 +250,12 @@ extension TravelMap {
                 let center = area.c?.count == 2 ? CGPoint(x: area.c![0], y: area.c![1]) : CGPoint(x: bounds.midX, y: bounds.midY)
                 return DisputedArea(id: area.id, path: path, bounds: bounds, center: center)
             },
-            disputedLines: (file.disputedLines ?? []).map { Self.path(fromSVG: $0.d) }
+            disputedLines: (file.disputedLines ?? []).map { Self.path(fromSVG: $0.d) },
+            parentTransform: file.parentTransform.flatMap { values in
+                values.count == 6
+                    ? CGAffineTransform(a: values[0], b: values[1], c: values[2], d: values[3], tx: values[4], ty: values[5])
+                    : nil
+            }
         )
         cache[collectionID] = map
         return map
@@ -353,6 +406,8 @@ private struct MapFile: Decodable {
     var frames: [[Double]]?
     var disputed: [OverlayFile]?
     var disputedLines: [OverlayFile]?
+    /// a, b, c, d, tx, ty, as for CGAffineTransform.
+    var parentTransform: [Double]?
 
     struct RegionFile: Decodable {
         var id: String

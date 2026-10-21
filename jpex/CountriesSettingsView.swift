@@ -5,11 +5,15 @@ import SwiftUI
 /// switched at once, its places lighting up one after another.
 struct CountriesSettingsView: View {
   @Environment(CountingPreferences.self) private var counting
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @ScaledMetric(relativeTo: .subheadline) private var cardWidth = 150
   /// The board just switched as a whole, so its places light up in a cascade rather than at once.
   @State private var cascading: String?
   @State private var isNamingPreset = false
   @State private var presetName = ""
+  /// The person's own unsaved mix from earlier on this screen, so they can try a standard or a
+  /// preset and still switch back to it.
+  @State private var unsavedMix: CountingRules?
 
   var body: some View {
     let count = CountryCatalog.world(applying: counting.rules).divisions.count
@@ -18,16 +22,17 @@ struct CountriesSettingsView: View {
         WorldCountRow(count: count)
       }
       countBySection
+      statesSection
       unitedKingdomSection
       board(
-        "outside", title: "States Outside the UN", groups: [.observers, .partlyRecognised, .taiwan, .associatedStates, .deFactoStates],
+        "outside", title: "States outside the UN", groups: [.observers, .partlyRecognised, .taiwan, .associatedStates, .deFactoStates],
         systemImage: "flag.2.crossed.fill", tint: .purple)
       board(
-        "special", title: "Special Administrative Regions", groups: [.specialRegions],
+        "special", title: "Special administrative regions", groups: [.specialRegions],
         systemImage: "building.2.fill", tint: .red)
       board("territories", title: "Territories", groups: [.territories], systemImage: "flag.fill", tint: .orange)
       board(
-        "remote", title: "Antarctica & Remote Islands", groups: [.remotePlaces], systemImage: "snowflake", tint: .cyan)
+        "remote", title: "Antarctica & remote islands", groups: [.remotePlaces], systemImage: "snowflake", tint: .cyan)
       continentsSection
     }
     .navigationTitle("Countries")
@@ -37,7 +42,10 @@ struct CountriesSettingsView: View {
       try? await Task.sleep(for: .seconds(1))
       cascading = nil
     }
-    .alert("Save Preset", isPresented: $isNamingPreset) {
+    .onChange(of: counting.rules) { mix, _ in
+      if isUnsaved(mix) { unsavedMix = mix }
+    }
+    .alert("Save preset", isPresented: $isNamingPreset) {
       TextField("Name", text: $presetName)
       Button("Save") {
         let name = presetName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -46,7 +54,7 @@ struct CountriesSettingsView: View {
       }
       Button("Cancel", role: .cancel) {}
     } message: {
-      Text("Keep these choices to come back to with one tap.")
+      Text("Save these choices to use again.")
     }
   }
 
@@ -64,7 +72,7 @@ struct CountriesSettingsView: View {
     return Section {
       VStack(alignment: .leading, spacing: 12) {
         BoardHeader(
-          title: "Count By", subtitle: Text(current).contentTransition(.interpolate),
+          title: "Count by", subtitle: ScrollingText { Text(current).contentTransition(.interpolate) },
           systemImage: "slider.horizontal.3", tint: .teal, trigger: current
         ) {
           if standard == nil && preset == nil {
@@ -76,8 +84,8 @@ struct CountriesSettingsView: View {
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
             .tint(.teal)
-            .transition(.scale.combined(with: .opacity))
-            .accessibilityLabel("Save as Preset")
+            .transition(.arrive(reduceMotion: reduceMotion))
+            .accessibilityLabel("Save as preset")
           }
         }
         .animation(.snappy, value: standard == nil && preset == nil)
@@ -105,28 +113,37 @@ struct CountriesSettingsView: View {
               apply(applied)
             }
             .contextMenu {
-              Button("Delete Preset", systemImage: "trash", role: .destructive) {
+              Button("Delete preset", systemImage: "trash", role: .destructive) {
                 withAnimation(.snappy) { counting.presets.removeAll { $0.id == saved.id } }
               }
             }
-            .transition(.scale(scale: 0.8).combined(with: .opacity))
+            .transition(reduceMotion ? .opacity : .scale(scale: 0.8).combined(with: .opacity))
           }
           // The current mix when it isn't one of the above, always in its place so the page holds
-          // still. Faded until it's saved; tap it to save it.
+          // still. Faded until it's saved; tap it to save it, or to go back to it after trying
+          // another way of counting.
           let isCustom = standard == nil && preset == nil
+          let earlier = isCustom ? nil : earlierMix
           ToggleCard(
             title: "Custom",
-            subtitle: isCustom ? "\(CountryCatalog.world(applying: counting.rules).divisions.count) countries" : "Your own choices",
+            subtitle: (isCustom ? counting.rules : earlier).map {
+              "\(CountryCatalog.world(applying: $0).divisions.count) countries"
+            } ?? "Your own choices",
             tint: .teal, isOn: isCustom
           ) {
             SymbolMark(systemImage: "slider.horizontal.3", tint: .teal, isOn: isCustom)
           } action: {
-            presetName = ""
-            isNamingPreset = true
+            if let earlier {
+              apply(earlier)
+            } else {
+              presetName = ""
+              isNamingPreset = true
+            }
           }
           .opacity(0.55)
-          .disabled(!isCustom)
-          .accessibilityHint(isCustom ? "Saves these choices as a preset." : "")
+          .disabled(!isCustom && earlier == nil)
+          .accessibilityHint(
+            isCustom ? "Saves these choices as a preset." : earlier == nil ? "" : "Goes back to your unsaved choices.")
         }
       }
       .padding(.vertical, 6)
@@ -136,6 +153,19 @@ struct CountriesSettingsView: View {
   private func apply(_ rules: CountingRules) {
     cascading = "all"
     withAnimation(.snappy) { counting.rules = rules }
+  }
+
+  /// Whether a mix is the person's own: neither a standard nor one of their presets.
+  private func isUnsaved(_ rules: CountingRules) -> Bool {
+    rules.standard == nil && !counting.presets.contains { $0.applied(to: rules) == rules }
+  }
+
+  /// The unsaved mix to switch back to, at the level counted from now, unless it's since been
+  /// saved as a preset.
+  private var earlierMix: CountingRules? {
+    guard var mix = unsavedMix else { return nil }
+    mix.minimumLevelID = counting.rules.minimumLevelID
+    return isUnsaved(mix) ? mix : nil
   }
 
   // MARK: United Kingdom
@@ -188,6 +218,24 @@ struct CountriesSettingsView: View {
     }
   }
 
+  /// The way into showing or hiding the countries World always counts, such as UN members, with
+  /// how many are hidden.
+  private var statesSection: some View {
+    let hidden = counting.rules.hiddenStates.count
+    return Section {
+      NavigationLink {
+        StatesVisibilityView()
+      } label: {
+        SettingsLabel(
+          "Show/hide states", systemImage: "eye.slash.fill", fill: Color.gray.gradient, trigger: hidden
+        ) {
+          Text(hidden == 0 ? "All shown" : hidden == 1 ? "1 hidden" : "\(hidden) hidden")
+            .contentTransition(.numericText(value: Double(hidden)))
+        }
+      }
+    }
+  }
+
   private func setSplit(_ isSplit: Bool) {
     withAnimation(.bouncy) { counting.rules.splitsUnitedKingdom = isSplit }
   }
@@ -232,6 +280,8 @@ struct CountriesSettingsView: View {
             ) {
               FlagMark(assetName: place.flagAssetName, isOn: isOn)
             } action: {
+              // Tapped by hand, it answers at once, even mid-cascade.
+              cascading = nil
               withAnimation(.snappy) { counting.rules.setIncludes(code: place.abbreviation, !isOn) }
             }
             .accessibilityLabel(Self.ownerName(of: place).map { "\(place.name), \($0)" } ?? place.name)
@@ -310,7 +360,7 @@ struct CountriesSettingsView: View {
     CountryCatalog.world.groups.first { $0.id == "WORLD-\(continent)" }?.name ?? continent.capitalized
   }
 
-  private static func color(of continent: String) -> Color {
+  static func color(of continent: String) -> Color {
     switch continent {
     case "europe": .blue
     case "asia": .red
@@ -320,7 +370,7 @@ struct CountriesSettingsView: View {
     }
   }
 
-  private static func globe(of continent: String) -> String {
+  static func globe(of continent: String) -> String {
     switch continent {
     case "europe", "africa": "globe.europe.africa.fill"
     case "asia": "globe.central.south.asia.fill"
@@ -332,7 +382,7 @@ struct CountriesSettingsView: View {
 
 /// A section's heading inside its card: an icon tile, a title with a line beneath, and room
 /// for a button at the end.
-private struct BoardHeader<Subtitle: View, Trailing: View>: View {
+struct BoardHeader<Subtitle: View, Trailing: View>: View {
   var title: LocalizedStringKey
   var subtitle: Subtitle
   var systemImage: String
@@ -344,9 +394,12 @@ private struct BoardHeader<Subtitle: View, Trailing: View>: View {
     HStack(spacing: 12) {
       SettingsIcon(systemImage: systemImage, fill: AnyShapeStyle(tint.gradient), trigger: trigger)
       VStack(alignment: .leading, spacing: 2) {
-        Text(title)
-          .font(.headline)
-          .accessibilityAddTraits(.isHeader)
+        // On one line, a long heading, as Special administrative regions, gliding to show the rest.
+        ScrollingText {
+          Text(title)
+            .font(.headline)
+        }
+        .accessibilityAddTraits(.isHeader)
         subtitle
           .font(.subheadline)
           .foregroundStyle(.secondary)
@@ -360,7 +413,7 @@ private struct BoardHeader<Subtitle: View, Trailing: View>: View {
 /// A small card that lights up in its board's colour while it's on and greys out while it's off,
 /// with a mark such as a flag at the front and a tick at the end. Every card keeps room for two
 /// lines so cards in a row stay the same height; a title without a subtitle sits in the middle.
-private struct ToggleCard<Leading: View>: View {
+struct ToggleCard<Leading: View>: View {
   var title: String
   var subtitle: String?
   var tint: Color
@@ -369,6 +422,9 @@ private struct ToggleCard<Leading: View>: View {
   var delay: Double = 0
   /// A slimmer card for one-word choices: no tick, and only one line's height.
   var isCompact = false
+  /// Counts each time what the card stands for is made or changed elsewhere, such as a group
+  /// saved in its editor, for the card to pop as its page comes back.
+  var arrivals = 0
   @ViewBuilder var leading: Leading
   var action: () -> Void
   @State private var pops = 0
@@ -411,7 +467,7 @@ private struct ToggleCard<Leading: View>: View {
       }
       .animation(
         reduceMotion ? .easeInOut(duration: 0.2) : .bouncy(duration: 0.4, extraBounce: 0.12).delay(delay), value: isOn)
-      .pop(on: pops)
+      .pop(on: pops + arrivals)
       .contentShape(shape)
     }
     .buttonStyle(PillButtonStyle())
@@ -423,7 +479,7 @@ private struct ToggleCard<Leading: View>: View {
 }
 
 /// A flag at the front of a card, greyed out while the card is off.
-private struct FlagMark: View {
+struct FlagMark: View {
   var assetName: String
   var isOn: Bool
 
@@ -439,8 +495,9 @@ private struct FlagMark: View {
   }
 }
 
-/// A symbol at the front of a card, in the card's colour while it's on.
-private struct SymbolMark: View {
+/// A symbol at the front of a card, in the card's colour while it's on, bouncing as the card
+/// lights up but not as it goes out.
+struct SymbolMark: View {
   var systemImage: String
   var tint: Color
   var isOn: Bool
@@ -449,7 +506,7 @@ private struct SymbolMark: View {
     Image(systemName: systemImage)
       .font(.body.weight(.semibold))
       .foregroundStyle(isOn ? AnyShapeStyle(tint) : AnyShapeStyle(.secondary))
-      .symbolEffect(.bounce, value: isOn)
+      .bouncesWhenLit(isOn)
       .frame(width: 30, height: 20)
   }
 }

@@ -51,7 +51,7 @@ enum LevelColor: String, CaseIterable, Identifiable, Codable, Sendable {
         case .lime: "Lime"
         case .green: "Green"
         case .mint: "Mint"
-        case .lightBlue: "Light Blue"
+        case .lightBlue: "Light blue"
         case .blue: "Blue"
         case .indigo: "Indigo"
         case .purple: "Purple"

@@ -1,7 +1,9 @@
 import Foundation
 
 /// How far through a country's subdivisions the person is, for linking to that collection.
-struct CollectionSummary {
+struct CollectionSummary: Identifiable {
+    /// The collection's ID, for opening it.
+    var id: String
     var label: String
     var counted: Int
     var total: Int
@@ -11,6 +13,7 @@ struct CollectionSummary {
     var minimumStatus: VisitLevel
 
     init(collection: Country, snapshot: TravelSnapshot, rules: CountingRules) {
+        id = collection.id
         label = collection.divisionLabel
         counted = snapshot.count(in: collection.divisions, counting: rules)
         total = collection.divisions.count

@@ -46,14 +46,15 @@ struct VisitedNamesView: View {
         return Button {
             onSelect(place)
         } label: {
-            Text(name)
-                .placeName(language, kerning: -0.4)
-                .font(.system(
-                    size: largestSize * (0.5 + 0.5 * emphasis),
-                    weight: PlaceTypesetting.weight(emphasis > 0.75 ? .regular : .light, for: language)))
-                .foregroundStyle(level.color.gradient)
-                .lineLimit(2)
-                .fixedSize(horizontal: false, vertical: true)
+            // On one line, gliding where it's longer than the panel, never wrapping.
+            ScrollingText {
+                Text(name)
+                    .placeName(language, kerning: -0.4)
+                    .font(.system(
+                        size: largestSize * (0.5 + 0.5 * emphasis),
+                        weight: PlaceTypesetting.weight(emphasis > 0.75 ? .regular : .light, for: language)))
+                    .foregroundStyle(level.color.gradient)
+            }
         }
         .buttonStyle(NameButtonStyle())
         .accessibilityLabel("\(place.name), \(level.name)")

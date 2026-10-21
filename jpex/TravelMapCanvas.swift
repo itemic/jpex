@@ -4,7 +4,9 @@ import SwiftUI
 /// Colours sweep in from west to east when the map appears. A place that rises lifts while its
 /// new colour floods out from its centre, and sends a ripple of that colour across the map; a
 /// place that falls quietly drains back, and the places around a rising one lift a little as its
-/// ripple passes them. Full-screen maps also set place names on the map. With day and night on, the
+/// ripple passes them. Where the map is in front, a rising place breaks out of it instead: it lifts
+/// off over everything around the map and lands back with sparks, and on the full map its ripple
+/// spreads across the screen as it lands. Full-screen maps also set place names on the map. With day and night on, the
 /// World's night side is shaded and the capitals there light up.
 struct TravelMapCanvas: View, Animatable {
     var map: TravelMap
@@ -13,6 +15,9 @@ struct TravelMapCanvas: View, Animatable {
     var minimumStatus: VisitLevel
     var zoom: CGFloat = 1
     var pan: CGSize = .zero
+    /// How far the map is turned on screen, clockwise, about the middle of the area it fits into.
+    /// Only the full map turns under two fingers; every other map faces north.
+    var rotation: Angle = .zero
     /// Room kept clear around the fitted map, such as for bars and panels floating over it.
     var insets = EdgeInsets()
     /// The area to fit on screen, when it should differ from the places being coloured.
@@ -23,6 +28,18 @@ struct TravelMapCanvas: View, Animatable {
     var highlight: VisitLevel?
     /// A place to outline, such as the one whose details are open.
     var selection: String?
+    /// Every part of a place drawn in several, outlined together with `selection`, so tapping
+    /// Scotland outlines the whole United Kingdom its callout names, not Scotland alone.
+    var selectionParts: Set<String> = []
+    /// The colour to trace the selected place in, over a soft glow of the same colour, as Learn
+    /// does; without one it's outlined in the primary colour.
+    var selectionTint: Color? = nil
+    /// Whether the outline traces itself in round each place newly picked, as a pen would: in its
+    /// tint, as Learn's does, or in the primary colour, as round a place whose callout opens on
+    /// the full map. Otherwise it's simply there, as while Learn's places are scrubbed past.
+    var tracesSelection = false
+    /// Changes to pulse a tinted outline: it dims and traces round again, to say where the place is.
+    var selectionPulses = 0
     /// A country's subdivisions drawn over this map in the same projection, such as Japan's
     /// prefectures over the World. They trace themselves in as `detailProgress` runs from 0 to 1.
     var detail: MapDetail?
@@ -33,8 +50,14 @@ struct TravelMapCanvas: View, Animatable {
     var morphProgress: Double = 0
     /// Whether the subdivisions are leaving: their borders then fade away rather than retracing.
     var detailIsLeaving = false
+    /// How far the rest of the map washes out as a detail arrives: most of the way for a country's
+    /// subdivisions over the World, a little for a region's over its country's own map, where the
+    /// other regions stay in view.
+    var detailWash = 0.6
     /// Names to set on places large enough to hold them, by region. Only full-screen maps pass them.
     var labels: [String: MapLabel] = [:]
+    /// Whether the names show. Switched on or off, they fade in or out on the map's own clock.
+    var showsLabels = true
     /// Whether to paint the sea and its grid across the whole view. Copies of a map laid side by
     /// side leave it to one of them.
     var drawsBackdrop = true
@@ -48,8 +71,19 @@ struct TravelMapCanvas: View, Animatable {
     /// Levels a place blends into quietly, without lifting, flooding or rippling, as an answer
     /// shown in the quiz does: only a place earned rises with a flourish.
     var quietLevelIDs: Set<String> = []
+    /// Whether the camera glides in a straight line, zooming evenly: the place in the middle of the
+    /// view travels straight to where it's going, and each doubling of the zoom takes as long as the
+    /// last, so a flight from one side of the World to the other neither swoops off course nor
+    /// rushes the last of its zoom. Left unset, every map glides straight except copies laid out by
+    /// their view, such as the quiz's board, whose veil and spotlights move with the camera's plain
+    /// zoom and pan beside the map and must stay in step with it.
+    var glidesStraight: Bool? = nil
+    /// The camera part way through a glide, in the form it glides in; nil at rest, when `zoom` and
+    /// `pan` say it all.
+    private var glide: CameraGlide?
     @Environment(\.visitLadder) private var ladder
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.breaksOutOntoScreen) private var breaksOutOntoScreen
     @Environment(\.spreadsRipplesAcrossScreen) private var spreadsRipplesAcrossScreen
     @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
     @AppStorage(LevelPattern.storageKey) private var showsPatterns = true
@@ -64,35 +98,78 @@ struct TravelMapCanvas: View, Animatable {
     /// Places around one that has just risen, which lift a little as its ripple reaches them.
     @State private var nudges: [String: Nudge] = [:]
     @Environment(\.showsDayNight) private var showsDayNight
+    /// What else World maps show, such as countries coloured by the side of the road they drive on.
+    @Environment(\.worldLayers) private var worldLayers
+    /// The countries' colouring just changed, which sweeps the new colours across from west to east.
+    @State private var colouringChange: ColouringChange?
+    /// A layer's key just brought forward or let go, which fades the other countries back or up.
+    @State private var layerHighlightChange = LayerHighlightChange(from: nil, start: .distantPast)
+    /// The Equator and tropics, or the antipodes, just switched on or off, to draw them in or fade them out.
+    @State private var latitudesChange: NightChange?
+    @State private var antipodesChange: NightChange?
     /// Day and night just switched on, which plays a day through, or off, which fades the night away.
     @State private var nightChange: NightChange?
+    /// The place names just switched on or off, as from the chooser or as the map opens and closes.
+    @State private var labelsChange: NightChange?
     /// Moves on every half minute while the night is shown, so its shade keeps creeping west with the Sun.
     @State private var nightClock = Date.now
+    /// When the tinted outline began tracing round the place picked, or pulsing; nil while it's
+    /// whole. Kept on the map's own clock, apart from the camera's animation, so a new outline
+    /// starting never cuts short the camera gliding to its place.
+    @State private var selectionTrace: SelectionTrace?
 
-    /// Lets zoom, pan, the room around the map and the subdivisions' arrival glide when they change
-    /// inside an animation.
+    /// Lets zoom, pan, turn, the room around the map, the subdivisions' arrival and the selected
+    /// place's outline tracing itself in glide when they change inside an animation.
+    ///
+    /// The camera glides in two forms at once. One is its plain zoom and pan, for maps that keep in
+    /// step with views beside them. The other glides straight: the zoom's logarithm, so it zooms
+    /// evenly, and the place in the middle of the view, which then moves in a straight line. That
+    /// place can't be worked out here, without the size of the view, so it travels as two parts
+    /// that each move in a straight line and only meet once the view's size is known: the pan
+    /// turned back to north and divided by the zoom, and one over the zoom. The body puts them
+    /// together (see `CameraGlide`).
     var animatableData: AnimatablePair<
         AnimatablePair<AnimatablePair<CGFloat, CGSize.AnimatableData>, EdgeInsets.AnimatableData>,
-        AnimatablePair<Double, Double>
+        AnimatablePair<AnimatablePair<Double, Double>, AnimatablePair<Double, CameraGlide.AnimatableData>>
     > {
         get {
             AnimatablePair(
                 AnimatablePair(AnimatablePair(zoom, pan.animatableData), insets.animatableData),
-                AnimatablePair(detailProgress, morphProgress))
+                AnimatablePair(
+                    AnimatablePair(detailProgress, morphProgress),
+                    AnimatablePair(rotation.radians, CameraGlide(zoom: zoom, pan: pan, rotation: rotation).animatableData)))
         }
         set {
             zoom = newValue.first.first.first
             pan.animatableData = newValue.first.first.second
             insets.animatableData = newValue.first.second
-            detailProgress = newValue.second.first
-            morphProgress = newValue.second.second
+            detailProgress = newValue.second.first.first
+            morphProgress = newValue.second.first.second
+            rotation = .radians(newValue.second.second.first)
+            glide = CameraGlide(animatableData: newValue.second.second.second)
         }
+    }
+
+    /// The zoom and pan to draw with in a view of `size`: the straight glide's, while there is one
+    /// and the map glides straight, or else the plain ones.
+    private func shownCamera(in size: CGSize) -> (zoom: CGFloat, pan: CGSize) {
+        guard glidesStraight ?? tiles, let glide else { return (zoom, pan) }
+        let area = MapGeometry(focus: focusRect, size: size, zoom: 1, pan: .zero, insets: insets).fitArea
+        return glide.camera(middle: CGPoint(x: area.midX, y: area.midY), rotation: rotation)
+    }
+
+    /// Every region outlined as selected: the place picked and all its parts.
+    private var selectedIDs: Set<String> {
+        guard let selection else { return selectionParts }
+        return selectionParts.union([selection])
     }
 
     var body: some View {
         let clock = nightClock
         GeometryReader { proxy in
-            let geometry = MapGeometry(focus: focusRect, size: proxy.size, zoom: zoom, pan: pan, insets: insets)
+            let shown = shownCamera(in: proxy.size)
+            let geometry = MapGeometry(
+                focus: focusRect, size: proxy.size, zoom: shown.zoom, pan: shown.pan, insets: insets, rotation: rotation)
             let tiling = tiling(in: geometry)
             let wraps = (wrapsAround || tiling.lap > 0) && map.outline.map(Self.isRectangular) == true
             TimelineView(.animation(paused: !isAnimating)) { timeline in
@@ -100,11 +177,10 @@ struct TravelMapCanvas: View, Animatable {
                 let rippleElapsed = ripple.map { now.timeIntervalSince($0.start) } ?? .infinity
                 let origin = ripple.flatMap { region(id: $0.regionID) }.map { geometry.toScreen($0.center) } ?? .zero
                 ZStack {
-                    // The middle copy paints the sea and grid for them all; each copy sits a lap further along.
+                    // The middle copy paints the sea and grid for them all; each copy sits a lap further
+                    // along the map's own east–west line, which runs aslant while the map is turned.
                     ForEach(tiling.copies, id: \.self) { copy in
-                        let shifted = copy == 0 ? geometry : MapGeometry(
-                            focus: focusRect, size: proxy.size, zoom: zoom,
-                            pan: CGSize(width: pan.width + CGFloat(copy) * tiling.lap, height: pan.height), insets: insets)
+                        let shifted = copy == 0 ? geometry : geometry.sliding(by: CGFloat(copy) * tiling.lap)
                         canvas(geometry: shifted, now: now, clock: clock, isCopy: copy != 0, wraps: wraps)
                     }
                 }
@@ -114,19 +190,30 @@ struct TravelMapCanvas: View, Animatable {
                             .float(9), .float(14), .float(3.2), .float(MapTiming.rippleSpeed), .color(ripple?.color ?? .white)
                         ),
                         maxSampleOffset: CGSize(width: 10, height: 10),
-                        isEnabled: !reduceMotion && rippleElapsed < MapTiming.ripple
+                        isEnabled: !reduceMotion && rippleElapsed >= 0 && rippleElapsed < MapTiming.ripple
                     )
             }
-            // On the full map, the ripple's light carries on past the map's edges, across the screen.
+            // Where the map is in front, a rising place breaks out of it: it lifts off over everything
+            // around the map, and as it lands on the full map, the ripple's light carries on across
+            // the screen.
             .onChange(of: ripple?.start) {
-                guard spreadsRipplesAcrossScreen, !reduceMotion, let ripple,
+                guard breaksOutOntoScreen, !reduceMotion, let ripple,
                       let region = region(id: ripple.regionID) else { return }
-                let point = geometry.toScreen(region.center)
                 // The global frame includes any scale the map is shown at, such as while it grows open.
                 let frame = proxy.frame(in: .global)
                 let scale = proxy.size.width > 0 ? frame.width / proxy.size.width : 1
-                ToastCenter.shared.ripple(
-                    from: CGPoint(x: frame.minX + point.x * scale, y: frame.minY + point.y * scale), color: ripple.color)
+                let toScreen = geometry.transform
+                    .concatenating(CGAffineTransform(scaleX: scale, y: scale))
+                    .concatenating(CGAffineTransform(translationX: frame.minX, y: frame.minY))
+                // Only a place in view on the map breaks out of it, not one the camera has left out.
+                let point = region.center.applying(toScreen)
+                let isInView = frame.contains(point) && ToastCenter.shared.isOnScreen(point)
+                if ripple.liftsOff, !isInView || !liftOff(region, for: ripple, toScreen: toScreen) {
+                    standDown(ripple)
+                    return
+                }
+                guard spreadsRipplesAcrossScreen, isInView else { return }
+                ToastCenter.shared.ripple(from: point, color: ripple.color, start: ripple.start)
             }
         }
         .onAppear(perform: startReveal)
@@ -145,8 +232,49 @@ struct TravelMapCanvas: View, Animatable {
             nightChange = NightChange(isOn: isOn, start: .now)
             animate(for: isOn ? DayNight.introDuration : DayNight.fadeDuration)
         }
-        .task(id: showsDayNight) {
-            guard showsDayNight else { return }
+        // A place newly picked traces its outline in, and a pulse dims a tinted one and traces it
+        // round again; with Reduce Motion, or while places are scrubbed past, it's simply there.
+        .onChange(of: selectedIDs) { _, ids in
+            guard tracesSelection, !reduceMotion, !ids.isEmpty else {
+                selectionTrace = nil
+                return
+            }
+            selectionTrace = SelectionTrace(start: .now, from: 0, duration: MapTiming.selectionTrace)
+            animate(for: MapTiming.selectionTrace)
+        }
+        .onChange(of: selectionPulses) {
+            guard selectionTint != nil, !reduceMotion else { return }
+            selectionTrace = SelectionTrace(start: .now, from: 0.55, duration: MapTiming.selectionPulse)
+            animate(for: MapTiming.selectionPulse)
+        }
+        // The new colours sweep across the World from west to east; with Reduce Motion every
+        // country fades into its new colour at once, in one short blend.
+        .onChange(of: worldLayers.colouring) { old, _ in
+            colouringChange = ColouringChange(from: old, start: .now, sweeps: !reduceMotion)
+            animate(for: reduceMotion ? MapTiming.layerBlend : MapTiming.layerSweep)
+        }
+        .onChange(of: worldLayers.highlight) { old, _ in
+            layerHighlightChange = LayerHighlightChange(from: old, start: .now)
+            animate(for: MapTiming.highlight)
+        }
+        // The lines draw themselves across the World and the antipodes rise into view from west
+        // to east; with Reduce Motion both only fade in where they are. Either way they fade out.
+        .onChange(of: worldLayers.showsLatitudes) { _, isOn in
+            latitudesChange = NightChange(isOn: isOn, start: .now, fades: reduceMotion)
+            animate(for: isOn && !reduceMotion ? MapTiming.latitudesDrawIn : DayNight.fadeDuration)
+        }
+        .onChange(of: worldLayers.showsAntipodes) { _, isOn in
+            antipodesChange = NightChange(isOn: isOn, start: .now, fades: reduceMotion)
+            animate(for: isOn && !reduceMotion ? MapTiming.antipodesRise : DayNight.fadeDuration)
+        }
+        // The place names fade in or out where they are, whatever switched them.
+        .onChange(of: showsLabels) { _, isOn in
+            labelsChange = NightChange(isOn: isOn, start: .now, fades: true)
+            animate(for: MapTiming.highlight)
+        }
+        // Only a map in longitude and latitude, the World, has a night to move on.
+        .task(id: showsDayNight && map.projection != nil) {
+            guard showsDayNight, map.projection != nil else { return }
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(30))
                 guard !Task.isCancelled else { return }
@@ -159,14 +287,31 @@ struct TravelMapCanvas: View, Animatable {
 
     /// Which copies of the map to draw, by how many laps from the middle one, and how wide a lap is
     /// on screen. Only a rectangular World tiles, and only the copies that reach into view are drawn.
+    /// Turned, the copies run on along the map's own east–west line, so the view is measured on the map.
     private func tiling(in geometry: MapGeometry) -> (copies: [Int], lap: CGFloat) {
         guard tiles, !map.isSphere, let outline = map.outline, Self.isRectangular(outline) else { return ([0], 0) }
+        guard geometry.rotation == .zero else {
+            let edges = outline.boundingRect
+            let lap = edges.width * geometry.scale
+            guard lap > 1, edges.width > 0 else { return ([0], 0) }
+            let seen = geometry.visibleMapRect
+            let first = Int(((seen.minX - edges.maxX) / edges.width).rounded(.up))
+            let last = Int(((seen.maxX - edges.minX) / edges.width).rounded(.down))
+            return (Self.copies(from: first, through: last), lap)
+        }
         let box = outline.boundingRect.applying(geometry.transform)
         let lap = box.width
         guard lap > 1 else { return ([0], 0) }
-        let first = max(Int((-box.maxX / lap).rounded(.up)), -4)
-        let last = min(Int(((geometry.size.width - box.minX) / lap).rounded(.down)), 4)
-        return ([0] + stride(from: first, through: last, by: 1).filter { $0 != 0 }, lap)
+        let first = Int((-box.maxX / lap).rounded(.up))
+        let last = Int(((geometry.size.width - box.minX) / lap).rounded(.down))
+        return (Self.copies(from: first, through: last), lap)
+    }
+
+    /// The middle copy, which paints the backdrop, and the copies in view, however many laps along
+    /// a World that runs on round has been dragged, but never more than nine at once.
+    private static func copies(from first: Int, through last: Int) -> [Int] {
+        guard first <= last else { return [0] }
+        return [0] + stride(from: first, through: min(last, first + 8), by: 1).filter { $0 != 0 }
     }
 
     /// One copy of the map. Side copies leave the backdrop to the middle one, and leave out a
@@ -185,8 +330,14 @@ struct TravelMapCanvas: View, Animatable {
             // World washes out; once they settle into the country's own map, the World is gone.
             let detailShare = detail == nil ? 0 : Double(eased(detailProgress))
             let morphShare = detail == nil || morph == nil ? 0 : Double(eased(morphProgress))
-            let worldPresence = (1 - 0.6 * detailShare) * (1 - morphShare)
+            let worldPresence = (1 - detailWash * detailShare) * (1 - morphShare)
             let owners = detail?.ownerRegionIDs ?? []
+            // On the World, the countries can wear something other than the person's levels, such
+            // as the side of the road they drive on. Every layer's colours, by key.
+            let colouring = map.outline != nil ? worldLayers.colouring : .travels
+            let keyColors = Dictionary(
+                MapColouring.allCases.flatMap(\.keys).map { ($0.id, $0.color.resolve(in: environment)) }
+            ) { first, _ in first }
 
             if drawsBackdrop && !isCopy {
                 drawBackdrop(in: context, size: size, geometry: geometry, wraps: wraps)
@@ -207,6 +358,8 @@ struct TravelMapCanvas: View, Animatable {
                 // Land stays within the world's edge: Mercator's rounded card, the globe's rim.
                 mapContext.clip(to: outline)
             }
+            // In the Atlas's coasts, the seas themselves, in their oceans' colours, beneath the land.
+            drawSeas(in: mapContext, colouring: colouring, keyColors: keyColors, now: now)
             // Borders, drawn apart from fills so that where copies of a wrapping World meet, the
             // cut through places on the join isn't traced as a border.
             var borders = mapContext
@@ -219,7 +372,8 @@ struct TravelMapCanvas: View, Animatable {
                 }
             }
             for frame in map.frames {
-                let box = Path(roundedRect: frame.applying(geometry.transform), cornerRadius: 8)
+                // Drawn on the map and carried onto the screen, so the box turns with it.
+                let box = Path(roundedRect: frame, cornerRadius: 8 / scale).applying(geometry.transform)
                 context.stroke(box, with: .color(.secondary.opacity(0.3)), style: StrokeStyle(lineWidth: 0.75, dash: [3, 3]))
             }
             // Outlines outside the collection first, so places in it always draw on top.
@@ -229,11 +383,19 @@ struct TravelMapCanvas: View, Animatable {
             outsideColor.opacity *= Float(worldPresence)
             if worldPresence > 0 {
                 for region in map.regions where map.outline != nil && statuses[region.id] == nil {
-                    mapContext.fill(region.path, with: .color(Color(outsideColor)), style: FillStyle(eoFill: true))
+                    var color = outsideColor
+                    if colouring != .travels {
+                        // Coloured by a layer, places outside a group of countries still say what
+                        // they are, more quietly than its members.
+                        color = mix(layerColor(of: region.id, colouring: colouring, keyColors: keyColors, land: outside, now: now), outside, 0.5)
+                        color.opacity *= Float(worldPresence)
+                    }
+                    mapContext.fill(region.path, with: .color(Color(color)), style: FillStyle(eoFill: true))
                     borders.stroke(region.path, with: .color(border), lineWidth: 0.6 / scale)
                 }
             }
             var markers: [(MapRegion, Color.Resolved)] = []
+            let selected = selectedIDs
             let patterns = patternLayout(for: map.regions, statuses: statuses, geometry: geometry, budget: 1800)
             for region in map.regions {
                 guard let status = statuses[region.id] else { continue }
@@ -241,14 +403,15 @@ struct TravelMapCanvas: View, Animatable {
                 let onScreen = region.bounds.applying(geometry.transform)
                 let floods = !reduceMotion && morphShare == 0 && !(detailShare > 0 && isGivingWay)
                     && max(onScreen.width, onScreen.height) >= 7
-                var color = fill(
-                    for: region, status: status, now: now, palette: palette, land: land, geometry: geometry, floods: floods)
+                var color = worldColor(
+                    for: region, status: status, colouring: colouring, now: now, palette: palette, keyColors: keyColors,
+                    land: land, geometry: geometry, floods: floods)
                 if isGivingWay {
                     // The country's own coarser outline fades out entirely beneath its subdivisions.
                     color = mix(color, land, Float(detailShare))
                     color.opacity *= Float(1 - detailShare)
                 } else {
-                    color = mix(color, land, Float(0.6 * detailShare))
+                    color = mix(color, land, Float(detailWash * detailShare))
                     color.opacity *= Float(worldPresence)
                 }
                 guard color.opacity > 0.001 else { continue }
@@ -256,19 +419,28 @@ struct TravelMapCanvas: View, Animatable {
                 if !isGivingWay || detailShare < 0.5 {
                     borders.stroke(region.path, with: .color(border), lineWidth: 0.6 / scale)
                 }
-                if !isGivingWay {
+                // A level's pattern belongs to the level, so a layer's colours go without.
+                if !isGivingWay, colouring == .travels {
                     drawPattern(
                         for: region, status: status, color: color, onScreen: onScreen, in: mapContext,
                         geometry: geometry, layout: patterns)
                 }
                 // Places too small to see get a dot, once there is something to show.
-                if max(onScreen.width, onScreen.height) < 7, status != .never || region.id == selection, detailShare < 0.3 {
+                let hasSomethingToShow = colouring == .travels
+                    ? status != .never : !colouring.keyIDs(ofRegion: region.id).isEmpty
+                if max(onScreen.width, onScreen.height) < 7, hasSomethingToShow || selected.contains(region.id), detailShare < 0.3 {
                     markers.append((region, color))
                 }
             }
             var worldOverlays = context
             worldOverlays.opacity = worldPresence
             drawDisputed(of: map, in: worldOverlays, geometry: geometry, border: border)
+            // The countries again at their antipodes, faint, over the land and sea they lie beneath.
+            var antipodes = context
+            antipodes.opacity = worldPresence
+            drawAntipodes(
+                in: antipodes, geometry: geometry, now: now, wraps: wraps, colouring: colouring, palette: palette,
+                keyColors: keyColors)
             if let detail, detailShare > 0, !isCopy {
                 drawDetail(
                     detail, share: detailShare, morphShare: morphShare, context: context, mapContext: mapContext,
@@ -276,7 +448,9 @@ struct TravelMapCanvas: View, Animatable {
             }
             // The places around one that rises lift a little as its ripple reaches them, less the
             // further away they are, as if they felt it pass.
-            for (id, nudge) in nudges where morphShare == 0 && !reduceMotion {
+            // Under a layer's colours, only subdivisions drawn over the World show their levels rising.
+            for (id, nudge) in nudges where morphShare == 0 && !reduceMotion
+                && (colouring == .travels || detail?.statuses[id] != nil) {
                 guard changes[id] == nil, !(detailShare > 0 && owners.contains(id)),
                       let region = region(id: id), let status = detail?.statuses[id] ?? statuses[id]
                 else { continue }
@@ -300,7 +474,9 @@ struct TravelMapCanvas: View, Animatable {
             // A place that rises lifts off the map for a moment while its new colour floods out from
             // its centre. A country rising along with it follows a beat later, more quietly.
             // A place that falls doesn't lift; its colour simply drains back.
-            for (id, change) in changes where morphShare == 0 && change.rises {
+            // A place lifting off the map is drawn above it instead, keeping its old colour here.
+            for (id, change) in changes where morphShare == 0 && change.rises && !change.liftsOff
+                && (colouring == .travels || detail?.statuses[id] != nil) {
                 let elapsed = now.timeIntervalSince(change.start)
                 guard elapsed >= 0, elapsed < MapTiming.flood, !reduceMotion, !(detailShare > 0 && owners.contains(id)),
                       let region = region(id: id), let status = detail?.statuses[id] ?? statuses[id]
@@ -342,21 +518,50 @@ struct TravelMapCanvas: View, Animatable {
                         center: region.center, startRadius: 0, endRadius: radius))
             }
             drawNight(in: context, geometry: geometry, now: now, clock: clock, wraps: wraps, presence: 1 - morphShare)
+            // How strongly the place names show, as they fade in or out when switched.
+            let names = labels.isEmpty ? 0 : labelPresence(at: now)
+            drawLatitudes(
+                in: context, geometry: geometry, now: now, wraps: wraps, presence: worldPresence,
+                names: isCopy ? 0 : names)
             for (region, color) in markers {
                 let center = geometry.toScreen(region.center)
-                let dot = Path(ellipseIn: CGRect(x: center.x - 3.5, y: center.y - 3.5, width: 7, height: 7))
+                // Under a layer every small place has a colour, so their dots stay small and quiet:
+                // one the same colour as the land around it all but disappears.
+                let isSelected = selected.contains(region.id)
+                let isQuiet = colouring != .travels && !isSelected
+                let radius: CGFloat = isQuiet ? 2.4 : 3.5
+                let dot = Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2))
                 context.fill(dot, with: .color(Color(color)))
-                context.stroke(dot, with: .color(region.id == selection ? .primary : border), lineWidth: region.id == selection ? 2 : 1)
-            }
-            if !labels.isEmpty, morphShare == 0 {
-                // The World's names give way to the subdivisions' as they arrive.
-                MapLabels.draw(labels, regions: map.regions, in: context, geometry: geometry, opacity: 1 - detailShare)
-                if let detail, detailShare > 0 {
-                    MapLabels.draw(labels, regions: detail.map.regions, in: context, geometry: geometry, opacity: detailShare)
+                if !isQuiet {
+                    context.stroke(
+                        dot, with: .color(isSelected ? selectionTint ?? .primary : border), lineWidth: isSelected ? 2 : 1)
                 }
             }
-            if morphShare == 0, let selection, let region = region(id: selection), !markers.contains(where: { $0.0.id == selection }) {
-                mapContext.stroke(region.path, with: .color(.primary), style: StrokeStyle(lineWidth: 2 / scale, lineJoin: .round))
+            if names > 0 {
+                // The World's names give way to the subdivisions' as they arrive, and both fade
+                // away as the subdivisions set off for the country's own map.
+                let settingOff = names * (1 - Double(eased(morphShare / 0.2)))
+                MapLabels.draw(
+                    labels, regions: map.regions, in: context, geometry: geometry, opacity: settingOff * (1 - detailShare))
+                if let detail, detailShare > 0 {
+                    MapLabels.draw(
+                        labels, regions: detail.map.regions, in: context, geometry: geometry,
+                        opacity: settingOff * detailShare)
+                }
+                // The country's own names fade in where its places land, over the last of the
+                // morph, and carry on unchanged once its map takes over; flying back out, they
+                // fade before the places set off back to the World.
+                if let detail, let morph, morphShare > 0.75, !isCopy {
+                    MapLabels.draw(
+                        labels, regions: morph.regions, in: context,
+                        geometry: destinationGeometry(of: morph, detail: detail, size: geometry.size),
+                        opacity: names * Double(eased((morphShare - 0.75) / 0.25)))
+                }
+            }
+            if morphShare == 0, !selected.isEmpty {
+                drawSelection(
+                    selected.subtracting(markers.map(\.0.id)), in: context, mapContext: mapContext, geometry: geometry,
+                    reveal: selectionTrace?.progress(at: now) ?? 1)
             }
             if let outline = map.outline, morphShare < 1, !wraps {
                 var edge = context
@@ -373,6 +578,44 @@ struct TravelMapCanvas: View, Animatable {
                 }
                 edge.stroke(outline, with: .color(.primary.opacity(0.12)), lineWidth: 0.75 / scale)
             }
+        }
+    }
+
+    /// Outlines the selected place, every part of it alike, in sorted order so the parts never
+    /// swap places from one frame to the next. Each part traces itself round as `reveal` runs to
+    /// 1: tinted, as Learn picks a place, in the tint over a soft glow of the same colour that
+    /// follows the line; otherwise as a plain line in the primary colour, as round a place whose
+    /// callout has just opened.
+    private func drawSelection(
+        _ ids: Set<String>, in context: GraphicsContext, mapContext: GraphicsContext, geometry: MapGeometry,
+        reveal: Double
+    ) {
+        let regions = ids.sorted().compactMap { region(id: $0) }
+        guard !regions.isEmpty else { return }
+        let scale = geometry.scale
+        let reveal = min(max(reveal, 0), 1)
+        guard reveal > 0 else { return }
+        let traced = regions.map { reveal >= 1 ? $0.path : $0.path.trimmedPath(from: 0, to: reveal) }
+        guard let tint = selectionTint else {
+            // Its ends rounded, so the line's leading tip looks drawn rather than cut.
+            let line = StrokeStyle(lineWidth: 2 / scale, lineCap: .round, lineJoin: .round)
+            for path in traced {
+                mapContext.stroke(path, with: .color(.primary), style: line)
+            }
+            return
+        }
+        // The glow is blurred on the screen, so it stays as soft however close the map is.
+        var glow = context
+        glow.addFilter(.blur(radius: 3))
+        for path in traced {
+            glow.stroke(
+                path.applying(geometry.transform), with: .color(tint.opacity(0.3)),
+                style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
+        }
+        // The traced line's ends are rounded, so its leading tip looks drawn rather than cut.
+        let line = StrokeStyle(lineWidth: 2 / scale, lineCap: .round, lineJoin: .round)
+        for path in traced {
+            mapContext.stroke(path, with: .color(tint), style: line)
         }
     }
 
@@ -407,11 +650,7 @@ struct TravelMapCanvas: View, Animatable {
         finishLine()
         let lap = outline.boundingRect.width
         guard lap > 0 else { return }
-        let corner = geometry.toMap(.zero)
-        let opposite = geometry.toMap(CGPoint(x: size.width, y: size.height))
-        let visible = CGRect(
-            x: min(corner.x, opposite.x), y: min(corner.y, opposite.y),
-            width: abs(opposite.x - corner.x), height: abs(opposite.y - corner.y))
+        let visible = geometry.visibleMapRect
         var grid = Path()
         // The meridians come round again every lap of the World.
         for meridian in meridians {
@@ -468,9 +707,7 @@ struct TravelMapCanvas: View, Animatable {
         let extent = detail.extent
         // Where the country's own map sits once it fills the view, as it does when opened directly.
         let destination: (map: TravelMap, geometry: MapGeometry)? = if morphShare > 0, let morph {
-            (morph, MapGeometry(
-                focus: morph.focusRect(including: detail.statuses.keys), size: geometry.size, zoom: 1, pan: .zero,
-                insets: insets))
+            (morph, destinationGeometry(of: morph, detail: detail, size: geometry.size))
         } else {
             nil
         }
@@ -535,6 +772,20 @@ struct TravelMapCanvas: View, Animatable {
         }
     }
 
+    /// Where a country's own map sits once it fills the view, as it does when opened directly, for
+    /// its subdivisions to settle into.
+    private func destinationGeometry(of morph: TravelMap, detail: MapDetail, size: CGSize) -> MapGeometry {
+        MapGeometry(focus: morph.focusRect(including: detail.statuses.keys), size: size, zoom: 1, pan: .zero, insets: insets)
+    }
+
+    /// How strongly the place names show, from 0 to 1: all the way while they're on, and fading in
+    /// or out on the map's own clock for a moment after they're switched.
+    private func labelPresence(at now: Date) -> Double {
+        guard let labelsChange else { return showsLabels ? 1 : 0 }
+        let shown = Double(eased(now.timeIntervalSince(labelsChange.start) / MapTiming.highlight))
+        return labelsChange.isOn ? shown : 1 - shown
+    }
+
     /// The night side of a World map, shaded in steps through twilight and softened, with the
     /// capitals' lights glowing in the dark. Switched on, it plays the last day through in a moment;
     /// switched off, it fades. Each copy of a World laid side by side shades its own lap, the
@@ -570,7 +821,7 @@ struct TravelMapCanvas: View, Animatable {
         let strength = isDark ? 1.3 : 1
         var night = context
         night.opacity = opacity
-        night.clip(to: wraps ? Path(outline.boundingRect.applying(geometry.transform)) : outline.applying(geometry.transform))
+        night.clip(to: wraps ? Path(outline.boundingRect).applying(geometry.transform) : outline.applying(geometry.transform))
         let mapWidth = geometry.focus.width * geometry.scale
         night.drawLayer { layer in
             layer.addFilter(.blur(radius: min(max(mapWidth / 140, 1.5), 8)))
@@ -593,6 +844,202 @@ struct TravelMapCanvas: View, Animatable {
             night.fill(
                 Path(ellipseIn: CGRect(x: point.x - core, y: point.y - core, width: core * 2, height: core * 2)),
                 with: .color(warm.opacity(0.9 * light.glow)))
+        }
+    }
+
+    // MARK: World layers
+
+    /// A place's colour on the World right now: its level's, or a layer's key's, sweeping from
+    /// one to the other across the map from west to east just after the colouring changes.
+    private func worldColor(
+        for region: MapRegion, status: VisitLevel, colouring: MapColouring, now: Date,
+        palette: [String: Color.Resolved], keyColors: [String: Color.Resolved], land: Color.Resolved,
+        geometry: MapGeometry, floods: Bool
+    ) -> Color.Resolved {
+        func color(under colouring: MapColouring, floods: Bool) -> Color.Resolved {
+            colouring == .travels
+                ? fill(for: region, status: status, now: now, palette: palette, land: land, geometry: geometry, floods: floods)
+                : layerColor(of: region.id, colouring: colouring, keyColors: keyColors, land: land, now: now)
+        }
+        let current = color(under: colouring, floods: floods)
+        guard let change = colouringChange, map.outline != nil, change.from != colouring else { return current }
+        let position = (region.center.x - focusRect.minX) / max(focusRect.width, 1)
+        let progress = change.progress(at: now, position: Double(position))
+        guard progress < 1 else { return current }
+        return mix(color(under: change.from, floods: false), current, eased(max(progress, 0)))
+    }
+
+    /// In the Atlas's coasts, the seas softly in their oceans' colours beneath the land, so each
+    /// country's colour matches the water it's on. They sweep in and out from west to east with the
+    /// countries, and a key brought forward lights its seas as well as its countries.
+    private func drawSeas(
+        in context: GraphicsContext, colouring: MapColouring, keyColors: [String: Color.Resolved], now: Date
+    ) {
+        let change = colouringChange.flatMap { $0.from == colouring ? nil : $0 }
+        guard colouring == .coasts || change?.from == .coasts, map.outline != nil,
+              let projection = map.projection, let longitude = map.centerLongitude,
+              let seas = Geography.subdivisions(of: CountryCatalog.seas.id)?.map(projection, centerLongitude: longitude)
+        else { return }
+        let clear = Color.Resolved(red: 0, green: 0, blue: 0, opacity: 0)
+        for sea in seas.regions {
+            var color = layerColor(of: sea.id, colouring: .coasts, keyColors: keyColors, land: clear, now: now)
+            if let change {
+                let position = (sea.center.x - focusRect.minX) / max(focusRect.width, 1)
+                let shown = eased(change.progress(at: now, position: Double(position)))
+                color.opacity *= Float(colouring == .coasts ? shown : 1 - shown)
+            }
+            color.opacity *= 0.4
+            guard color.opacity > 0.001 else { continue }
+            context.fill(sea.path, with: .color(Color(color)), style: FillStyle(eoFill: true))
+        }
+    }
+
+    /// A place's colour under a layer: its first key's, or, while a key it has is brought forward,
+    /// that one's. Places without the key brought forward fade back; places the layer says
+    /// nothing about, such as Antarctica for driving side, are plain land.
+    private func layerColor(
+        of regionID: String, colouring: MapColouring, keyColors: [String: Color.Resolved], land: Color.Resolved, now: Date
+    ) -> Color.Resolved {
+        let ids = colouring.keyIDs(ofRegion: regionID)
+        guard let first = ids.first, var color = keyColors[first] else { return land }
+        let highlight = worldLayers.highlight.flatMap { colouring.key(id: $0) == nil ? nil : $0 }
+        if let highlight, ids.contains(highlight), let lit = keyColors[highlight] { color = lit }
+        let fadeProgress = min(now.timeIntervalSince(layerHighlightChange.start) / MapTiming.highlight, 1)
+        let wasDimmed = layerHighlightChange.from.map { colouring.key(id: $0) != nil && !ids.contains($0) } ?? false
+        let isDimmed = highlight.map { !ids.contains($0) } ?? false
+        let dim = (wasDimmed ? 1 : 0) + ((isDimmed ? 1 : 0) - (wasDimmed ? 1 : 0)) * eased(fadeProgress)
+        color.opacity *= Float(1 - 0.75 * dim)
+        return color
+    }
+
+    /// How far a layer that just switched on or off has come into view, from 0 to 1, at a share of
+    /// the way across the map; nil once it's gone. Sweeps in from the west, or with Reduce Motion
+    /// fades in everywhere at once, and fades out all at once.
+    private func layerPresence(isOn: Bool, change: NightChange?, duration: Double, position: Double, now: Date) -> Double? {
+        guard let change else { return isOn ? 1 : nil }
+        let elapsed = now.timeIntervalSince(change.start)
+        if change.isOn {
+            guard isOn else { return nil }
+            guard !change.fades else { return Double(eased(elapsed / DayNight.fadeDuration)) }
+            return Double(eased((elapsed - 0.5 * duration * position) / (0.5 * duration)))
+        }
+        let left = 1 - min(max(elapsed / DayNight.fadeDuration, 0), 1)
+        return left > 0.001 ? left : nil
+    }
+
+    /// The countries again at their antipodes, mirrored and faint, as one translucent sheet of land
+    /// with a soft edge, so they read as the far side of the Earth showing through rather than land
+    /// of their own: each in its colour, a level's or a layer's, and the rest a cool ghost. They
+    /// rise into view from west to east as they switch on.
+    private func drawAntipodes(
+        in context: GraphicsContext, geometry: MapGeometry, now: Date, wraps: Bool, colouring: MapColouring,
+        palette: [String: Color.Resolved], keyColors: [String: Color.Resolved]
+    ) {
+        guard let outline = map.outline, let projection = map.projection, let center = map.centerLongitude,
+              worldLayers.showsAntipodes || antipodesChange != nil,
+              let antipodes = Antipodes.map(projection, centerLongitude: center)
+        else { return }
+        let visible = CGRect(origin: .zero, size: geometry.size).insetBy(dx: -20, dy: -20)
+        let isDark = context.environment.colorScheme == .dark
+        let ghost = Color(uiColor: .systemIndigo).resolve(in: context.environment)
+        var sheet = context
+        sheet.opacity *= isDark ? 0.42 : 0.32
+        sheet.clip(to: wraps ? Path(outline.boundingRect).applying(geometry.transform) : outline.applying(geometry.transform))
+        // Drawn as one layer, so its edge is traced once round the coasts, not along every border.
+        sheet.drawLayer { edged in
+            edged.addFilter(.shadow(color: Color(ghost).opacity(0.9), radius: 1.2))
+            edged.drawLayer { land in
+                for region in antipodes.regions {
+                    let path = region.path.applying(geometry.transform)
+                    guard path.boundingRect.intersects(visible) else { continue }
+                    let position = (region.center.x - focusRect.minX) / max(focusRect.width, 1)
+                    guard let presence = layerPresence(
+                        isOn: worldLayers.showsAntipodes, change: antipodesChange, duration: MapTiming.antipodesRise,
+                        position: position, now: now)
+                    else { continue }
+                    var color = ghost
+                    if colouring == .travels {
+                        if let status = statuses[region.id], status != .never, let level = palette[status.id] { color = level }
+                    } else if !colouring.keyIDs(ofRegion: region.id).isEmpty {
+                        color = layerColor(of: region.id, colouring: colouring, keyColors: keyColors, land: ghost, now: now)
+                    }
+                    color.opacity *= Float(presence)
+                    land.fill(path, with: .color(Color(color)), style: FillStyle(eoFill: true))
+                }
+            }
+        }
+    }
+
+    /// The Equator, the tropics and the polar circles, drawing themselves across the World from
+    /// west to east as they switch on, or with Reduce Motion fading in where they lie: the Equator
+    /// a firm line, the tropics dashed in the Sun's warm colour and the polar circles dotted in ice
+    /// blue. Full maps name them where they come into view on the left, as strongly as `names`
+    /// says, so the names come and go with the places'.
+    private func drawLatitudes(
+        in context: GraphicsContext, geometry: MapGeometry, now: Date, wraps: Bool, presence: Double, names: Double
+    ) {
+        guard let projection = map.projection, let outline = map.outline,
+              worldLayers.showsLatitudes || latitudesChange != nil
+        else { return }
+        var drawIn = 1.0
+        var opacity = presence
+        if let latitudesChange {
+            let elapsed = now.timeIntervalSince(latitudesChange.start)
+            if latitudesChange.isOn {
+                guard worldLayers.showsLatitudes else { return }
+                if latitudesChange.fades {
+                    opacity *= min(max(elapsed / DayNight.fadeDuration, 0), 1)
+                } else {
+                    drawIn = Double(eased(elapsed / MapTiming.latitudesDrawIn))
+                }
+            } else {
+                opacity *= 1 - min(max(elapsed / DayNight.fadeDuration, 0), 1)
+            }
+        }
+        guard opacity > 0.001, drawIn > 0.001 else { return }
+        let isRectangular = !map.isSphere && Self.isRectangular(outline)
+        let lines = LatitudeLines.drawn(in: projection, edge: isRectangular ? 190 : 180)
+        let isDark = context.environment.colorScheme == .dark
+        let mapWidth = geometry.focus.width * geometry.scale
+        let weight = min(max(mapWidth / 420, 0.8), 1.6)
+        var drawing = context
+        drawing.opacity = opacity
+        drawing.clip(to: wraps ? Path(outline.boundingRect).applying(geometry.transform) : outline.applying(geometry.transform))
+        for drawn in lines {
+            let style = Self.latitudeStyle(of: drawn.line.kind, isDark: isDark, weight: weight)
+            let path = drawn.path.applying(geometry.transform)
+            drawing.stroke(drawIn < 1 ? path.trimmedPath(from: 0, to: drawIn) : path, with: .color(style.color), style: style.stroke)
+            guard names > 0.001, drawIn >= 1 else { continue }
+            // The name sits just above the line, where it first comes into view from the left.
+            let room = CGRect(origin: .zero, size: geometry.size).insetBy(dx: 14, dy: 24)
+            let start = drawn.pieces.lazy.flatMap { $0 }
+                .map { $0.applying(geometry.transform) }
+                .first { room.contains($0) && $0.x < room.maxX - 120 }
+            guard let start else { continue }
+            var named = drawing
+            named.opacity = opacity * names
+            named.draw(
+                Text(drawn.line.name)
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(style.color),
+                at: CGPoint(x: start.x + 2, y: start.y - 2), anchor: .bottomLeading)
+        }
+    }
+
+    private static func latitudeStyle(
+        of kind: LatitudeLines.Kind, isDark: Bool, weight: CGFloat
+    ) -> (color: Color, stroke: StrokeStyle) {
+        switch kind {
+        case .equator:
+            return (.primary.opacity(isDark ? 0.6 : 0.5), StrokeStyle(lineWidth: 1.2 * weight, lineCap: .round))
+        case .tropic:
+            return (
+                Color(red: 0.93, green: 0.52, blue: 0.16).opacity(0.9),
+                StrokeStyle(lineWidth: 1.1 * weight, lineCap: .round, dash: [5 * weight, 3.5 * weight]))
+        case .polar:
+            return (
+                Color(red: 0.32, green: 0.62, blue: 0.95).opacity(0.9),
+                StrokeStyle(lineWidth: 1.4 * weight, lineCap: .round, dash: [0.1, 3.6 * weight]))
         }
     }
 
@@ -637,6 +1084,9 @@ struct TravelMapCanvas: View, Animatable {
             let old = target(for: change.from, now: now, palette: palette, land: land)
             if elapsed < 0 {
                 color = old
+            } else if change.liftsOff {
+                // Lifted off the map, it takes its new colour here as it lands.
+                if elapsed < PlaceLift.landing { color = old }
             } else if change.rises, !change.isSecondary, floods {
                 if elapsed < MapTiming.flood { color = old }
             } else if elapsed < MapTiming.blend {
@@ -694,12 +1144,56 @@ struct TravelMapCanvas: View, Animatable {
                 from: change.from, start: start, rises: rises(change.from, to: change.to), isSecondary: isSecondary)
         }
         // Only the place itself, rising, sends a ripple in its new colour, and the places around it
-        // feel it pass.
+        // feel it pass. Breaking out of the map, it lifts off first, and both wait for it to land.
+        // Not while subdivisions are moving into their country's own map, where it isn't drawn
+        // where the map would say.
+        var landing = 0.0
         if !isSecondary, let first = changed.first, rises(first.from, to: first.to) {
-            ripple = MapRipple(regionID: first.id, start: now, color: first.to.color)
-            nudges = neighbours(of: first.id, among: new, isDetail: isDetail, excluding: Set(changed.map(\.id)), start: now)
+            let liftsOff = breaksOutOntoScreen && !reduceMotion && (morph == nil || morphProgress == 0)
+            landing = liftsOff ? PlaceLift.landing : 0
+            changes[first.id]?.liftsOff = liftsOff
+            let lands = now.addingTimeInterval(landing)
+            ripple = MapRipple(regionID: first.id, start: lands, from: first.from, to: first.to, liftsOff: liftsOff)
+            nudges = neighbours(of: first.id, among: new, isDetail: isDetail, excluding: Set(changed.map(\.id)), start: lands)
         }
-        animate(for: MapTiming.ripple + (isSecondary ? MapTiming.followDelay : 0))
+        animate(for: MapTiming.ripple + landing + (isSecondary ? MapTiming.followDelay : 0))
+    }
+
+    /// Lifts a place that has just risen off the map, over the screen around it, from where it sits
+    /// on screen now. False, lifting nothing, when it can't be seen there.
+    private func liftOff(_ region: MapRegion, for ripple: MapRipple, toScreen: CGAffineTransform) -> Bool {
+        let center = region.center.applying(toScreen)
+        var outline = region.mainBody.applying(toScreen)
+        let box = outline.boundingRect
+        // A place too small to see is drawn as a dot, so the dot lifts instead.
+        if max(box.width, box.height) < 7 {
+            outline = Path(ellipseIn: CGRect(x: center.x - 3.5, y: center.y - 3.5, width: 7, height: 7))
+        }
+        return ToastCenter.shared.lift(PlaceLift(
+            outline: outline, center: center, from: liftColor(for: ripple.from), to: liftColor(for: ripple.to),
+            symbolName: ripple.to.symbolName,
+            height: Double(ladder.rank(of: ripple.to)) / Double(max(ladder.levels.count, 1)),
+            start: ripple.start.addingTimeInterval(-PlaceLift.landing)))
+    }
+
+    /// A place that was to lift off but is out of sight rises on the map alone, as it would
+    /// anywhere else, from now.
+    private func standDown(_ ripple: MapRipple) {
+        let now = Date.now
+        changes[ripple.regionID]?.liftsOff = false
+        nudges = nudges.mapValues { nudge in
+            var nudge = nudge
+            nudge.start = now
+            return nudge
+        }
+        self.ripple?.liftsOff = false
+        self.ripple?.start = now
+    }
+
+    /// A level's colour as it fills a place on the map, for the place lifted off it.
+    private func liftColor(for status: VisitLevel) -> Color {
+        guard status != .never else { return Color(uiColor: .systemGray4) }
+        return ladder.rank(of: status) < ladder.rank(of: minimumStatus) ? status.color.opacity(0.5) : status.color
     }
 
     /// Whether a change is a rise to celebrate: up the ladder, to a level that isn't a quiet one.
@@ -841,6 +1335,20 @@ struct TravelMapCanvas: View, Animatable {
     }
 }
 
+/// A tinted outline tracing itself round a place: from how much of it to whole, starting when, and
+/// over how long, easing out as a pen slows to finish a line.
+private struct SelectionTrace {
+    var start: Date
+    var from: Double
+    var duration: TimeInterval
+
+    func progress(at date: Date) -> Double {
+        let linear = min(max(date.timeIntervalSince(start) / duration, 0), 1)
+        let eased = 1 - pow(1 - linear, 3)
+        return from + (1 - from) * eased
+    }
+}
+
 /// A country's subdivisions drawn over the World map in the same projection.
 struct MapDetail {
     var map: TravelMap
@@ -887,7 +1395,9 @@ private struct DetailMove {
     }
 }
 
-/// Converts between map units and points on screen for a fitted, zoomed and panned map.
+/// Converts between map units and points on screen for a fitted, zoomed, turned and panned map.
+/// The map is fitted into the fit area and zoomed, then turned about the middle of the fit area,
+/// then panned, so a pan is always a plain move across the screen whichever way the map faces.
 struct MapGeometry {
     var focus: CGRect
     var size: CGSize
@@ -895,6 +1405,8 @@ struct MapGeometry {
     var pan: CGSize
     /// Room kept clear around the fitted map; the map still draws beneath it.
     var insets = EdgeInsets()
+    /// How far the map is turned, clockwise on screen, about the middle of the fit area.
+    var rotation: Angle = .zero
 
     /// The part of the view the map fits into before zooming.
     var fitArea: CGRect {
@@ -915,47 +1427,151 @@ struct MapGeometry {
     var transform: CGAffineTransform {
         let originX = fitArea.midX - focus.midX * fitScale
         let originY = fitArea.midY - focus.midY * fitScale
-        return CGAffineTransform(a: scale, b: 0, c: 0, d: scale, tx: originX * zoom + pan.width, ty: originY * zoom + pan.height)
+        guard rotation.radians != 0 else {
+            return CGAffineTransform(a: scale, b: 0, c: 0, d: scale, tx: originX * zoom + pan.width, ty: originY * zoom + pan.height)
+        }
+        // Fitted and zoomed, then turned about the middle of the fit area, then panned.
+        let middle = CGPoint(x: fitArea.midX, y: fitArea.midY)
+        return CGAffineTransform(a: scale, b: 0, c: 0, d: scale, tx: originX * zoom - middle.x, ty: originY * zoom - middle.y)
+            .concatenating(CGAffineTransform(rotationAngle: rotation.radians))
+            .concatenating(CGAffineTransform(translationX: middle.x + pan.width, y: middle.y + pan.height))
     }
 
-    /// The pan that puts a point on the map at the centre of the fit area at a given zoom.
-    func camera(centering point: CGPoint, zoom: CGFloat) -> MapCamera {
-        let scale = fitScale * zoom
-        let originX = fitArea.midX - focus.midX * fitScale
-        let originY = fitArea.midY - focus.midY * fitScale
+    /// The same layout facing north, for framing a map that is about to stop being turned.
+    var facingNorth: MapGeometry {
+        var geometry = self
+        geometry.rotation = .zero
+        return geometry
+    }
+
+    /// The part of the map in view, as a rectangle in map units: all of it, and a little more where
+    /// the map is turned and the view's corners reach out across it.
+    var visibleMapRect: CGRect {
+        let corners = [
+            CGPoint.zero, CGPoint(x: size.width, y: 0), CGPoint(x: 0, y: size.height), CGPoint(x: size.width, y: size.height),
+        ].map(toMap)
+        let xs = corners.map(\.x)
+        let ys = corners.map(\.y)
+        return CGRect(x: xs.min()!, y: ys.min()!, width: xs.max()! - xs.min()!, height: ys.max()! - ys.min()!)
+    }
+
+    /// The same map moved `distance` points along its own east–west line, as a copy of a tiled World
+    /// lies a lap along from the middle one.
+    func sliding(by distance: CGFloat) -> MapGeometry {
+        var geometry = self
+        geometry.pan.width += distance * cos(rotation.radians)
+        geometry.pan.height += distance * sin(rotation.radians)
+        return geometry
+    }
+
+    /// The camera that puts a point on the map at a point on screen, at a given zoom and turn.
+    func camera(placing point: CGPoint, at screenPoint: CGPoint, zoom: CGFloat, rotation: Angle) -> MapCamera {
+        var unpanned = self
+        unpanned.zoom = zoom
+        unpanned.pan = .zero
+        unpanned.rotation = rotation
+        let landed = unpanned.toScreen(point)
         return MapCamera(
-            zoom: zoom,
-            pan: CGSize(
-                width: fitArea.midX - point.x * scale - originX * zoom,
-                height: fitArea.midY - point.y * scale - originY * zoom))
+            zoom: zoom, pan: CGSize(width: screenPoint.x - landed.x, height: screenPoint.y - landed.y), rotation: rotation)
+    }
+
+    /// The pan that puts a point on the map at the centre of the fit area at a given zoom, keeping the map's turn.
+    func camera(centering point: CGPoint, zoom: CGFloat) -> MapCamera {
+        camera(placing: point, at: CGPoint(x: fitArea.midX, y: fitArea.midY), zoom: zoom, rotation: rotation)
     }
 
     /// The zoom and pan that fit a map rectangle into the fit area, leaving a little room around it.
+    /// A turned map keeps its turn, and fits the rectangle as it lies aslant.
     func camera(fitting rect: CGRect) -> MapCamera {
-        guard rect.width > 0 || rect.height > 0 else { return MapCamera(zoom: zoom, pan: pan) }
+        guard rect.width > 0 || rect.height > 0 else { return MapCamera(zoom: zoom, pan: pan, rotation: rotation) }
         let padded = rect.insetBy(dx: -max(rect.width, rect.height * 0.2) * 0.04, dy: -max(rect.height, rect.width * 0.2) * 0.04)
-        let targetScale = min(fitArea.width / max(padded.width, 0.001), fitArea.height / max(padded.height, 0.001))
-        let targetZoom = targetScale / fitScale
-        let originX = fitArea.midX - focus.midX * fitScale
-        let originY = fitArea.midY - focus.midY * fitScale
-        return MapCamera(
-            zoom: targetZoom,
-            pan: CGSize(
-                width: fitArea.midX - padded.midX * targetScale - originX * targetZoom,
-                height: fitArea.midY - padded.midY * targetScale - originY * targetZoom))
+        // How much room the rectangle takes on screen once turned, for each unit of scale.
+        let cosine = abs(cos(rotation.radians))
+        let sine = abs(sin(rotation.radians))
+        let width = padded.width * cosine + padded.height * sine
+        let height = padded.width * sine + padded.height * cosine
+        let targetScale = min(fitArea.width / max(width, 0.001), fitArea.height / max(height, 0.001))
+        return camera(centering: CGPoint(x: padded.midX, y: padded.midY), zoom: targetScale / fitScale)
     }
 
     func toScreen(_ point: CGPoint) -> CGPoint { point.applying(transform) }
     func toMap(_ point: CGPoint) -> CGPoint { point.applying(transform.inverted()) }
 }
 
-/// How far a map is zoomed in and where it has been dragged to.
+/// How far a map is zoomed in, where it has been dragged to and how far it has been turned.
 struct MapCamera: Equatable {
     var zoom: CGFloat = 1
     var pan: CGSize = .zero
+    /// Clockwise on screen. Only the full map turns; every other camera faces north.
+    var rotation: Angle = .zero
+
+    /// Whether the map faces north, near enough that no compass is needed to say so.
+    var facesNorth: Bool { abs(Self.normalised(rotation).degrees) < 0.5 }
+
+    /// The same turn within half a turn either way of north, so animating home never goes the long way round.
+    static func normalised(_ rotation: Angle) -> Angle {
+        .degrees(remainder(rotation.degrees, 360))
+    }
 }
 
-private enum MapTiming {
+/// A camera in the form it glides in, so it moves in a straight line and zooms evenly.
+///
+/// The map is fitted, zoomed by `z`, turned by `R` about the middle `M` of the fit area, then
+/// panned, so the place `c` at that middle, measured from the middle of the fitted map in fitted
+/// points as `u`, satisfies `z·u + (z − 1)·M = −R⁻¹·pan`. Gliding `u` in a straight line and
+/// `log z` evenly is what's wanted, but `M` depends on the view's size, which an animation's
+/// values can't see. So `u` is split into `lead`, `−R⁻¹·pan / z`, and `inverseZoom`, `1 / z`:
+/// `u = lead − M·(1 − inverseZoom)`. Both parts are straight in `u` for any `M`, so gliding each in
+/// a straight line glides `u` in one too, and they're put back together once `M` is known. At
+/// rest the round trip gives back the very pan it started from.
+struct CameraGlide {
+    var logZoom: Double
+    var inverseZoom: Double
+    var lead: CGSize
+
+    init(zoom: CGFloat, pan: CGSize, rotation: Angle) {
+        let zoom = max(zoom, 0.0001)
+        let cosine = cos(rotation.radians)
+        let sine = sin(rotation.radians)
+        // The pan turned back to face north.
+        let unturned = CGSize(
+            width: pan.width * cosine + pan.height * sine,
+            height: -pan.width * sine + pan.height * cosine)
+        logZoom = log(Double(zoom))
+        inverseZoom = Double(1 / zoom)
+        lead = CGSize(width: -unturned.width / zoom, height: -unturned.height / zoom)
+    }
+
+    init(animatableData: AnimatableData) {
+        logZoom = animatableData.first.first
+        inverseZoom = animatableData.first.second
+        lead = CGSize(width: animatableData.second.first, height: animatableData.second.second)
+    }
+
+    typealias AnimatableData = AnimatablePair<AnimatablePair<Double, Double>, AnimatablePair<CGFloat, CGFloat>>
+
+    var animatableData: AnimatableData {
+        AnimatablePair(AnimatablePair(logZoom, inverseZoom), AnimatablePair(lead.width, lead.height))
+    }
+
+    /// The zoom and pan this glide has reached, for a fit area whose middle is `middle`, turned by
+    /// `rotation`.
+    func camera(middle: CGPoint, rotation: Angle) -> (zoom: CGFloat, pan: CGSize) {
+        let zoom = CGFloat(exp(logZoom))
+        let held = 1 - CGFloat(inverseZoom)
+        let u = CGPoint(x: lead.width - middle.x * held, y: lead.height - middle.y * held)
+        let v = CGPoint(x: zoom * u.x + (zoom - 1) * middle.x, y: zoom * u.y + (zoom - 1) * middle.y)
+        let cosine = cos(rotation.radians)
+        let sine = sin(rotation.radians)
+        return (zoom, CGSize(width: -(v.x * cosine - v.y * sine), height: -(v.x * sine + v.y * cosine)))
+    }
+}
+
+/// The map's own clock: how long what it draws for itself takes, apart from any animation, so
+/// colours, outlines and ripples never cut short the camera gliding at the same time. Others time
+/// themselves to it, as the full map waits for a fact's colours to finish sweeping away before
+/// World Time curls up out of it.
+enum MapTiming {
     static let blend = 0.55
     static let pop = 0.5
     /// How long a rising place's new colour takes to spread out to its edges.
@@ -968,6 +1584,18 @@ private enum MapTiming {
     static let rippleSpeed = 700.0
     /// How long a place takes to lift and settle as the ripple passes it.
     static let nudge = 0.45
+    /// How long a new colouring takes to sweep across the World from west to east, and how long
+    /// each country takes to change as it passes.
+    static let layerSweep = 1.1
+    static let layerBlend = 0.4
+    /// How long the Equator and tropics take to draw themselves across the World.
+    static let latitudesDrawIn = 1.2
+    /// How long the antipodes take to rise into view.
+    static let antipodesRise = 0.9
+    /// How long a tinted outline takes to trace itself round a place picked, as in Learn.
+    static let selectionTrace = 0.45
+    /// How long a tinted outline takes to dim and trace round again when pulsed.
+    static let selectionPulse = 0.5
 }
 
 /// A place lifting a little as the ripple from a neighbour that rose passes it.
@@ -980,9 +1608,34 @@ private struct Nudge {
     var closeness: Double
 }
 
-/// Day and night being switched on or off.
+/// Day and night, or another layer, being switched on or off.
 private struct NightChange {
     var isOn: Bool
+    var start: Date
+    /// Whether a layer switched on only fades in where it is, as with Reduce Motion, rather than
+    /// drawing or rising across the World.
+    var fades = false
+}
+
+/// The countries' colouring changing, from what they were coloured by before.
+private struct ColouringChange {
+    var from: MapColouring
+    var start: Date
+    /// Whether the new colours sweep across from west to east; with Reduce Motion, every country
+    /// blends into its new colour at once instead.
+    var sweeps = true
+
+    /// How far a place `position` of the way across the map from the west has come from the old
+    /// colours to the new: below 0 until the sweep reaches it, and 1 or more once it has changed.
+    func progress(at now: Date, position: Double) -> Double {
+        let wait = sweeps ? (MapTiming.layerSweep - MapTiming.layerBlend) * position : 0
+        return (now.timeIntervalSince(start) - wait) / MapTiming.layerBlend
+    }
+}
+
+/// A layer's key brought forward or let go, from the one brought forward before, if any.
+private struct LayerHighlightChange {
+    var from: String?
     var start: Date
 }
 
@@ -993,13 +1646,20 @@ private struct StatusChange {
     var rises: Bool
     /// A country following one of its places, a beat later and more quietly.
     var isSecondary: Bool
+    /// Lifted off the map, so it's drawn above it until it lands, rather than here.
+    var liftsOff = false
 }
 
 private struct MapRipple {
     var regionID: String
+    /// When the ripple sets off: as the place rises, or once it has lifted off and landed.
     var start: Date
+    var from: VisitLevel
+    var to: VisitLevel
+    var liftsOff = false
+
     /// The colour of the level the place rose to, carried on the wave's crests.
-    var color: Color = .white
+    var color: Color { to.color }
 }
 
 private struct HighlightChange {

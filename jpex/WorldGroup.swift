@@ -40,36 +40,27 @@ enum WorldGroup: String, CaseIterable, Identifiable, Sendable {
         case .mercosur: "Mercosur"
         case .caricom: "CARICOM"
         case .efta: "EFTA"
-        case .nordic: "Nordic Countries"
-        case .baltic: "Baltic States"
+        case .nordic: "Nordic countries"
+        case .baltic: "Baltic states"
         case .benelux: "Benelux"
         }
     }
 
-    /// What the group is, in a few words, for its row in the sidebar.
-    var summary: String {
+    /// The group's own flag, where it flies one that's free to use, as WORLD_FLAG_SOURCES.md lists.
+    /// The rest, such as the G7, wear their symbol on a tile instead.
+    var flagAssetName: String? {
         switch self {
-        case .unitedNations: "Member states"
-        case .g7: "Major advanced economies"
-        case .g20: "The largest economies"
-        case .europeanUnion: "Political and economic union"
-        case .schengen: "Travel without border checks"
-        case .eurozone: "Countries using the euro"
-        case .nato: "North Atlantic alliance"
-        case .commonwealth: "Commonwealth of Nations"
-        case .asean: "Southeast Asian nations"
-        case .africanUnion: "Every state in Africa"
-        case .arabLeague: "League of Arab States"
-        case .oecd: "Economic co-operation"
-        case .brics: "Emerging economies"
-        case .gulfCooperation: "Arab states of the Gulf"
-        case .opec: "Oil-exporting countries"
-        case .mercosur: "South American trade bloc"
-        case .caricom: "Caribbean Community"
-        case .efta: "European Free Trade Association"
-        case .nordic: "With the Faroe Islands, Greenland and Åland"
-        case .baltic: "Estonia, Latvia and Lithuania"
-        case .benelux: "Belgium, the Netherlands and Luxembourg"
+        case .unitedNations: "group_flag_united_nations"
+        case .europeanUnion: "group_flag_european_union"
+        case .nato: "group_flag_nato"
+        case .africanUnion: "group_flag_african_union"
+        case .arabLeague: "group_flag_arab_league"
+        case .gulfCooperation: "group_flag_gulf_cooperation"
+        case .opec: "group_flag_opec"
+        case .mercosur: "group_flag_mercosur"
+        case .caricom: "group_flag_caricom"
+        case .nordic: "group_flag_nordic"
+        case .g7, .g20, .schengen, .eurozone, .commonwealth, .asean, .oecd, .brics, .efta, .baltic, .benelux: nil
         }
     }
 

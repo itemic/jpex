@@ -1,6 +1,8 @@
 # France catalog and flag sources
 
-The France catalog follows INSEE’s **Code officiel géographique at 1 January 2026**: 101 departments grouped into 18 regions. It tracks department geography, including Corsica, Paris, the Rhône departmental district, and the five overseas departments, rather than the changing number of departmental councils. Mayotte’s territorial authority became Département-Région de Mayotte (976R) in 2026; its department code in the official department file remains 976.
+The France catalog follows INSEE’s **Code officiel géographique at 1 January 2026** as two lists. France opens on its **18 regions**, its first level of government; its **101 departments** are a further level, a tap away on the same list (`CountryCatalog.frenchDepartments`, list ID `FR-departments`). Region IDs follow ISO 3166-2:FR (`FR-ARA` … `FR-PAC`, with `FR-20R` for Corsica’s single territorial collectivity). Each overseas region is a single department, so both lists share its record under the department code (`FR-971` … `FR-976`), as Countries does. Marking a department raises its region, and a region raises France; on first launch with regions, each region catches up once with the best level already set among its departments. Region outlines are the department outlines merged, so the two maps match exactly.
+
+The department list tracks department geography, including Corsica, Paris, the Rhône departmental district, and the five overseas departments, rather than the changing number of departmental councils. Mayotte’s territorial authority became Département-Région de Mayotte (976R) in 2026; its department code in the official department file remains 976.
 
 - [INSEE 2026 catalog](https://www.insee.fr/fr/information/8740222)
 - [Official department CSV](https://www.insee.fr/fr/statistiques/fichier/8740222/v_departement_2026.csv)
@@ -9,6 +11,36 @@ The France catalog follows INSEE’s **Code officiel géographique at 1 January 
 Departmental flags in France do not have uniform official status. This collection distinguishes heraldic or traditional local banners, departmental council flags, and the national tricolor. No new flag artwork was invented. Known proposals were omitted in favour of actual council flags or the national fallback. Corsica’s regional flag is shared by its two departments. The five national fallbacks are Aveyron, Doubs, Pyrénées-Atlantiques, Seine-Saint-Denis and La Réunion.
 
 Images are bundled PNG renderings obtained from Wikimedia Commons’ SVG thumbnail service. Artwork is unchanged; image size changes to suit the app. Each image retains the license listed below; CC BY-SA artwork remains available under that same license. Author and license links are also exposed in Settings → Acknowledgements → France through the bundled `FranceFlagCredits.json`. Flags do not imply endorsement.
+
+## Regions
+
+Region IDs were checked against ISO 3166-2:FR on 16 October 2026. All 12 metropolitan region codes are current, and Corsica is `FR-20R`, a metropolitan collectivity with special status (FR-COR was replaced on 24 November 2020). Sources: [ISO 3166-2:FR on Wikipedia](https://en.wikipedia.org/wiki/ISO_3166-2:FR), from the ISO Online Browsing Platform, and Debian’s [iso-codes](https://salsa.debian.org/iso-codes-team/iso-codes/-/raw/main/data/iso_3166-2.json), updated from ISO in November 2025.
+
+Regional flags follow the same rule as the departments. A region shows one of:
+- a flag its regional council flies or has presented,
+- a banner of the region’s arms,
+- a traditional flag of the region,
+- or the national tricolor, where the council flies only its logo.
+
+Logo flags were left out: the logos belong to the regions, and the Commons copies carry doubtful licences. Corsica shows the flag its two departments share. The five overseas regions are the same records as their departments and keep their flags (see 971–976 below).
+
+The seven new images were rendered from the Commons SVGs with resvg at 768 px wide, at each file’s own aspect ratio, then reduced to a 256-colour palette like the other flags. Neither step changes the artwork: each rendering was compared against Commons’ own, and the palette reduction changes no pixel noticeably. Each original was checked against its Commons SHA-1.
+
+| Code | Region | Asset | Source / author | License | Representation |
+| --- | --- | --- | --- | --- | --- |
+| ARA | Auvergne-Rhône-Alpes | `fr_flag_ara` | [Flag of the region Auvergne-Rhône-Alpes (version 2).svg](https://commons.wikimedia.org/wiki/File:Flag_of_the_region_Auvergne-Rh%C3%B4ne-Alpes_(version_2).svg) — Jfblanc | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | Banner of arms used by the regional council, though the arms were never formally adopted: presented in February 2018, with the vote postponed ([Place Gre’net](https://www.placegrenet.fr/2018/06/18/un-blason-pour-la-region-auvergne-rhone-alpes-symbole-territorial-fort-ou-anachronisme/197238), [FOTW](https://www.crwflags.com/fotw/flags/fr-r-ar.html)). |
+| BFC | Bourgogne-Franche-Comté | `fr_flag_bfc` | [Flag of the region Bourgogne-Franche-Comté.svg](https://commons.wikimedia.org/wiki/File:Flag_of_the_region_Bourgogne-Franche-Comt%C3%A9.svg) — Geraldiker | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | Banner of the regional arms the region presented in July 2017 ([region](https://www.bourgognefranchecomte.fr/armoiries-de-la-bourgogne-franche-comte)), flown at the Hôtel de Région. |
+| BRE | Bretagne | `fr_flag_bre` | [Flag of Brittany (Gwenn ha du).svg](https://commons.wikimedia.org/wiki/File:Flag_of_Brittany_(Gwenn_ha_du).svg) — Gryffindor | [Public domain](https://creativecommons.org/publicdomain/mark/1.0/) | Traditional flag, the Gwenn-ha-du, adopted by the regional council in 1997 ([FOTW](https://www.crwflags.com/fotw/flags/fr-r-br.html)). |
+| CVL | Centre-Val de Loire | `fr_flag` | — | — | National tricolor: the council flies only its logo, and the other designs on Commons are unused. |
+| 20R | Corse | `fr_flag_2a` | [Flag of Corsica.svg](https://commons.wikimedia.org/wiki/File:Flag_of_Corsica.svg) — Patricia.fidi | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en) | The flag of Corsica, with the Moor’s head, shared with Corse-du-Sud and Haute-Corse. |
+| GES | Grand Est | `fr_flag` | — | — | National tricolor: the council flies only its logo; the other designs on Commons are proposals. |
+| HDF | Hauts-de-France | `fr_flag` | — | — | National tricolor: the council flies only its logo; the other designs on Commons are proposals. |
+| IDF | Île-de-France | `fr_flag` | — | — | National tricolor: the council’s flag is its logo, whose Commons licence is doubtful, and the fleur-de-lis “cultural flag” is used by no public authority. |
+| NOR | Normandie | `fr_flag_nor` | [Flag of Normandie.svg](https://commons.wikimedia.org/wiki/File:Flag_of_Normandie.svg) — Saebhiar | [Public domain](https://creativecommons.org/publicdomain/mark/1.0/) | Traditional flag, two gold leopards on red, raised at the Hôtel de Région in Rouen in 2014 ([FOTW](https://www.crwflags.com/fotw/flags/fr-r-no.html)). |
+| NAQ | Nouvelle-Aquitaine | `fr_flag` | — | — | National tricolor: the region reserves its 2016 arms for the regional council, and the only banner on Commons carries a licence that can’t apply to them. |
+| OCC | Occitanie | `fr_flag_occ` | [Flag of Occitania.svg](https://commons.wikimedia.org/wiki/File:Flag_of_Occitania.svg) — Nimlar | [Public domain](https://creativecommons.org/publicdomain/mark/1.0/) | The Occitan cross, traditional flag of Languedoc and the counts of Toulouse, flown alongside the council’s logo flag ([FOTW](https://www.crwflags.com/fotw/flags/fr-r-oc.html)). |
+| PDL | Pays de la Loire | `fr_flag_pdl` | [Cultural flag of Pays-de-la-Loire.svg](https://commons.wikimedia.org/wiki/File:Cultural_flag_of_Pays-de-la-Loire.svg) — Patricia.fidi, after Hervé Pinoteau (1976) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en) | Unofficial heraldic flag, flown at the regional council in Nantes in the 1980s and 1990s ([FOTW](https://www.crwflags.com/fotw/flags/fr-r-pl.html)). The council has flown logo flags since 2006, so this is the least certain choice. |
+| PAC | Provence-Alpes-Côte d'Azur | `fr_flag_pac` | [Flag of Provence-Alpes-Côte d'Azur.svg](https://commons.wikimedia.org/wiki/File:Flag_of_Provence-Alpes-C%C3%B4te_d%27Azur.svg) — Diades | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | Regional flag presented by the regional council in January 1999, combining Provence, Dauphiné and Nice, and flown at its building in Marseille ([FOTW](https://www.crwflags.com/fotw/flags/fr-r-pa.html)). |
 
 ## Artwork register
 

@@ -15,6 +15,11 @@ final class SaveModel {
     // Nil until they first change the default levels.
     var levelsData: Data?
 
+    // Every change of level made by hand, dated, oldest first, also optional for lightweight
+    // migration. Kept for what's to come, such as when a place was first visited or a year in
+    // review; nothing reads it yet. Nil until the first change.
+    var changeLogData: Data?
+
     init() {
         visitStatus = Array(repeating: .never, count: 47)
     }
@@ -65,6 +70,28 @@ final class SaveModel {
         statusesData = encoded
     }
 
+    /// Notes, dated, that places were just set to these levels, after their statuses are set: each
+    /// with the level it had in `previous`, and whether it rose by itself, as one of `raised`.
+    /// A log that can't be read is left as it is rather than replaced, and the change goes unlogged.
+    func logChanges(
+        _ changes: [(place: AdministrativeDivision, level: VisitLevel)], from previous: TravelSnapshot? = nil,
+        raised: Set<String> = [], at date: Date = .now
+    ) {
+        guard !changes.isEmpty, var log = try? decodedChangeLog() else { return }
+        log.append(contentsOf: changes.map { change in
+            PlaceChange(
+                placeID: change.place.id, levelID: change.level.id, date: date,
+                previousLevelID: previous?.status(for: change.place).id,
+                wasRaised: raised.contains(change.place.id) ? true : nil)
+        })
+        if let encoded = try? JSONEncoder().encode(log) { changeLogData = encoded }
+    }
+
+    /// Every change of level logged, oldest first.
+    func changeLog() throws -> [PlaceChange] {
+        try decodedChangeLog()
+    }
+
     /// Saves new levels. Places at a level that was removed move down to the closest
     /// remaining level below it, or to never been, so no place points at a missing level.
     /// Saved levels or statuses that can't be read are never overwritten.
@@ -100,6 +127,7 @@ final class SaveModel {
     func resetPlaces() {
         statusesData = nil
         visitStatus = Array(repeating: .never, count: 47)
+        changeLogData = nil
         finishReset()
     }
 
@@ -108,6 +136,7 @@ final class SaveModel {
         statusesData = nil
         visitStatus = Array(repeating: .never, count: 47)
         levelsData = nil
+        changeLogData = nil
         finishReset()
     }
 
@@ -153,10 +182,26 @@ final class SaveModel {
         return try JSONDecoder().decode([String: String].self, from: statusesData)
     }
 
+    private func decodedChangeLog() throws -> [PlaceChange] {
+        guard let changeLogData else { return [] }
+        return try JSONDecoder().decode([PlaceChange].self, from: changeLogData)
+    }
+
     private func decodedLadder() throws -> VisitLadder {
         guard let levelsData else { return .standard }
         return try JSONDecoder().decode(VisitLadder.self, from: levelsData)
     }
+}
+
+/// A place set to a level, and when. Kept by permanent IDs, so it follows renames.
+struct PlaceChange: Codable, Equatable {
+    var placeID: String
+    var levelID: String
+    var date: Date
+    /// The level it had just before, where known.
+    var previousLevelID: String? = nil
+    /// Whether it rose by itself, as a country does when one of its places rises, rather than by hand.
+    var wasRaised: Bool? = nil
 }
 
 /// Why a change to levels or places was refused.

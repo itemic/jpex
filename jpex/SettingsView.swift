@@ -3,12 +3,14 @@ import SwiftUI
 struct SettingsView: View {
   /// Nil until the store is ready; levels can be edited once it is.
   var saveModel: SaveModel?
-  @AppStorage("localLanguage") private var localLanguage = false
-  @AppStorage(MapCard.pinnedKey) private var keepsMapAtTop = false
+  /// Shows the welcome again, once Settings has closed.
+  var onShowWelcome: () -> Void = {}
   @AppStorage(ListOrder.showsMapKey) private var showsMap = true
   @AppStorage(MapProjection.storageKey) private var projection = MapProjection.standard
   @AppStorage(MapCenter.storageKey) private var center = MapCenter.standard
   @Environment(CountingPreferences.self) private var counting
+  @Environment(CustomWorldGroups.self) private var customGroups
+  @AppStorage(HiddenWorldGroups.storageKey) private var hiddenGroups = HiddenWorldGroups()
   @AppStorage(LevelPattern.storageKey) private var showsPatterns = true
   @AppStorage(AppIcon.storageKey) private var appIcon = AppIcon.japan
   @AppStorage(MotionPreference.storageKey) private var reducesMotion = false
@@ -16,10 +18,19 @@ struct SettingsView: View {
   @Environment(\.visitLadder) private var ladder
   @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.verticalSizeClass) private var verticalSizeClass
   @State private var isConfirmingReset = false
+  /// Asks once more before Reset Everything, saying all that goes with it.
+  @State private var isConfirmingResetEverything = false
   /// Counts choices made here, so this picker's tick plays once, apart from the list's own.
   @State private var countFromPicks = 0
   @State private var resets = 0
+
+  /// How many groups of countries the sidebar shows, the World's and the person's own.
+  private var shownGroupCount: Int {
+    (WorldGroup.allCases.map(\.collectionID) + customGroups.groups.map(\.collectionID))
+      .count { !hiddenGroups.isHidden($0) }
+  }
 
   /// The level totals count from, kept by ID so it follows renames.
   private var minimumLevel: Binding<VisitLevel> {
@@ -39,28 +50,17 @@ struct SettingsView: View {
     let worldCount = CountryCatalog.world(applying: counting.rules).divisions.count
     NavigationStack {
       Form {
-        Section {
-          Toggle(isOn: $localLanguage.animation(.smooth)) {
-            SettingsLabel(
-              "Local names first", systemImage: "character.book.closed.fill", fill: Color.indigo.gradient,
-              trigger: localLanguage)
-          }
-          Toggle(isOn: $showsMap.animation(.smooth)) {
-            SettingsLabel("Show Map", systemImage: showsMap ? "eye.fill" : "eye.slash.fill", fill: Color.mint.gradient, trigger: showsMap)
-          }
-          Toggle(isOn: $keepsMapAtTop.animation(.smooth)) {
-            SettingsLabel("Pin map to top", systemImage: "pin.fill", fill: Color.orange.gradient, trigger: keepsMapAtTop)
-          }
-          .disabled(!showsMap)
-        } header: {
-          Text("Lists")
-        }
-
+        // Local names and showing the map are in each list's View menu, so they're set there.
         Section {
           // A fixed frame, so changing the projection reshapes the map without moving the page.
           // The map runs past the card's margins to the screen's edges, with the page around it.
+          // On a phone on its side, no taller than a postcard, so it doesn't fill the screen; the
+          // map still runs edge to edge, fitted within that height. Upright and on iPad, it keeps
+          // its own shape.
           Color.clear
             .aspectRatio(1.9, contentMode: .fit)
+            .frame(maxHeight: verticalSizeClass == .compact ? 240 : nil)
+            .frame(maxWidth: .infinity)
             .overlay {
               WorldMapPreview(saveModel: saveModel, projection: projection, center: $center, isActive: showsMap)
                 .containerRelativeFrame(.horizontal)
@@ -72,7 +72,7 @@ struct SettingsView: View {
             .animation(.smooth, value: showsMap)
             .accessibilityHidden(true)
         } header: {
-          Text("World Map")
+          Text("World map")
         }
 
         Section {
@@ -85,7 +85,7 @@ struct SettingsView: View {
                 Label(center.name, systemImage: center.globeSymbolName).tag(center)
               }
             } label: {
-              SettingsLabel("Center", systemImage: center.globeSymbolName, fill: Color.blue.gradient, trigger: center)
+              SettingsLabel("Map centre", systemImage: center.globeSymbolName, fill: Color.blue.gradient, trigger: center)
             }
           }
           .disabled(!showsMap)
@@ -93,7 +93,7 @@ struct SettingsView: View {
           .animation(.smooth, value: showsMap)
         } footer: {
           if !showsMap {
-            Text("Enable “Show Map” settings to customize the map view")
+            Text("Turn on Map in a list’s View menu to change how it looks.")
           }
         }
 
@@ -162,14 +162,38 @@ struct SettingsView: View {
             }
           }
           .animation(.snappy, value: worldCount)
+          NavigationLink {
+            WorldGroupsSettingsView(saveModel: saveModel)
+          } label: {
+            LabeledContent {
+              Text(shownGroupCount, format: .number)
+                .font(.title3.weight(.light))
+                .monospacedDigit()
+                .contentTransition(.numericText(value: Double(shownGroupCount)))
+            } label: {
+              SettingsLabel("Groups", systemImage: "rectangle.3.group.fill", fill: Color.indigo.gradient)
+            }
+          }
+          .animation(.snappy, value: shownGroupCount)
+          NavigationLink {
+            SeasSettingsView()
+          } label: {
+            LabeledContent {
+              Text(CountryCatalog.seas.divisions.count, format: .number)
+                .font(.title3.weight(.light))
+                .monospacedDigit()
+            } label: {
+              SettingsLabel("Seas", systemImage: "water.waves", fill: Color.blue.gradient)
+            }
+          }
         } header: {
-          Text("Regions of the World")
+          Text("Regions of the world")
         }
 
         Section {
           Toggle(isOn: $reducesMotion.animation(.smooth)) {
             SettingsLabel(
-              "Reduce Motion", systemImage: "figure.walk.motion", fill: Color.blue.gradient, trigger: reducesMotion)
+              "Reduce motion", systemImage: "figure.walk.motion", fill: Color.blue.gradient, trigger: reducesMotion)
           }
         } header: {
           Text("Motion")
@@ -191,17 +215,24 @@ struct SettingsView: View {
                   .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
                   .accessibilityHidden(true)
               } label: {
-                SettingsLabel("App Icon", systemImage: "paintpalette.fill", fill: Color.cyan.gradient, trigger: appIcon)
+                SettingsLabel("App icon", systemImage: "paintpalette.fill", fill: Color.cyan.gradient, trigger: appIcon)
               }
             }
           }
         }
 
         Section {
+          Button {
+            onShowWelcome()
+            dismiss()
+          } label: {
+            SettingsLabel("Replay welcome screen", systemImage: "play.fill", fill: Color.green.gradient)
+          }
+          .foregroundStyle(.primary)
           NavigationLink {
             PrivacyPolicyView()
           } label: {
-            SettingsLabel("Privacy Policy", systemImage: "hand.raised.fill", fill: Color.blue.gradient)
+            SettingsLabel("Privacy policy", systemImage: "hand.raised.fill", fill: Color.blue.gradient)
           }
           NavigationLink {
             AcknowledgementsView()
@@ -221,16 +252,31 @@ struct SettingsView: View {
             }
             .tint(.red)
             .confirmationDialog("Reset", isPresented: $isConfirmingReset, titleVisibility: .hidden) {
-              Button("Reset All Places", role: .destructive) {
+              Button("Reset all places", role: .destructive) {
                 saveModel.resetPlaces()
                 resets += 1
               }
-              Button("Reset Places and Levels", role: .destructive) {
+              Button("Reset places and levels", role: .destructive) {
                 saveModel.resetEverything()
                 resets += 1
               }
+              // The most that can go, so it asks again, saying exactly what.
+              Button("Reset everything", role: .destructive) {
+                isConfirmingResetEverything = true
+              }
             } message: {
               Text("Every place in every country goes back to never been. This can’t be undone.")
+            }
+            .alert("Reset everything?", isPresented: $isConfirmingResetEverything) {
+              Button("Reset everything", role: .destructive) {
+                AppReset.resetEverything(saveModel: saveModel, counting: counting, groups: customGroups)
+                resets += 1
+              }
+              Button("Cancel", role: .cancel) {}
+            } message: {
+              Text(
+                "Your places and levels, the groups and presets you made, and your pinned lists are erased, and every setting goes back to how it started, the app icon included. This can’t be undone."
+              )
             }
           }
           // A soft thud: the places go quiet, which is nothing to celebrate.
@@ -242,7 +288,7 @@ struct SettingsView: View {
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button("Close", systemImage: "xmark") { dismiss() }
-            .labelStyle(.iconOnly)
+            .keyboardShortcut(.cancelAction)
         }
       }
     }
@@ -271,7 +317,7 @@ struct SettingsLabel<Detail: View>: View {
   var body: some View {
     Label {
       VStack(alignment: .leading, spacing: 2) {
-        Text(title)
+        ScrollingText { Text(title) }
         detail
           .font(.subheadline)
           .foregroundStyle(.secondary)
@@ -344,49 +390,98 @@ private struct LevelSwatches: View {
   }
 }
 
-/// How many countries World lists under the rules in its section, in the app's big light
-/// numerals. Each change floats up beside the count, so a switch's effect is plain to see.
+/// A page's total, in the manner of webOS on the Palm Pre: straight on the page and centred, as the
+/// Pre's clock sat above its gesture light. The number is a glossy, striped bubble in the page's
+/// colour (see `BubblyNumber`), and "in total" sits beside it in Seravek Light, the nearest iOS has
+/// to Palm's Prelude, pressed into the page with a letterpress highlight. Beneath them sits the
+/// Pre's gesture light, a pearl set in a groove. Each change floats up beside the count in a glossy
+/// pill, green as it rises and orange as it falls, and sends a streak of that colour along the
+/// light: forwards as it rises and back as it falls, as the Pre's light followed a swipe. Changes
+/// made while the pill shows add to it, rolling in place. With Reduce Motion the pill fades in and
+/// out where it stands and the light only brightens.
 struct WorldCountRow: View {
   var count: Int
-  @ScaledMetric(relativeTo: .largeTitle) private var countSize = 52
+  /// What's counted, for VoiceOver, such as "countries"; the page itself says only "in total".
+  var noun = "countries"
+  /// Beside the count.
+  var caption = "in total"
+  /// The number's colour, the same as the page's icon in Settings.
+  var tint: Color = .teal
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(\.colorScheme) private var colorScheme
   @State private var change: CountChange?
+  /// Counts each change, for the gesture light to pulse.
+  @State private var pulses = 0
+  /// Whether the last change was a rise, for its pulse's colour and way.
+  @State private var rose = true
 
   var body: some View {
-    HStack(alignment: .firstTextBaseline, spacing: 8) {
-      Text(count, format: .number)
-        .font(.system(size: countSize, weight: .thin))
-        .kerning(-1.5)
-        .monospacedDigit()
-        .contentTransition(.numericText(value: Double(count)))
-      Text("countries in World")
-        .font(.title3.weight(.light))
-        .foregroundStyle(.secondary)
-      if let change {
-        Text(change.delta, format: .number.sign(strategy: .always()))
-          .font(.subheadline.weight(.semibold))
-          .monospacedDigit()
-          .foregroundStyle(change.delta > 0 ? Color.green : Color.orange)
-          .id(change.id)
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .bottom).combined(with: .opacity),
-              removal: .opacity.combined(with: .offset(y: -10))))
+    // Pressed into the page: a highlight just below the type on light pages, a shade just above
+    // it on dark ones.
+    let press: (color: Color, y: CGFloat) = colorScheme == .dark ? (.black.opacity(0.7), -1) : (.white, 1)
+    VStack(spacing: 14) {
+      HStack(alignment: .firstTextBaseline, spacing: 10) {
+        BubblyNumber(count: count, tint: tint)
+        Text(caption)
+          .font(.custom("Seravek-Light", size: 23, relativeTo: .title3))
+          .tracking(0.3)
+          .foregroundStyle(.secondary)
+          .shadow(color: press.color, radius: 0, y: press.y)
+          // One slot beside the caption, outside the centred pair so it doesn't push them over,
+          // and a change made just as the last floats away takes its place.
+          .overlay(alignment: .trailing) {
+            ZStack(alignment: .leading) {
+              if let change {
+                ChangePill(delta: change.delta)
+                  .id(change.id)
+                  .transition(
+                    reduceMotion
+                      ? .opacity
+                      : .asymmetric(
+                        insertion: .move(edge: .bottom).combined(with: .opacity),
+                        removal: .opacity.combined(with: .offset(y: -10))))
+              }
+            }
+            .fixedSize()
+            .alignmentGuide(.trailing) { $0[.leading] - 10 }
+          }
       }
-      Spacer(minLength: 0)
+      .lineLimit(1)
+      GestureLight(pulses: pulses, tint: rose ? .green : .orange, forward: rose)
     }
-    .lineLimit(1)
-    .minimumScaleFactor(0.6)
-    .animation(.snappy, value: count)
+    .frame(maxWidth: .infinity)
+    .padding(.vertical, 8)
+    .dynamicTypeSize(...DynamicTypeSize.accessibility1)
+    // Straight on the page, rather than in a well of its own like the rows beneath it.
+    .listRowBackground(Color.clear)
+    .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+    .animation(Motion.count, value: count)
     .onChange(of: count) { old, new in
-      withAnimation(.snappy) { change = CountChange(delta: new - old) }
+      rose = new > old
+      pulses += 1
+      // A few switches in a row read as their sum, the change already showing rolling to it, and
+      // its time starting over; switches that cancel out leave nothing to show.
+      let delta = (change?.delta ?? 0) + new - old
+      withAnimation(Motion.count) {
+        if delta == 0 {
+          change = nil
+        } else if var current = change {
+          current.delta = delta
+          change = current
+        } else {
+          change = CountChange(delta: delta)
+        }
+      }
     }
     .task(id: change) {
       guard change != nil else { return }
       try? await Task.sleep(for: .seconds(1.6))
+      // A newer change has started its time over, so this one leaves it be.
+      guard !Task.isCancelled else { return }
       withAnimation(.smooth) { change = nil }
     }
     .accessibilityElement(children: .ignore)
-    .accessibilityLabel("World lists \(count) countries")
+    .accessibilityLabel("\(count) \(noun) \(caption)")
   }
 
   private struct CountChange: Equatable {
@@ -395,11 +490,236 @@ struct WorldCountRow: View {
   }
 }
 
+/// A count as a glossy bubble: heavy rounded figures in a colour that deepens towards their foot,
+/// striped across with fine lines that thicken as they go down, glossed across their top half, lit
+/// along every upper edge and shaded along every lower one, and standing a little proud of the page
+/// on a darker edge of their own. It rolls to each new count as the plain figures would.
+private struct BubblyNumber: View {
+  var count: Int
+  var tint: Color
+  @ScaledMetric(relativeTo: .largeTitle) private var size: CGFloat = 84
+
+  var body: some View {
+    // How far the rims and the raised edge reach, in step with the figures' size.
+    let depth = size * 0.033
+    figures
+      .foregroundStyle(
+        LinearGradient(
+          colors: [tint.mix(with: .white, by: 0.15), tint, tint.mix(with: .black, by: 0.2)],
+          startPoint: .top, endPoint: .bottom))
+      .overlay {
+        ZStack {
+          BubbleStripes(pitch: depth * 2.2, headThickness: depth * 0.22, footThickness: depth * 1.45)
+            .fill(.white.opacity(0.3))
+          // The gloss, bright at the top and ending in a clean edge halfway down.
+          LinearGradient(
+            stops: [
+              .init(color: .white.opacity(0.45), location: 0), .init(color: .white.opacity(0.14), location: 0.42),
+              .init(color: .clear, location: 0.46),
+            ],
+            startPoint: .top, endPoint: .bottom)
+          // A highlight along every upper edge, where the figures would catch the light…
+          Color.white.opacity(0.85)
+            .mask { rim(offset: depth * 0.75) }
+          // …and a shade along every lower one.
+          Color.black.opacity(0.25)
+            .mask { rim(offset: -depth * 0.75) }
+        }
+        .mask { figures }
+      }
+      // Standing proud of the page.
+      .shadow(color: tint.mix(with: .black, by: 0.5).opacity(0.85), radius: 0, y: depth)
+      .shadow(color: tint.opacity(0.25), radius: depth * 2.6, y: depth * 2)
+  }
+
+  private var figures: some View {
+    Text(count, format: .number)
+      .font(.system(size: size, weight: .heavy, design: .rounded))
+      .kerning(-1)
+      .contentTransition(.numericText(value: Double(count)))
+  }
+
+  /// The edge of the figures left uncovered by a copy of them moved down by `offset`, or up for a
+  /// negative one: their upper edges, or their lower ones.
+  private func rim(offset: CGFloat) -> some View {
+    ZStack {
+      figures
+      figures
+        .offset(y: offset)
+        .blendMode(.destinationOut)
+    }
+    .compositingGroup()
+  }
+}
+
+/// Lines across a space, thin at its head and thickening towards its foot.
+private struct BubbleStripes: Shape {
+  /// From one line to the next.
+  var pitch: CGFloat
+  var headThickness: CGFloat
+  var footThickness: CGFloat
+
+  func path(in rect: CGRect) -> Path {
+    var path = Path()
+    guard pitch > 0 else { return path }
+    var y = rect.minY
+    while y < rect.maxY {
+      let along = (y - rect.minY) / max(rect.height, 1)
+      let thickness = headThickness + (footThickness - headThickness) * along
+      path.addRect(CGRect(x: rect.minX, y: y + (pitch - thickness) / 2, width: rect.width, height: thickness))
+      y += pitch
+    }
+    return path
+  }
+}
+
+/// A change to the count in a glossy pill, as webOS badged its counts: green as it rises and orange
+/// as it falls, its top half catching the light.
+private struct ChangePill: View {
+  var delta: Int
+
+  var body: some View {
+    let tint = delta > 0 ? Color.green : Color.orange
+    // A true minus sign as it falls, the width of the plus as it rises.
+    Text(delta > 0 ? "+\(delta)" : "\u{2212}\(-delta)")
+      .font(.custom("Seravek-Medium", size: 15, relativeTo: .subheadline))
+      .monospacedDigit()
+      .foregroundStyle(.white)
+      .shadow(color: .black.opacity(0.25), radius: 0, y: -0.5)
+      .contentTransition(.numericText(value: Double(delta)))
+      .padding(.horizontal, 9)
+      .padding(.vertical, 3)
+      .background {
+        Capsule()
+          .fill(LinearGradient(colors: [tint.mix(with: .white, by: 0.2), tint], startPoint: .top, endPoint: .bottom))
+          // The gloss: bright across the top half, ending in a clean edge.
+          .overlay {
+            Capsule()
+              .fill(
+                LinearGradient(
+                  stops: [
+                    .init(color: .white.opacity(0.55), location: 0), .init(color: .white.opacity(0.15), location: 0.48),
+                    .init(color: .clear, location: 0.5),
+                  ],
+                  startPoint: .top, endPoint: .bottom))
+              .padding(1)
+          }
+          .overlay { Capsule().strokeBorder(tint.mix(with: .black, by: 0.2).opacity(0.5), lineWidth: 0.5) }
+          .shadow(color: tint.opacity(0.35), radius: 3, y: 1)
+      }
+  }
+}
+
+/// The Palm Pre's gesture light: a pearl in a slim, pointed groove pressed into the page beneath the count,
+/// glowing softly at its middle, which sends a streak of light along it each time `pulses`
+/// changes, forwards or back as the Pre's light followed a swipe. With Reduce Motion the light only
+/// brightens where it rests.
+private struct GestureLight: View {
+  var pulses: Int
+  var tint: Color
+  /// Whether the streak runs forwards, from the leading end, or back from the trailing one.
+  var forward: Bool
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(\.colorScheme) private var colorScheme
+  @ScaledMetric(relativeTo: .largeTitle) private var length: CGFloat = 180
+  /// Follows `pulses`, gliding from one count to the next, so a streak is the fraction of the way
+  /// between them: nothing at rest, running along and fading as it goes.
+  @State private var travelled = 0.0
+
+  var body: some View {
+    let isDark = colorScheme == .dark
+    // A sliver, fullest at its middle and drawn to a point at each end, as the Pre's light was.
+    Ellipse()
+      // The groove, its upper edge in shade.
+      .fill(Color.primary.opacity(isDark ? 0.16 : 0.11).shadow(.inner(color: .black.opacity(isDark ? 0.6 : 0.28), radius: 1, y: 1)))
+      // The pearl, glowing softly at its middle as the Pre's light rests.
+      .overlay {
+        Ellipse()
+          .fill(
+            LinearGradient(
+              stops: [
+                .init(color: .white.opacity(0), location: 0.15), .init(color: .white.opacity(isDark ? 0.45 : 1), location: 0.5),
+                .init(color: .white.opacity(0), location: 0.85),
+              ],
+              startPoint: .leading, endPoint: .trailing))
+          .padding(.vertical, 2)
+          .padding(.horizontal, 8)
+      }
+      .frame(height: 8)
+      // The groove's lower lip catching the light.
+      .background {
+        Ellipse()
+          .fill(.white.opacity(isDark ? 0.07 : 1))
+          .offset(y: 1)
+      }
+      .modifier(LightStreak(travelled: travelled, tint: tint, forward: forward, runs: !reduceMotion))
+      .frame(maxWidth: length)
+      .onAppear { travelled = Double(pulses) }
+      .onChange(of: pulses) { _, pulses in
+        withAnimation(reduceMotion ? .easeOut(duration: 0.6) : .easeInOut(duration: 0.9)) { travelled = Double(pulses) }
+      }
+      .accessibilityHidden(true)
+  }
+}
+
+/// The gesture light's streak, drawn from how far `travelled` is between two whole numbers: in at
+/// one end of the groove and out at the other as it goes, brightest midway, with a glow spilling
+/// on to the page around it; gone once it arrives.
+private struct LightStreak: ViewModifier, Animatable {
+  var travelled: Double
+  var tint: Color
+  var forward: Bool
+  /// Whether the streak runs along, or with Reduce Motion only brightens where it rests.
+  var runs: Bool
+
+  var animatableData: Double {
+    get { travelled }
+    set { travelled = newValue }
+  }
+
+  func body(content: Content) -> some View {
+    let progress = travelled - travelled.rounded(.down)
+    let glow = progress > 0 ? sin(progress * .pi) : 0
+    content.overlay {
+      GeometryReader { proxy in
+        let width = proxy.size.width
+        let streak = runs ? width * 0.5 : width
+        let along = forward ? progress : 1 - progress
+        let centre = runs ? along * width : width / 2
+        let core = LinearGradient(
+          stops: [
+            .init(color: tint.opacity(0), location: 0), .init(color: tint, location: 0.3),
+            .init(color: tint.mix(with: .white, by: 0.45), location: 0.5), .init(color: tint, location: 0.7),
+            .init(color: tint.opacity(0), location: 1),
+          ],
+          startPoint: .leading, endPoint: .trailing)
+        ZStack {
+          // The glow, spilling out of the groove on to the page.
+          Capsule()
+            .fill(core)
+            .frame(width: streak, height: 14)
+            .blur(radius: 7)
+            .opacity(glow * 0.75)
+            .position(x: centre, y: proxy.size.height / 2)
+          // The light itself, kept to the groove.
+          Capsule()
+            .fill(core)
+            .frame(width: streak, height: proxy.size.height)
+            .position(x: centre, y: proxy.size.height / 2)
+            .opacity(glow)
+            .mask(Ellipse())
+        }
+      }
+    }
+  }
+}
+
 /// Every projection as a little world in its own shape, to tap rather than pick from a list.
 /// The chosen one lifts in the accent of the map and its name firms up.
 private struct ProjectionChooser: View {
   @Binding var selection: MapProjection
   var center: MapCenter
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @State private var thumbnails: [MapProjection: ProjectionThumbnail] = [:]
   @State private var pops: [MapProjection: Int] = [:]
   @ScaledMetric(relativeTo: .caption) private var tileWidth = 112
@@ -423,7 +743,10 @@ private struct ProjectionChooser: View {
       .scrollTargetBehavior(.viewAligned)
       .onAppear { scroller.scrollTo(selection, anchor: .center) }
       .onChange(of: selection) { _, projection in
-        withAnimation(.smooth) { scroller.scrollTo(projection, anchor: .center) }
+        // With Reduce Motion the chosen world is simply in the middle, rather than gliding there.
+        withAnimation(Motion.travelling(.smooth, reduceMotion: reduceMotion)) {
+          scroller.scrollTo(projection, anchor: .center)
+        }
       }
     }
     .sensoryFeedback(.selection, trigger: selection)
@@ -471,7 +794,7 @@ private struct ProjectionChooser: View {
           shape.strokeBorder(Color.blue.opacity(0.55), lineWidth: 1.5)
         }
       }
-      .scaleEffect(isSelected ? 1 : 0.97)
+      .scaleEffect(isSelected || reduceMotion ? 1 : 0.97)
       .contentShape(shape)
     }
     .buttonStyle(PillButtonStyle())
@@ -506,10 +829,22 @@ private struct ProjectionThumbnailView: View {
   var isSelected: Bool
 
   var body: some View {
-    let ocean = isSelected ? Color.blue.opacity(0.22) : Color.secondary.opacity(0.12)
-    let land = isSelected ? Color.blue.opacity(0.75) : Color.secondary.opacity(0.55)
-    let line = isSelected ? Color.blue.opacity(0.35) : Color.secondary.opacity(0.25)
-    Canvas { context, size in
+    // A drawing can't ease from one colour to another, so the world in grey and the same world in
+    // blue cross-fade with the tile around them.
+    ZStack {
+      world(chosen: false)
+        .opacity(isSelected ? 0 : 1)
+      world(chosen: true)
+        .opacity(isSelected ? 1 : 0)
+    }
+    .accessibilityHidden(true)
+  }
+
+  private func world(chosen: Bool) -> some View {
+    let ocean = chosen ? Color.blue.opacity(0.22) : Color.secondary.opacity(0.12)
+    let land = chosen ? Color.blue.opacity(0.75) : Color.secondary.opacity(0.55)
+    let line = chosen ? Color.blue.opacity(0.35) : Color.secondary.opacity(0.25)
+    return Canvas { context, size in
       let bounds = thumbnail.bounds
       guard bounds.width > 0, bounds.height > 0 else { return }
       let fit = min(size.width / bounds.width, size.height / bounds.height)
@@ -528,6 +863,5 @@ private struct ProjectionThumbnailView: View {
         context.stroke(outline, with: .color(line), lineWidth: 1 / fit)
       }
     }
-    .accessibilityHidden(true)
   }
 }

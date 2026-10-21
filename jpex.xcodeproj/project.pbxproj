@@ -7,32 +7,57 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A2D004BB9934111F64F272B4 /* HistoricalFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C00BCCF26381FAC101E13E8 /* HistoricalFlagCredits.json */; };
-		3FFFDE1AC1E34263BCDA27E9 /* TimeMachineScrubberBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C77EEB590ACD3D0763FAA8 /* TimeMachineScrubberBar.swift */; };
-		EE89DD0D20C32AC5C521D0DC /* TimeMachineEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D865A3D8835AEA5DD759F862 /* TimeMachineEvents.swift */; };
-		0ABD2EA9B13C748C4D11AD23 /* TimeMachineStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A381F178D10F311D90A9EBE5 /* TimeMachineStage.swift */; };
-		F7EB56988C05804FCB60E2F2 /* TimeMachineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A61D2B56C2373E70CE37900 /* TimeMachineHeader.swift */; };
-		6ED5C888898A5AF3B66B696F /* TimeMachinePlates.json in Resources */ = {isa = PBXBuildFile; fileRef = 02D42D2C2CE613188229F2AD /* TimeMachinePlates.json */; };
-		3B3ECBEEFA64C511D001DC1F /* TimeMachineEras.json in Resources */ = {isa = PBXBuildFile; fileRef = 9F7BD816D3206AE4315FA40C /* TimeMachineEras.json */; };
-		D08E62B65CF41586E213DB21 /* geo_TIMEMACHINE.json in Resources */ = {isa = PBXBuildFile; fileRef = 243BB9E5491B2032FB3389AC /* geo_TIMEMACHINE.json */; };
-		1002708465DAC30E47FC3374 /* TimeMachineAboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503FBE830B39CA4A397CC3D /* TimeMachineAboutView.swift */; };
-		449E2035310581FCFA76A14C /* TimeMachineScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A68E823647A0543E4F05DC /* TimeMachineScreen.swift */; };
-		1D9A4E326C2211F5708C12CE /* HistoryMapOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5963812EC87AD8129995FDA /* HistoryMapOverlay.swift */; };
-		FD24B21D21F1F0A4E4E93CE3 /* TimeStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484B96FD70D0E9CDC32A8E96 /* TimeStack.swift */; };
-		1A19FDBA1E02AC0D67D1841F /* HistoryEventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCEEC3708CC4B18373AE822 /* HistoryEventCard.swift */; };
-		281D5669714FC28C42C6AE63 /* TimeMachineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1D549CCFDBDE7E7AE1500B /* TimeMachineModel.swift */; };
-		D882B4D9A1EF5B99C312548B /* TimeScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF151B3A3B411EFBA321D621 /* TimeScrubber.swift */; };
-		6147142487C6ADE2BE1433A9 /* SpaceBackdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E62509C679A85C16260B96 /* SpaceBackdrop.swift */; };
-		66C29EB026492E492EF1AF06 /* DeepTimeGlobe.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15C0583D74CA16A39B1E1A3 /* DeepTimeGlobe.swift */; };
-		FBB8918BB7B40503381064AC /* HistoryMapCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5F1D66B53AE2E7E8AA32E0 /* HistoryMapCanvas.swift */; };
-		273909F75BB6D300A537C149 /* HistoryMapGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3277BED9C27D96D0A82F48AE /* HistoryMapGeometry.swift */; };
-		DF23D7633813F5167F3AACC6 /* DeepTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D9D1FB704F052ED961829 /* DeepTime.swift */; };
-		5759A753C1B3BEDCEDC2DAF4 /* HistoryColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8ECF534A6BFF46BCE64C6CD /* HistoryColor.swift */; };
-		199491CF9226179B465324BD /* HistoricalPolity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB316848BFDAB40AD746C7 /* HistoricalPolity.swift */; };
-		7EE0D9C6D077CCCE0F8A7FE5 /* HistoricalEra.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51E775A3210EF27C719F7EE /* HistoricalEra.swift */; };
-		BED91B896CF3DBF820E1950D /* TimeMachineAtlas.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D9A7C9619B9BB529B98830 /* TimeMachineAtlas.swift */; };
+		D207AECB39864908B79A9374 /* AtlasPlaceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9211629C87E91E83D266D3DD /* AtlasPlaceList.swift */; };
+		E7364D5C1D8BEDC790C848E4 /* PlugGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD927EEDE1B8EBBA0EDB573A /* PlugGallery.swift */; };
+		4BEFE7D986B93C4A12DE6070 /* VoltageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F26CEC50BA664164973497B /* VoltageKey.swift */; };
+		F72152AC86682A5E3A4989A4 /* DrivingSideKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5A4830E2C7B214C62E97A4 /* DrivingSideKey.swift */; };
+		F0F77F5E77DF109043B9621B /* AtlasKeyTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525659196A6860FBAB5D5F54 /* AtlasKeyTile.swift */; };
+		6CC1AAE54E668206108800EC /* AtlasKeyEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93F872CD71F999DC089FE126 /* AtlasKeyEntry.swift */; };
+		6E75650D4259711017CC1F2F /* MapFactRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA87A34A0B0F94FB8587901 /* MapFactRow.swift */; };
+		A4E750494FBCE5175A8751CE /* WorldLayerControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1236B145923DD7AC72329D /* WorldLayerControls.swift */; };
+		BF303A86E89E762CD1998817 /* Antipodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBA91A237862082705277B9 /* Antipodes.swift */; };
+		DD7F4656DE251631B1120B7E /* LatitudeLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D17E37C0ECC6490B9C3C09D /* LatitudeLines.swift */; };
+		73E24F3672A0B73DDF601980 /* PlugFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A39AD92061EAED5557EABF /* PlugFace.swift */; };
+		338304592313C14F2CBA197D /* MainsPower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DCAF491E528AFC83454150 /* MainsPower.swift */; };
+		58608A1163542473F377A9E8 /* PlugType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4740149C8CB72A1923F508A5 /* PlugType.swift */; };
+		52EB0C6E3C6413EA4017EC6C /* DrivingSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5700510F01169C9685C43CF1 /* DrivingSide.swift */; };
+		43FABBF30E9321FF1E6EF0AD /* MapColouring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9F4E357391DB0957F6602 /* MapColouring.swift */; };
+		106ED70497A5A7AC12D55F0F /* WorldLayers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B80713FF46F13B03C32A37 /* WorldLayers.swift */; };
+		603B2A90A920D2A58EF575EC /* FlagThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139CB3430C5BF81A474EAD5 /* FlagThumbnail.swift */; };
+		B21C837A0D085909114A6594 /* LocalNameLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2B7755C699BA2A28A9972A /* LocalNameLanguage.swift */; };
+		EE6C4CA25A4BF8E0CBE26204 /* GameModeSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC343B10898E504884C3C8D0 /* GameModeSetup.swift */; };
+		EF27F5ECA037401EE84797DA /* GameListAllCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B731A6561D2D2DDEE65A03E8 /* GameListAllCard.swift */; };
+		98A5E48792E8538A455A8A91 /* GamePictureChoices.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34F0F18F0BE468D50ADAC30 /* GamePictureChoices.swift */; };
+		0AF86193E93E5A3AE516B349 /* JapanFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D304EBF8A0AD9AC2452D3F8 /* JapanFlagCredits.json */; };
+		537BA725C6AABB20E6F23E61 /* Starfield.metal in Sources */ = {isa = PBXBuildFile; fileRef = 308D45E62F762160D173F294 /* Starfield.metal */; };
+		00D0C9BF58AD1B9995A00E2E /* SpaceGlobe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056FA8CA48BB0D5B24BE7402 /* SpaceGlobe.swift */; };
+		12CAA49DAA2CCF35885C9E60 /* TimeZoneAtlas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9733F981FF140213CEBEB076 /* TimeZoneAtlas.swift */; };
+		5D7DDC247592C6B796045F6B /* ClockWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7A0E19DAE4A753E288D1E9 /* ClockWords.swift */; };
+		920761E71E303D7C234BA48E /* TimeGlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506BF13F62B0E3D7794BD8CE /* TimeGlide.swift */; };
+		0C182FB3A341197E8E3C12DF /* TimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E899D624213CF3E2F0ECB92D /* TimeLabel.swift */; };
+		54B1EBD150A035065897C60E /* WorldTimeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDCCBCC7877B675247E30D64 /* WorldTimeScreen.swift */; };
+		28C0FC70D86740427044F3DE /* WorldTimeDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC0D111C709CE523DEE4F7 /* WorldTimeDial.swift */; };
+		4D1457B86258888B9EDD00E2 /* WorldTimeSky.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8C7C6BE029A76E253BEE0 /* WorldTimeSky.swift */; };
+		5CDDAEE00B452E5E19A174C2 /* WorldTimeSky.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F4676D8985E00B2233197 /* WorldTimeSky.metal */; };
+		8087FBD7C58BF2B1131682B2 /* WorldTimeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C47FF1B6F346EEF595B7EEB /* WorldTimeCard.swift */; };
+		6777C641A7B002711A18B5A6 /* CurlingWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06338154F29A2E5BA62AF805 /* CurlingWorld.swift */; };
+		32EEE1FF7175FE6C72D34CB5 /* ZoneClock+Names.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF9ADB91184B524281F69C4 /* ZoneClock+Names.swift */; };
+		565FA08FF92DB971345A1089 /* TimeZoneAtlas+Subdivisions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BADE63F840693D7ED762AB /* TimeZoneAtlas+Subdivisions.swift */; };
+		2209ACE4F8AF1A0071D860CF /* ZoneHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D44423EF27B5D0DB3A7A79 /* ZoneHistory.swift */; };
+		D7ABD58B1AA252683CC9671E /* ZoneFacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D70049BA438F946C4F53DA /* ZoneFacts.swift */; };
+		EBA3910012B23BED2DEDB6BD /* SeaZones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5042C270C79E12D7C16159AE /* SeaZones.swift */; };
+		A2487E42D7748786F9D2DA65 /* WorldTimeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CE6BA6C7D1CF46F9C582E /* WorldTimeMap.swift */; };
+		D6347E246084670D11F93E2A /* TimeZoneBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61485E64FC57A7A604B6CCA0 /* TimeZoneBand.swift */; };
+		F6A506BFEC9D92AA64695269 /* ZoneChoices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D9BFAA5DFC8E8EA4E21756 /* ZoneChoices.swift */; };
+		EB6A80DF96022367BCA389C4 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF83771307EA2987713F6F0 /* WelcomeView.swift */; };
+		882D28DE6FFB62CEE41B37B3 /* WelcomePlaceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B903A3CE18A215D220A6DC /* WelcomePlaceBar.swift */; };
+		D57AF942BA880D46C830BDA1 /* PlaceSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6E94961EB5FE539DFA5834 /* PlaceSearch.swift */; };
+		D551872FA22FC9482E9A8EFF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 84FA81B3946AA52D60A325FD /* PrivacyInfo.xcprivacy */; };
 		BDB539747F12EC812FDF097F /* CapitalCities.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE390E2E2D33C7039E50CAD6 /* CapitalCities.swift */; };
 		F72BC91980FC959408649FD1 /* GameLearnCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5935B677F4C1B8FD20D834BC /* GameLearnCard.swift */; };
+		A09D065A947BBCA23A6E6F4D /* LearnSearchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9AE471BB8849BF7E0D4854 /* LearnSearchSheet.swift */; };
+		E6202DCC58D05139064D5062 /* LearnDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450E5B460152026285015907 /* LearnDeck.swift */; };
+		C106ABD690E8F374BE25E4AC /* LearnSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B47AF18FD7E849E4D958EE /* LearnSearch.swift */; };
 		267DCFB84EF9B074974DE440 /* MapGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FDE616F2E5CE14B5E013A7 /* MapGame.swift */; };
 		BC4BA7A3F034A16B3139C66A /* MapGameMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99F212B5F034A17E3157FBE /* MapGameMode.swift */; };
 		3603FF880377B4F8169A8A7E /* MapGameLength.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B258B66EE63712C8BD2F07 /* MapGameLength.swift */; };
@@ -51,16 +76,13 @@
 		D5EB3930CD8AA65889CBE2C4 /* CandyGloss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2556C75F7E7DC2303AB4CAFC /* CandyGloss.swift */; };
 		A5CEB88A4D43DEE26DBBF59F /* RollingNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A8AA4D7E94282CB9960176 /* RollingNumber.swift */; };
 		4552E7672B64CFD600EEB0F0 /* SaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552E7662B64CFD600EEB0F0 /* SaveModel.swift */; };
-		45B3358D2B71E0EE008C037B /* 01_flag_Hokkaido.png in Resources */ = {isa = PBXBuildFile; fileRef = 45B3358C2B71E0EE008C037B /* 01_flag_Hokkaido.png */; };
 		45B3358F2B71FA26008C037B /* VisitPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B3358E2B71FA26008C037B /* VisitPillView.swift */; };
 		45F6B6A22B63D05A00931EEB /* jpexApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F6B6A12B63D05A00931EEB /* jpexApp.swift */; };
 		45F6B6A42B63D05A00931EEB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F6B6A32B63D05A00931EEB /* ContentView.swift */; };
 		45F6B6A62B63D05B00931EEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45F6B6A52B63D05B00931EEB /* Assets.xcassets */; };
 		45F6B6A92B63D05B00931EEB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45F6B6A82B63D05B00931EEB /* Preview Assets.xcassets */; };
-		45F6B6B12B63D0D200931EEB /* mie.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 45F6B6B02B63D0D200931EEB /* mie.geojson */; };
 		45F6B6B32B63DAAC00931EEB /* Prefecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F6B6B22B63DAAC00931EEB /* Prefecture.swift */; };
 		45F6B6B72B63E3C200931EEB /* VisitStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F6B6B62B63E3C200931EEB /* VisitStatus.swift */; };
-		45FB0A3B2B70C6EA00517EF0 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FB0A3A2B70C6EA00517EF0 /* HomeView.swift */; };
 		45FE342A2B723518006BF802 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FE34292B723518006BF802 /* ProgressBarView.swift */; };
 		FF976F535F5B23A73E0F27FF /* AdministrativeDivision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BD85C643C81A821D104852 /* AdministrativeDivision.swift */; };
 		1F704607CD81521D9E5EA3A6 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F27C708AA0BC5005D70BCC /* Country.swift */; };
@@ -108,11 +130,18 @@
 		AE6825FEE65BACBE062E2258 /* TravelSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58857A18C6CA55C82B38141 /* TravelSnapshot.swift */; };
 		C7A523CA8BCF0B5E8AEC76A0 /* VisitPillLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A3C85C8836D8929EDB9660 /* VisitPillLabel.swift */; };
 		CEBF9F3015852A3278B4ACB9 /* PillButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B5666DFFA0787FDE692909 /* PillButtonStyle.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* TravelsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5061728394A5B6C /* TravelsKey.swift */; };
+		8DCE95BB33ED0D2B5255E580 /* StatesVisibilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D8FE3B4E5176182203EAC4 /* StatesVisibilityView.swift */; };
+		23E846E5194F9094C4433342 /* AtlasBookIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AF3761EEE970E51844E8A4 /* AtlasBookIndex.swift */; };
+		7E540217F28512BC33ED61FD /* AtlasBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611666B7641EEB8978965E33 /* AtlasBook.swift */; };
+		D8299CEAB506C9E8F91DF1BF /* AtlasBookPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F3163406F16A6928D979C /* AtlasBookPager.swift */; };
+		1A1634D867BB73226163B674 /* AtlasBookPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4932557E3DE9B39D43E8A090 /* AtlasBookPage.swift */; };
+		505F1FA021AAE548A23134AA /* FadingCardGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611FFCAA3CF1F32661B9E5C5 /* FadingCardGrid.swift */; };
+		322DB75E3A2BFEEC35025265 /* PlaceChoiceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB2A48173963398029C12D7 /* PlaceChoiceCard.swift */; };
 		A6747F0D3E2952AE6A12D8B9 /* PopEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C600153722FBC75C7CF38 /* PopEffect.swift */; };
 		63A91734BC42AF1192C08D5C /* StripeOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7206D074716B1C3E8C8489 /* StripeOverlay.swift */; };
 		24F86273C9F001871708AECD /* StatusTallyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A839B95B285F53E3030237FC /* StatusTallyBar.swift */; };
 		2CD1DCF7A9F1CBA8C79FD940 /* TravelTotalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24398C7C1C6E46D05D5638C3 /* TravelTotalView.swift */; };
-		49BEAC856C36E9D7DA58C551 /* StatusLadder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDBAFD5225E2F20677F3DB /* StatusLadder.swift */; };
 		F224AC2991C9AC87AA94C756 /* VisitLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56CDC6E124C5EE96309B0D8 /* VisitLevel.swift */; };
 		A42703769DA41A0111023405 /* VisitLadder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA6FD3DDE044EE2EA0031A7 /* VisitLadder.swift */; };
 		D1EF710ACF1CD26FB79CC680 /* LevelColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7732F17DE9B8AA7D6786D91C /* LevelColor.swift */; };
@@ -127,6 +156,16 @@
 		B6A1FD3707F0E0D9DFCDC728 /* WorldGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A703CCEEE6E6C1BCAF245D6E /* WorldGroup.swift */; };
 		F5986755D07F45815D9BAD40 /* ScrollingName.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9751DD7B49DB4A1A41E3680 /* ScrollingName.swift */; };
 		AEAC7BB6EB2CE57F542A729D /* WorldGroupBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C599B3360D86757F40CC35F6 /* WorldGroupBadge.swift */; };
+		93583ED045486D7C084CEE06 /* CustomWorldGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47F6A2413300D969C1954EF /* CustomWorldGroup.swift */; };
+		57046A1FD1072CFE088F9F5A /* CustomWorldGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A9714F7278A3914BD746FC /* CustomWorldGroups.swift */; };
+		6551A5CC31EF694A7CF081B0 /* CustomGroupDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B64248E32ED9807458CCE07 /* CustomGroupDraft.swift */; };
+		69D61E4DE48F767C561B6997 /* GroupPlaceChoices.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9C9FB15B211C54512B5BC /* GroupPlaceChoices.swift */; };
+		8ECB3723AFD39CEDC8E734FC /* CustomGroupEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B28D3D5A436F7001C1CFBB2 /* CustomGroupEditor.swift */; };
+		AE098968AE3ACF3D90A3722D /* GroupEmblemPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43E46AAA88BB5EDF924F836 /* GroupEmblemPicker.swift */; };
+		1F3B453E37F276C88281793E /* AppReset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B34D147CBC1155FE8047BA4 /* AppReset.swift */; };
+		1D76956DB5607570F4643811 /* GroupFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046E18DE92123D25569A6351 /* GroupFlag.swift */; };
+		FD08B4103BFBD500C580AE14 /* HiddenWorldGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EBF8FE88A99E4EA9B42DF2 /* HiddenWorldGroups.swift */; };
+		5970A600D3E55600A3A5C3C7 /* WorldGroupsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B500FAB659D18C1BD7526D /* WorldGroupsSettingsView.swift */; };
 		CC82D1BF9D740FD16DF8A6FD /* JapanEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9E7B3DE9B7DDD857B8E540 /* JapanEx.swift */; };
 		B3EB9F97C4F1B59584B91856 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4436563A722CF5178DD6FB4 /* PrivacyPolicyView.swift */; };
 		25E4782BA05C7ACB7FB53670 /* FlagWave.metal in Sources */ = {isa = PBXBuildFile; fileRef = 78DAD0AEF855EBDF9CD3FB82 /* FlagWave.metal */; };
@@ -153,6 +192,7 @@
 		6A2BF977A5200543CB558BF4 /* map_DE.json in Resources */ = {isa = PBXBuildFile; fileRef = 89292AF71E2F9218E8888951 /* map_DE.json */; };
 		955F6EA501AA1E8896ED6C6D /* map_ES.json in Resources */ = {isa = PBXBuildFile; fileRef = F2F6D76C4E59403C285C2BF4 /* map_ES.json */; };
 		88CF0F08B9DC19A353A6C149 /* map_FR.json in Resources */ = {isa = PBXBuildFile; fileRef = BA7199AB26674BA409BBCAFE /* map_FR.json */; };
+		F8D67C32A2473A29A507F2CF /* map_FR-departments.json in Resources */ = {isa = PBXBuildFile; fileRef = EAD2B91FDB2D017E200E5F0F /* map_FR-departments.json */; };
 		F886BEF8CE3626D76ABD9A0C /* map_GB.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A3C3044F575BBBA70DC388B /* map_GB.json */; };
 		BA801F4F6F9AC5DAB17083E0 /* map_ID.json in Resources */ = {isa = PBXBuildFile; fileRef = 4953C86517E5BF53887AA548 /* map_ID.json */; };
 		FC8C67899E8F943FEE37179E /* map_IN.json in Resources */ = {isa = PBXBuildFile; fileRef = A895EF6AA984E4F07BD9443F /* map_IN.json */; };
@@ -206,6 +246,7 @@
 		FF15F60D6E3F111C81BBFE12 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CE237EC6FD62CD6FCBC087 /* FlowLayout.swift */; };
 		4BFF78F7EEC0046C9BADBFFF /* VisitedNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6A035143190F6341591F66 /* VisitedNamesView.swift */; };
 		7CFF23CBC13EDE180C432568 /* MapCallout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE9FBEAF61CC4CD58D194BB /* MapCallout.swift */; };
+		EE75E21C50DFBCFEF5CBAFD7 /* MapLayerChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E20BB4774AFA2321BBC705 /* MapLayerChooser.swift */; };
 		1EBB601CF37ED8E2E9AD3DD6 /* MapPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1764291DFE8BCA98F0013057 /* MapPanel.swift */; };
 		408F4D0E890F14355142FD16 /* MapNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F72E15AD5E51D030E1ABA0 /* MapNavigator.swift */; };
 		A71F4D49D4F1C87107E90E25 /* MapProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD5260977D41B4070F0D533 /* MapProjection.swift */; };
@@ -213,9 +254,11 @@
 		2241290B72E2B7916EED09F7 /* geo_WORLD.json in Resources */ = {isa = PBXBuildFile; fileRef = 9332BD3092EF55A91B220E7B /* geo_WORLD.json */; };
 		4EBAABFD89DB97D2300724B7 /* MapCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777FB33F36D923BC814DD7B0 /* MapCenter.swift */; };
 		03C4201D18F7976852CC47E0 /* FoldRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5B436CEDD3EEE8320D0832 /* FoldRegions.swift */; };
+		4AD86DDDBC92EF376AA6154A /* ToolbarContent+Overflow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F605BD38802BEB5DAB6F8F92 /* ToolbarContent+Overflow.swift */; };
 		9437FF9FDBA4208CED62DD84 /* PinnedMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B28790DA1B705DDF81AE900 /* PinnedMapView.swift */; };
 		DDBD23578501B7B04E6C27C9 /* WorldMapPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B492C8ADB1DA8D881208B /* WorldMapPreview.swift */; };
 		B28F4270C755C15674131E79 /* CelebrationBurst.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B88DAB5BAA2C7408572F8E /* CelebrationBurst.swift */; };
+		A1E5C0DE5C4EE0EF00000001 /* ScreenEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E5C0DE5C4EE0EF00000002 /* ScreenEffects.swift */; };
 		985FC12AC72D49D761CE3EFC /* geo_AE.json in Resources */ = {isa = PBXBuildFile; fileRef = C6CCE3A9F320C0B1CE697E9F /* geo_AE.json */; };
 		369931EB87A1DB8E382AC403 /* geo_AR.json in Resources */ = {isa = PBXBuildFile; fileRef = 58BDE13F879B6D3DB23C6B60 /* geo_AR.json */; };
 		730C940FF06D8C49FB0D96DA /* geo_AT.json in Resources */ = {isa = PBXBuildFile; fileRef = 3350AE6B4E1B302836F02569 /* geo_AT.json */; };
@@ -233,6 +276,7 @@
 		39FCBCDB8736693AF5946C5F /* geo_ES.json in Resources */ = {isa = PBXBuildFile; fileRef = 6A9CA245413D34DB0E7C1A22 /* geo_ES.json */; };
 		E21611FDF99D485974F28095 /* geo_FI.json in Resources */ = {isa = PBXBuildFile; fileRef = 4DEF4AD87CAEF850008E6FA2 /* geo_FI.json */; };
 		137F9482CC53E7B753298CA1 /* geo_FR.json in Resources */ = {isa = PBXBuildFile; fileRef = 32AA6E5AC500874BA732E683 /* geo_FR.json */; };
+		8BF245B930E8956873E9464C /* geo_FR-departments.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F194B4DF96583B9902640 /* geo_FR-departments.json */; };
 		59E2542A24D7D6555AE3B9CE /* geo_GB.json in Resources */ = {isa = PBXBuildFile; fileRef = 5999CA1DDBD8FD2B10D6B1A5 /* geo_GB.json */; };
 		864ED87B6CB86FDBCA00331B /* geo_GR.json in Resources */ = {isa = PBXBuildFile; fileRef = 82C3C083A055E45C879C47C8 /* geo_GR.json */; };
 		F587A82B6FBDE5605D78ABC5 /* geo_HR.json in Resources */ = {isa = PBXBuildFile; fileRef = 97A01FD1E762033012F80F35 /* geo_HR.json */; };
@@ -513,6 +557,119 @@
 		6FE72A3D2F2BEFBD908190C0 /* geo_UZ.json in Resources */ = {isa = PBXBuildFile; fileRef = F58946C1525479A53F1618A1 /* geo_UZ.json */; };
 		8DFCF21EF6B8CF73FA84FEA5 /* UzbekistanFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = AF0985451BFAD77CB600262E /* UzbekistanFlagCredits.json */; };
 		DA4B4D516BF6E083CF0EB918 /* KyrgyzstanCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9269E8BF084BA5B619D43E05 /* KyrgyzstanCatalog.swift */; };
+		4653E4142BA35348841A16D1 /* TravelMap+Parent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B47AF3917B37ECC6467C59 /* TravelMap+Parent.swift */; };
+		8F082DD55D84073A9EA2F5B9 /* map_AU-WA.json in Resources */ = {isa = PBXBuildFile; fileRef = 04D60FFB2988FFB132D53C9C /* map_AU-WA.json */; };
+		A5E17E9EB7A13748401E6143 /* map_AU-SA.json in Resources */ = {isa = PBXBuildFile; fileRef = 51A54EC6C077EDDDE6A3349D /* map_AU-SA.json */; };
+		6AA93C02E4B26351D724BCF6 /* map_AU-QLD.json in Resources */ = {isa = PBXBuildFile; fileRef = D9C4A6276619232E900169AA /* map_AU-QLD.json */; };
+		81B936A01DEFB327EFE36722 /* map_AU-VIC.json in Resources */ = {isa = PBXBuildFile; fileRef = BDC9AB903C403B9C95D6BD09 /* map_AU-VIC.json */; };
+		85C5F23517B5722F2EC86D76 /* map_AU-NSW.json in Resources */ = {isa = PBXBuildFile; fileRef = 6979B2BA42342B87C561025D /* map_AU-NSW.json */; };
+		D947D1BF42AE5972201BDE79 /* SolomonIslandsFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 16A9FB1617C22A3BAED0C8FA /* SolomonIslandsFlagCredits.json */; };
+		22288ACD4D27D169618DBB49 /* SolomonIslandsCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DECD9B30DF7A830630DD8 /* SolomonIslandsCatalog.swift */; };
+		6CCEE8350C6C250B772FB916 /* geo_SB.json in Resources */ = {isa = PBXBuildFile; fileRef = 1238D3886A967C9B122048BB /* geo_SB.json */; };
+		CAEF754F0973272C4166C5BA /* map_SB.json in Resources */ = {isa = PBXBuildFile; fileRef = C9153B2E2F2E98AFC634E7DB /* map_SB.json */; };
+		B3BCF2369417C3E9CB1F656E /* VanuatuFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 432E85200108D1A0FB54D228 /* VanuatuFlagCredits.json */; };
+		01EB15BEBE675F544C83734D /* VanuatuCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A14FEC1C0CD83E38E8F3DEE /* VanuatuCatalog.swift */; };
+		CE52CADF0701C209D16B0A18 /* geo_VU.json in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E6DB684EDC1609AAFAB93 /* geo_VU.json */; };
+		0004D2C38368969B60D12B8E /* map_VU.json in Resources */ = {isa = PBXBuildFile; fileRef = E410DE9F8782C5F2927A7B22 /* map_VU.json */; };
+		592F31B27D08B09A40D1577E /* NicaraguaFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 09E2F7FABA0515E6F2AFEA28 /* NicaraguaFlagCredits.json */; };
+		84CDAB6899F2D0AEF430D3F1 /* NicaraguaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C427CA26E9FE85BC14ECE7 /* NicaraguaCatalog.swift */; };
+		BB85B1F1F6E23E0C251B73E1 /* geo_NI.json in Resources */ = {isa = PBXBuildFile; fileRef = 257D8D7CBA5C73C2D6378B54 /* geo_NI.json */; };
+		ACCB682E3D76F58501D25119 /* map_NI.json in Resources */ = {isa = PBXBuildFile; fileRef = 1E4216EEA7E43C3C20E11608 /* map_NI.json */; };
+		F52E932F8A5DF0E26196DAC2 /* TrinidadAndTobagoCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0D87EC4276C0ACACC9BCCE /* TrinidadAndTobagoCatalog.swift */; };
+		4FE29C73EAA140AE766272FE /* geo_TT.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AA454014CD53EC384267979 /* geo_TT.json */; };
+		F5CAF06DFFBA1246B0464857 /* map_TT.json in Resources */ = {isa = PBXBuildFile; fileRef = 1F5415B8E957D8D98ADB86D9 /* map_TT.json */; };
+		48FB8DCB31C4CE6986464B72 /* MyanmarFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 80C985CE8D78670F0B65D3E6 /* MyanmarFlagCredits.json */; };
+		857FCC8436CFCB8C32A89CBA /* MyanmarCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0AF7CA1C38251940A3BC21 /* MyanmarCatalog.swift */; };
+		1D0497CAF703C3B86A77D6D4 /* geo_MM.json in Resources */ = {isa = PBXBuildFile; fileRef = 2AA454A57B0C1903D995CDAC /* geo_MM.json */; };
+		FD50587B6909DC39C6A609C2 /* map_MM.json in Resources */ = {isa = PBXBuildFile; fileRef = E6EC00F9CCCCB0256FD275F1 /* map_MM.json */; };
+		9184DEC3D7EE1B4588E2E724 /* SamoaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3678C087146BB215BD58097 /* SamoaCatalog.swift */; };
+		5BFA06084B69F2F8E464A1C1 /* geo_WS.json in Resources */ = {isa = PBXBuildFile; fileRef = E15F98095BD96222BD9CE8B9 /* geo_WS.json */; };
+		7B2E497624C35F5C5EE502C1 /* map_WS.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D8372CEB2393AF4E5CE5204 /* map_WS.json */; };
+		AFF5146C955C74E3CB754AD1 /* TongaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB37E6A09FF6DD7F4E777062 /* TongaCatalog.swift */; };
+		C50BD6AF347BA232A43FFAA4 /* CoastsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE79FF26718584704F311D /* CoastsKey.swift */; };
+		7FA6FD09C8CFA60838927D5E /* CoastKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9940267FF24625EB0A6EA448 /* CoastKey.swift */; };
+		1641C775A7C4FC3705BF4C4A /* geo_SEAS.json in Resources */ = {isa = PBXBuildFile; fileRef = 99707825EABAD0B248ECAC19 /* geo_SEAS.json */; };
+		61D834C03BCDEBC40C92B017 /* SeasSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C92DC2139F51A428DFCDE4F /* SeasSettingsView.swift */; };
+		3902D06054E614B28246450F /* CoastsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC463C180093B0EDDA0DC41 /* CoastsView.swift */; };
+		F1CAFAF7300731A58C89B773 /* SeaCoasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8946622A0F41534CC675BDC /* SeaCoasts.swift */; };
+		D20F804734C9746C0FE6F108 /* SeasCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B94E36F5982461814028D90 /* SeasCatalog.swift */; };
+		01A0B941C8189860A6E65F9A /* geo_TO.json in Resources */ = {isa = PBXBuildFile; fileRef = 25D1CDFA6777F2E85AD5B1FC /* geo_TO.json */; };
+		32865E91E0F91333C19032E7 /* map_TO.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CCA26F8C13EC2C0C4152EFE /* map_TO.json */; };
+		54E9743B97CFBBC9CA8875D8 /* SurinameCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC99252C19E09710B53D962 /* SurinameCatalog.swift */; };
+		4EBD670AA3F79F13B798FF89 /* geo_SR.json in Resources */ = {isa = PBXBuildFile; fileRef = AD25F2A566A810B99E3872EB /* geo_SR.json */; };
+		D12555A83A184E00555EE61B /* map_SR.json in Resources */ = {isa = PBXBuildFile; fileRef = D25CC9F3E0FA9E17BF554F05 /* map_SR.json */; };
+		F872A379E7B86813F1E5DE6D /* HaitiCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ED289B3C39E47AF87AF5B6 /* HaitiCatalog.swift */; };
+		211CAE73377CDD9C3290160F /* geo_HT.json in Resources */ = {isa = PBXBuildFile; fileRef = 2278311C8607EBF9281F0AD7 /* geo_HT.json */; };
+		9204765CF252196FF7EC032C /* map_HT.json in Resources */ = {isa = PBXBuildFile; fileRef = DB218C659E69834CB30698CA /* map_HT.json */; };
+		375B854EB9D7FC274819F988 /* GuyanaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF205838C49D592198B37290 /* GuyanaCatalog.swift */; };
+		4CBE65040ACA1FFAE462914F /* geo_GY.json in Resources */ = {isa = PBXBuildFile; fileRef = E6AED46C7F06B6CEFCD623C8 /* geo_GY.json */; };
+		59E5A6D844F8A176DF6FC502 /* map_GY.json in Resources */ = {isa = PBXBuildFile; fileRef = 3CF7F1757F7E3B5CE765AD09 /* map_GY.json */; };
+		619D24E7489BFDB27696A01F /* BelizeCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D88B07B99264E645ADADEF1 /* BelizeCatalog.swift */; };
+		CA83BD8C539B8428CEFA3564 /* geo_BZ.json in Resources */ = {isa = PBXBuildFile; fileRef = 7225C906DAEAEC6B50E9BE21 /* geo_BZ.json */; };
+		EFB0E8AD3E9BBF63D532479D /* map_BZ.json in Resources */ = {isa = PBXBuildFile; fileRef = 17449DA8174A09488C29D8F4 /* map_BZ.json */; };
+		26F7C195AFCF119EEB5D3FDD /* PakistanFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 39FA4CF0B28FC883BA336C0F /* PakistanFlagCredits.json */; };
+		3CF436CDCEB46179C49215D0 /* PakistanCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A486FC2ABB7E5FF7CC2181 /* PakistanCatalog.swift */; };
+		6F67488455431AE62D612632 /* geo_PK.json in Resources */ = {isa = PBXBuildFile; fileRef = 7DF54AC9479672DAEECCD957 /* geo_PK.json */; };
+		DCAAEE8FF980B5321ADE8F8F /* map_PK.json in Resources */ = {isa = PBXBuildFile; fileRef = B52E169D43A22ADE43CDDCED /* map_PK.json */; };
+		41774E649962111B0EB651BF /* LebanonCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F208E596EEB4CA4089F561AE /* LebanonCatalog.swift */; };
+		D0BE078B5D1F636CF8A1B6B8 /* geo_LB.json in Resources */ = {isa = PBXBuildFile; fileRef = 697C10882B4A74164EAFE0DF /* geo_LB.json */; };
+		8D3B6E66149BACC7E067C92A /* map_LB.json in Resources */ = {isa = PBXBuildFile; fileRef = B17B647A683BC376FE8E1804 /* map_LB.json */; };
+		0069A198036EEBDD7D8682D5 /* MoldovaFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 94A185AA8DA51DE5614CA1A5 /* MoldovaFlagCredits.json */; };
+		DD8C91E4E6B079223CEA2E87 /* MoldovaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5B435A708D2CC0220B1BBE /* MoldovaCatalog.swift */; };
+		D0EDC0B407E26AD8DA797DDA /* geo_MD.json in Resources */ = {isa = PBXBuildFile; fileRef = C737621BE81FDACB51CABACB /* geo_MD.json */; };
+		46B7010F515C85DA11FD8B57 /* map_MD.json in Resources */ = {isa = PBXBuildFile; fileRef = DD34171C998C2962AC2CA17E /* map_MD.json */; };
+		FCF4B42CB99D89EA128FC2C3 /* TajikistanCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D5C63FD77F21F8225CF266 /* TajikistanCatalog.swift */; };
+		79E177ADA4BE8DEC4AF21474 /* geo_TJ.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2A912486442B4760BFAC3 /* geo_TJ.json */; };
+		66BA5BBDBD13BA1B2FEA9755 /* map_TJ.json in Resources */ = {isa = PBXBuildFile; fileRef = 7B60B7F1221495B0C2ED5027 /* map_TJ.json */; };
+		E36FBED640BC67643C1468A9 /* GeorgiaFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 3106B44B3096D1F2EC7686F4 /* GeorgiaFlagCredits.json */; };
+		AF45910B77A6D2D6C13DF38D /* GeorgiaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C00466EFB34423EAA94FFC /* GeorgiaCatalog.swift */; };
+		0D7D41748F48FBE335BC71AC /* geo_GE.json in Resources */ = {isa = PBXBuildFile; fileRef = B57B5ED82A5A9DB8F26D4F2F /* geo_GE.json */; };
+		902C30D2A1826B654EC50095 /* map_GE.json in Resources */ = {isa = PBXBuildFile; fileRef = 1BEEFE7BBD5797F51B0D7A4A /* map_GE.json */; };
+		D3B86CD6C09208C061F44601 /* map_GB-NIR.json in Resources */ = {isa = PBXBuildFile; fileRef = 771F5CD7CB514D126191F3D4 /* map_GB-NIR.json */; };
+		AE9482E86A3CAD7C2C220A54 /* map_GB-WLS.json in Resources */ = {isa = PBXBuildFile; fileRef = F93BBECE5506D0E1743DF69A /* map_GB-WLS.json */; };
+		0D8F3DA6BAA61D1228B475DA /* map_GB-SCT.json in Resources */ = {isa = PBXBuildFile; fileRef = E12A8CDC234413EFC407FF94 /* map_GB-SCT.json */; };
+		01D0AC314BDD990ECD4C7FC7 /* map_AU-NT.json in Resources */ = {isa = PBXBuildFile; fileRef = 141A276D9B35A8E809EB296A /* map_AU-NT.json */; };
+		C0AAFD7D8B34AA4E933A6A2F /* map_AU-TAS.json in Resources */ = {isa = PBXBuildFile; fileRef = A7098A9FFAF9C3F862A35F24 /* map_AU-TAS.json */; };
+		D052AD52D39B6865C8D6A01E /* UnitedKingdomCouncilsCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3E5BD8342B20DC70116C04 /* UnitedKingdomCouncilsCatalog.swift */; };
+		EC3F1EB8A403EAFEC23826A1 /* AustraliaLocalGovernmentCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BE2EFE022A3962907BF3D4 /* AustraliaLocalGovernmentCatalog.swift */; };
+		CEED6003E057C43E97B1FA83 /* VietnamCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15989EDBE49F94213DE0D5ED /* VietnamCatalog.swift */; };
+		B85AEF3A3A4D306E33F6D201 /* geo_VN.json in Resources */ = {isa = PBXBuildFile; fileRef = B7AA2F20238BB0A9901840BF /* geo_VN.json */; };
+		4E160D6F24274F6B3D7EF6D6 /* map_VN.json in Resources */ = {isa = PBXBuildFile; fileRef = 55A211993D66D098CEE81549 /* map_VN.json */; };
+		FC6FB3D0A0D781B6ACEEEE93 /* BruneiCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071EB1C13DE2E06D3ED8B213 /* BruneiCatalog.swift */; };
+		94EEECCAA5FFB1953F551C3F /* geo_BN.json in Resources */ = {isa = PBXBuildFile; fileRef = 37686E3A1B1BA87E88F6549D /* geo_BN.json */; };
+		43786123E4DCFE96FECD8F3E /* map_BN.json in Resources */ = {isa = PBXBuildFile; fileRef = BCF4DEAD42B85620F800F3F4 /* map_BN.json */; };
+		5D74DB7C4B9BA3DDA553F150 /* AfghanistanCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEA1E0C913B552C05DC7852 /* AfghanistanCatalog.swift */; };
+		0A976D171944FF3BD3E4BC18 /* geo_AF.json in Resources */ = {isa = PBXBuildFile; fileRef = 65F164617CC52093CC672175 /* geo_AF.json */; };
+		70C135618E21DB767CF740C7 /* map_AF.json in Resources */ = {isa = PBXBuildFile; fileRef = 7BA140DFD6BDC56C9322685D /* map_AF.json */; };
+		423CABBDDDCF714096ED5B7E /* BotswanaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0B4251B597E69D9E53DEB6 /* BotswanaCatalog.swift */; };
+		0DD01130ADB934DBB467EDDC /* geo_BW.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A1DC4387935CD736BB5D080 /* geo_BW.json */; };
+		6458E48D9691295F2745A544 /* map_BW.json in Resources */ = {isa = PBXBuildFile; fileRef = A8B4E1B267AC2B178AE63D09 /* map_BW.json */; };
+		E5B624467561B09C6BD1BA77 /* CameroonCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E863DFB842EBE9142BF3770 /* CameroonCatalog.swift */; };
+		712DF42BF3512B22CA98B9E6 /* geo_CM.json in Resources */ = {isa = PBXBuildFile; fileRef = 4511264920DBF8DC7AACE019 /* geo_CM.json */; };
+		966FED8390AEDAC2D7128B59 /* map_CM.json in Resources */ = {isa = PBXBuildFile; fileRef = 62B6776DA61D50FD34B80385 /* map_CM.json */; };
+		B45C5FAAEA978193D042C2B8 /* MozambiqueCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD1E77325B254FDA728DBB /* MozambiqueCatalog.swift */; };
+		FF499BB85A5655E0163593C9 /* geo_MZ.json in Resources */ = {isa = PBXBuildFile; fileRef = 1186C7B7EE943E0361263561 /* geo_MZ.json */; };
+		0F3D1E4602C1408439D3E551 /* map_MZ.json in Resources */ = {isa = PBXBuildFile; fileRef = F7198A503A91F91DBB095CBA /* map_MZ.json */; };
+		B1663718899E939919B41819 /* ZimbabweCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB9B309FB428D309D74DC37 /* ZimbabweCatalog.swift */; };
+		DC2D65A71D24CAB9AA5EF355 /* geo_ZW.json in Resources */ = {isa = PBXBuildFile; fileRef = FFAEBC8A795CCC67065EE317 /* geo_ZW.json */; };
+		879C458E4DD6CF5A23295F9E /* map_ZW.json in Resources */ = {isa = PBXBuildFile; fileRef = 90DFBA0815A8EF989C5A6C0C /* map_ZW.json */; };
+		1D92883EB19F9E7309F7C287 /* ZambiaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7610A644F87E276637EE3F /* ZambiaCatalog.swift */; };
+		23FE28093FF07A5B908396F5 /* geo_ZM.json in Resources */ = {isa = PBXBuildFile; fileRef = 0208FC3EDB50F539810C1942 /* geo_ZM.json */; };
+		35566B2AADC73804331FE471 /* map_ZM.json in Resources */ = {isa = PBXBuildFile; fileRef = 822662F4F296BB8AD571B471 /* map_ZM.json */; };
+		B9099BD9F8F70B1DB9235204 /* map_ES-PV.json in Resources */ = {isa = PBXBuildFile; fileRef = 966CB4812EE79C4CDA6338D8 /* map_ES-PV.json */; };
+		4C562B7DD17362C684471C9F /* map_ES-GA.json in Resources */ = {isa = PBXBuildFile; fileRef = 1EEE6675EC67BD5501F6BECA /* map_ES-GA.json */; };
+		21F196EDEF2CB8332DEB399E /* map_ES-EX.json in Resources */ = {isa = PBXBuildFile; fileRef = D23B60AA85980A7FA1C4F466 /* map_ES-EX.json */; };
+		50C7AAAA232A7C49338CF8E0 /* map_ES-VC.json in Resources */ = {isa = PBXBuildFile; fileRef = 2549CB04D875F634D1FA5280 /* map_ES-VC.json */; };
+		79DDA5E3EDD2942B8104D927 /* map_ES-CT.json in Resources */ = {isa = PBXBuildFile; fileRef = 98D2967FD016CBF4743F6058 /* map_ES-CT.json */; };
+		F7D34EB07A879A213F723F98 /* map_ES-CM.json in Resources */ = {isa = PBXBuildFile; fileRef = 4A0B2E8E5D21CF8C42C6FFBB /* map_ES-CM.json */; };
+		00F568FEF6524C6293B84AC1 /* map_ES-CL.json in Resources */ = {isa = PBXBuildFile; fileRef = 0741808B29BFBAECCA52C166 /* map_ES-CL.json */; };
+		A223D56DA8445BB683E40B8E /* map_ES-CN.json in Resources */ = {isa = PBXBuildFile; fileRef = 5785B7F59DB311299E0CE5F0 /* map_ES-CN.json */; };
+		079219A44855D85A2B6FD567 /* map_ES-AR.json in Resources */ = {isa = PBXBuildFile; fileRef = 215B1D2738E776023E76D727 /* map_ES-AR.json */; };
+		BAFBB82BADFC9EF81BE8789A /* map_ES-AN.json in Resources */ = {isa = PBXBuildFile; fileRef = 72F4CD0AEEA21A81F475AD8F /* map_ES-AN.json */; };
+		9387E30B90AB31753F3E018C /* SpainProvincesCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B89330E873915E2F445D461 /* SpainProvincesCatalog.swift */; };
+		5982479BEF52BB10535DA2F9 /* SubdivisionCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15535060EE366AEAA2D860BC /* SubdivisionCatalog.swift */; };
+		9DC65B503A400CCFCCD45C72 /* SubdivisionLevels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A9694C9B1169F82339E1F8 /* SubdivisionLevels.swift */; };
+		EFC69894147DFAD47B66716A /* LevelCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED0E1840A1B074CE9EEE0A8 /* LevelCard.swift */; };
 		D8021205F459E504FA1080C5 /* map_KG.json in Resources */ = {isa = PBXBuildFile; fileRef = 837A6D1415E0AED37CD07775 /* map_KG.json */; };
 		BF57B98349869A36A5563F68 /* geo_KG.json in Resources */ = {isa = PBXBuildFile; fileRef = 04B229C8E2DFD21E515E4278 /* geo_KG.json */; };
 		B1E1743BDF5C9E7517C044BC /* KyrgyzstanFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 469BC27728AEB6E8977D55D6 /* KyrgyzstanFlagCredits.json */; };
@@ -522,32 +679,57 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7C00BCCF26381FAC101E13E8 /* HistoricalFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = HistoricalFlagCredits.json; sourceTree = "<group>"; };
-		D4C77EEB590ACD3D0763FAA8 /* TimeMachineScrubberBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineScrubberBar.swift; sourceTree = "<group>"; };
-		D865A3D8835AEA5DD759F862 /* TimeMachineEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineEvents.swift; sourceTree = "<group>"; };
-		A381F178D10F311D90A9EBE5 /* TimeMachineStage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineStage.swift; sourceTree = "<group>"; };
-		2A61D2B56C2373E70CE37900 /* TimeMachineHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineHeader.swift; sourceTree = "<group>"; };
-		02D42D2C2CE613188229F2AD /* TimeMachinePlates.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TimeMachinePlates.json; sourceTree = "<group>"; };
-		9F7BD816D3206AE4315FA40C /* TimeMachineEras.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TimeMachineEras.json; sourceTree = "<group>"; };
-		243BB9E5491B2032FB3389AC /* geo_TIMEMACHINE.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_TIMEMACHINE.json; sourceTree = "<group>"; };
-		C503FBE830B39CA4A397CC3D /* TimeMachineAboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineAboutView.swift; sourceTree = "<group>"; };
-		F7A68E823647A0543E4F05DC /* TimeMachineScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineScreen.swift; sourceTree = "<group>"; };
-		C5963812EC87AD8129995FDA /* HistoryMapOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryMapOverlay.swift; sourceTree = "<group>"; };
-		484B96FD70D0E9CDC32A8E96 /* TimeStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStack.swift; sourceTree = "<group>"; };
-		AFCEEC3708CC4B18373AE822 /* HistoryEventCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEventCard.swift; sourceTree = "<group>"; };
-		0A1D549CCFDBDE7E7AE1500B /* TimeMachineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineModel.swift; sourceTree = "<group>"; };
-		FF151B3A3B411EFBA321D621 /* TimeScrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeScrubber.swift; sourceTree = "<group>"; };
-		E8E62509C679A85C16260B96 /* SpaceBackdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceBackdrop.swift; sourceTree = "<group>"; };
-		F15C0583D74CA16A39B1E1A3 /* DeepTimeGlobe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepTimeGlobe.swift; sourceTree = "<group>"; };
-		0B5F1D66B53AE2E7E8AA32E0 /* HistoryMapCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryMapCanvas.swift; sourceTree = "<group>"; };
-		3277BED9C27D96D0A82F48AE /* HistoryMapGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryMapGeometry.swift; sourceTree = "<group>"; };
-		6C0D9D1FB704F052ED961829 /* DeepTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepTime.swift; sourceTree = "<group>"; };
-		D8ECF534A6BFF46BCE64C6CD /* HistoryColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryColor.swift; sourceTree = "<group>"; };
-		07FB316848BFDAB40AD746C7 /* HistoricalPolity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalPolity.swift; sourceTree = "<group>"; };
-		E51E775A3210EF27C719F7EE /* HistoricalEra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalEra.swift; sourceTree = "<group>"; };
-		F6D9A7C9619B9BB529B98830 /* TimeMachineAtlas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineAtlas.swift; sourceTree = "<group>"; };
+		9211629C87E91E83D266D3DD /* AtlasPlaceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasPlaceList.swift; sourceTree = "<group>"; };
+		CD927EEDE1B8EBBA0EDB573A /* PlugGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlugGallery.swift; sourceTree = "<group>"; };
+		6F26CEC50BA664164973497B /* VoltageKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltageKey.swift; sourceTree = "<group>"; };
+		DF5A4830E2C7B214C62E97A4 /* DrivingSideKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivingSideKey.swift; sourceTree = "<group>"; };
+		525659196A6860FBAB5D5F54 /* AtlasKeyTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasKeyTile.swift; sourceTree = "<group>"; };
+		93F872CD71F999DC089FE126 /* AtlasKeyEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasKeyEntry.swift; sourceTree = "<group>"; };
+		2BA87A34A0B0F94FB8587901 /* MapFactRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFactRow.swift; sourceTree = "<group>"; };
+		3D1236B145923DD7AC72329D /* WorldLayerControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldLayerControls.swift; sourceTree = "<group>"; };
+		8CBA91A237862082705277B9 /* Antipodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Antipodes.swift; sourceTree = "<group>"; };
+		2D17E37C0ECC6490B9C3C09D /* LatitudeLines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatitudeLines.swift; sourceTree = "<group>"; };
+		F7A39AD92061EAED5557EABF /* PlugFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlugFace.swift; sourceTree = "<group>"; };
+		43DCAF491E528AFC83454150 /* MainsPower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainsPower.swift; sourceTree = "<group>"; };
+		4740149C8CB72A1923F508A5 /* PlugType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlugType.swift; sourceTree = "<group>"; };
+		5700510F01169C9685C43CF1 /* DrivingSide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivingSide.swift; sourceTree = "<group>"; };
+		7BB9F4E357391DB0957F6602 /* MapColouring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapColouring.swift; sourceTree = "<group>"; };
+		31B80713FF46F13B03C32A37 /* WorldLayers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldLayers.swift; sourceTree = "<group>"; };
+		0139CB3430C5BF81A474EAD5 /* FlagThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagThumbnail.swift; sourceTree = "<group>"; };
+		DD2B7755C699BA2A28A9972A /* LocalNameLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNameLanguage.swift; sourceTree = "<group>"; };
+		CC343B10898E504884C3C8D0 /* GameModeSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModeSetup.swift; sourceTree = "<group>"; };
+		B731A6561D2D2DDEE65A03E8 /* GameListAllCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListAllCard.swift; sourceTree = "<group>"; };
+		A34F0F18F0BE468D50ADAC30 /* GamePictureChoices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePictureChoices.swift; sourceTree = "<group>"; };
+		6D304EBF8A0AD9AC2452D3F8 /* JapanFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = JapanFlagCredits.json; sourceTree = "<group>"; };
+		308D45E62F762160D173F294 /* Starfield.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Starfield.metal; sourceTree = "<group>"; };
+		056FA8CA48BB0D5B24BE7402 /* SpaceGlobe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceGlobe.swift; sourceTree = "<group>"; };
+		9733F981FF140213CEBEB076 /* TimeZoneAtlas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneAtlas.swift; sourceTree = "<group>"; };
+		DC7A0E19DAE4A753E288D1E9 /* ClockWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockWords.swift; sourceTree = "<group>"; };
+		506BF13F62B0E3D7794BD8CE /* TimeGlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeGlide.swift; sourceTree = "<group>"; };
+		E899D624213CF3E2F0ECB92D /* TimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabel.swift; sourceTree = "<group>"; };
+		FDCCBCC7877B675247E30D64 /* WorldTimeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldTimeScreen.swift; sourceTree = "<group>"; };
+		3BAC0D111C709CE523DEE4F7 /* WorldTimeDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldTimeDial.swift; sourceTree = "<group>"; };
+		4FE8C7C6BE029A76E253BEE0 /* WorldTimeSky.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldTimeSky.swift; sourceTree = "<group>"; };
+		3D8F4676D8985E00B2233197 /* WorldTimeSky.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = WorldTimeSky.metal; sourceTree = "<group>"; };
+		4C47FF1B6F346EEF595B7EEB /* WorldTimeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldTimeCard.swift; sourceTree = "<group>"; };
+		06338154F29A2E5BA62AF805 /* CurlingWorld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurlingWorld.swift; sourceTree = "<group>"; };
+		AFF9ADB91184B524281F69C4 /* ZoneClock+Names.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZoneClock+Names.swift"; sourceTree = "<group>"; };
+		88BADE63F840693D7ED762AB /* TimeZoneAtlas+Subdivisions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZoneAtlas+Subdivisions.swift"; sourceTree = "<group>"; };
+		33D44423EF27B5D0DB3A7A79 /* ZoneHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneHistory.swift; sourceTree = "<group>"; };
+		B0D70049BA438F946C4F53DA /* ZoneFacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneFacts.swift; sourceTree = "<group>"; };
+		5042C270C79E12D7C16159AE /* SeaZones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeaZones.swift; sourceTree = "<group>"; };
+		388CE6BA6C7D1CF46F9C582E /* WorldTimeMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldTimeMap.swift; sourceTree = "<group>"; };
+		61485E64FC57A7A604B6CCA0 /* TimeZoneBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneBand.swift; sourceTree = "<group>"; };
+		40D9BFAA5DFC8E8EA4E21756 /* ZoneChoices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneChoices.swift; sourceTree = "<group>"; };
+		5CF83771307EA2987713F6F0 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		10B903A3CE18A215D220A6DC /* WelcomePlaceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePlaceBar.swift; sourceTree = "<group>"; };
+		ED6E94961EB5FE539DFA5834 /* PlaceSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceSearch.swift; sourceTree = "<group>"; };
+		84FA81B3946AA52D60A325FD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		EE390E2E2D33C7039E50CAD6 /* CapitalCities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapitalCities.swift; sourceTree = "<group>"; };
 		5935B677F4C1B8FD20D834BC /* GameLearnCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLearnCard.swift; sourceTree = "<group>"; };
+		8D9AE471BB8849BF7E0D4854 /* LearnSearchSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnSearchSheet.swift; sourceTree = "<group>"; };
+		450E5B460152026285015907 /* LearnDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnDeck.swift; sourceTree = "<group>"; };
+		73B47AF18FD7E849E4D958EE /* LearnSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnSearch.swift; sourceTree = "<group>"; };
 		56FDE616F2E5CE14B5E013A7 /* MapGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGame.swift; sourceTree = "<group>"; };
 		D99F212B5F034A17E3157FBE /* MapGameMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGameMode.swift; sourceTree = "<group>"; };
 		C8B258B66EE63712C8BD2F07 /* MapGameLength.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGameLength.swift; sourceTree = "<group>"; };
@@ -566,17 +748,14 @@
 		2556C75F7E7DC2303AB4CAFC /* CandyGloss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandyGloss.swift; sourceTree = "<group>"; };
 		32A8AA4D7E94282CB9960176 /* RollingNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingNumber.swift; sourceTree = "<group>"; };
 		4552E7662B64CFD600EEB0F0 /* SaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveModel.swift; sourceTree = "<group>"; };
-		45B3358C2B71E0EE008C037B /* 01_flag_Hokkaido.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 01_flag_Hokkaido.png; sourceTree = "<group>"; };
 		45B3358E2B71FA26008C037B /* VisitPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitPillView.swift; sourceTree = "<group>"; };
 		45F6B69E2B63D05A00931EEB /* jpex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jpex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45F6B6A12B63D05A00931EEB /* jpexApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = jpexApp.swift; sourceTree = "<group>"; };
 		45F6B6A32B63D05A00931EEB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		45F6B6A52B63D05B00931EEB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45F6B6A82B63D05B00931EEB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		45F6B6B02B63D0D200931EEB /* mie.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = mie.geojson; sourceTree = "<group>"; };
 		45F6B6B22B63DAAC00931EEB /* Prefecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefecture.swift; sourceTree = "<group>"; };
 		45F6B6B62B63E3C200931EEB /* VisitStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitStatus.swift; sourceTree = "<group>"; };
-		45FB0A3A2B70C6EA00517EF0 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		45FE34292B723518006BF802 /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		52BD85C643C81A821D104852 /* AdministrativeDivision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdministrativeDivision.swift; sourceTree = "<group>"; };
 		D6F27C708AA0BC5005D70BCC /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
@@ -624,11 +803,18 @@
 		D58857A18C6CA55C82B38141 /* TravelSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSnapshot.swift; sourceTree = "<group>"; };
 		16A3C85C8836D8929EDB9660 /* VisitPillLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitPillLabel.swift; sourceTree = "<group>"; };
 		B6B5666DFFA0787FDE692909 /* PillButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillButtonStyle.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5061728394A5B6C /* TravelsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelsKey.swift; sourceTree = "<group>"; };
+		66D8FE3B4E5176182203EAC4 /* StatesVisibilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesVisibilityView.swift; sourceTree = "<group>"; };
+		88AF3761EEE970E51844E8A4 /* AtlasBookIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasBookIndex.swift; sourceTree = "<group>"; };
+		611666B7641EEB8978965E33 /* AtlasBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasBook.swift; sourceTree = "<group>"; };
+		266F3163406F16A6928D979C /* AtlasBookPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasBookPager.swift; sourceTree = "<group>"; };
+		4932557E3DE9B39D43E8A090 /* AtlasBookPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasBookPage.swift; sourceTree = "<group>"; };
+		611FFCAA3CF1F32661B9E5C5 /* FadingCardGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadingCardGrid.swift; sourceTree = "<group>"; };
+		BEB2A48173963398029C12D7 /* PlaceChoiceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceChoiceCard.swift; sourceTree = "<group>"; };
 		713C600153722FBC75C7CF38 /* PopEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopEffect.swift; sourceTree = "<group>"; };
 		7C7206D074716B1C3E8C8489 /* StripeOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StripeOverlay.swift; sourceTree = "<group>"; };
 		A839B95B285F53E3030237FC /* StatusTallyBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTallyBar.swift; sourceTree = "<group>"; };
 		24398C7C1C6E46D05D5638C3 /* TravelTotalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelTotalView.swift; sourceTree = "<group>"; };
-		99FDBAFD5225E2F20677F3DB /* StatusLadder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusLadder.swift; sourceTree = "<group>"; };
 		C56CDC6E124C5EE96309B0D8 /* VisitLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitLevel.swift; sourceTree = "<group>"; };
 		5FA6FD3DDE044EE2EA0031A7 /* VisitLadder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitLadder.swift; sourceTree = "<group>"; };
 		7732F17DE9B8AA7D6786D91C /* LevelColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelColor.swift; sourceTree = "<group>"; };
@@ -643,6 +829,16 @@
 		A703CCEEE6E6C1BCAF245D6E /* WorldGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldGroup.swift; sourceTree = "<group>"; };
 		D9751DD7B49DB4A1A41E3680 /* ScrollingName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingName.swift; sourceTree = "<group>"; };
 		C599B3360D86757F40CC35F6 /* WorldGroupBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldGroupBadge.swift; sourceTree = "<group>"; };
+		C47F6A2413300D969C1954EF /* CustomWorldGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWorldGroup.swift; sourceTree = "<group>"; };
+		E3A9714F7278A3914BD746FC /* CustomWorldGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWorldGroups.swift; sourceTree = "<group>"; };
+		5B64248E32ED9807458CCE07 /* CustomGroupDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGroupDraft.swift; sourceTree = "<group>"; };
+		AFA9C9FB15B211C54512B5BC /* GroupPlaceChoices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPlaceChoices.swift; sourceTree = "<group>"; };
+		3B28D3D5A436F7001C1CFBB2 /* CustomGroupEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGroupEditor.swift; sourceTree = "<group>"; };
+		B43E46AAA88BB5EDF924F836 /* GroupEmblemPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEmblemPicker.swift; sourceTree = "<group>"; };
+		5B34D147CBC1155FE8047BA4 /* AppReset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReset.swift; sourceTree = "<group>"; };
+		046E18DE92123D25569A6351 /* GroupFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupFlag.swift; sourceTree = "<group>"; };
+		34EBF8FE88A99E4EA9B42DF2 /* HiddenWorldGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenWorldGroups.swift; sourceTree = "<group>"; };
+		E1B500FAB659D18C1BD7526D /* WorldGroupsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldGroupsSettingsView.swift; sourceTree = "<group>"; };
 		BF9E7B3DE9B7DDD857B8E540 /* JapanEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapanEx.swift; sourceTree = "<group>"; };
 		A4436563A722CF5178DD6FB4 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		78DAD0AEF855EBDF9CD3FB82 /* FlagWave.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FlagWave.metal; sourceTree = "<group>"; };
@@ -669,6 +865,7 @@
 		89292AF71E2F9218E8888951 /* map_DE.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_DE.json; sourceTree = "<group>"; };
 		F2F6D76C4E59403C285C2BF4 /* map_ES.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES.json; sourceTree = "<group>"; };
 		BA7199AB26674BA409BBCAFE /* map_FR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_FR.json; sourceTree = "<group>"; };
+		EAD2B91FDB2D017E200E5F0F /* map_FR-departments.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_FR-departments.json; sourceTree = "<group>"; };
 		9A3C3044F575BBBA70DC388B /* map_GB.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_GB.json; sourceTree = "<group>"; };
 		4953C86517E5BF53887AA548 /* map_ID.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ID.json; sourceTree = "<group>"; };
 		A895EF6AA984E4F07BD9443F /* map_IN.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_IN.json; sourceTree = "<group>"; };
@@ -722,6 +919,7 @@
 		46CE237EC6FD62CD6FCBC087 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		ED6A035143190F6341591F66 /* VisitedNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedNamesView.swift; sourceTree = "<group>"; };
 		BEE9FBEAF61CC4CD58D194BB /* MapCallout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCallout.swift; sourceTree = "<group>"; };
+		88E20BB4774AFA2321BBC705 /* MapLayerChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLayerChooser.swift; sourceTree = "<group>"; };
 		1764291DFE8BCA98F0013057 /* MapPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPanel.swift; sourceTree = "<group>"; };
 		69F72E15AD5E51D030E1ABA0 /* MapNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNavigator.swift; sourceTree = "<group>"; };
 		9FD5260977D41B4070F0D533 /* MapProjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapProjection.swift; sourceTree = "<group>"; };
@@ -729,9 +927,11 @@
 		9332BD3092EF55A91B220E7B /* geo_WORLD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_WORLD.json; sourceTree = "<group>"; };
 		777FB33F36D923BC814DD7B0 /* MapCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCenter.swift; sourceTree = "<group>"; };
 		CB5B436CEDD3EEE8320D0832 /* FoldRegions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldRegions.swift; sourceTree = "<group>"; };
+		F605BD38802BEB5DAB6F8F92 /* ToolbarContent+Overflow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToolbarContent+Overflow.swift"; sourceTree = "<group>"; };
 		0B28790DA1B705DDF81AE900 /* PinnedMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedMapView.swift; sourceTree = "<group>"; };
 		CA8B492C8ADB1DA8D881208B /* WorldMapPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldMapPreview.swift; sourceTree = "<group>"; };
 		C6B88DAB5BAA2C7408572F8E /* CelebrationBurst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationBurst.swift; sourceTree = "<group>"; };
+		A1E5C0DE5C4EE0EF00000002 /* ScreenEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEffects.swift; sourceTree = "<group>"; };
 		C6CCE3A9F320C0B1CE697E9F /* geo_AE.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_AE.json; sourceTree = "<group>"; };
 		58BDE13F879B6D3DB23C6B60 /* geo_AR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_AR.json; sourceTree = "<group>"; };
 		3350AE6B4E1B302836F02569 /* geo_AT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_AT.json; sourceTree = "<group>"; };
@@ -749,6 +949,7 @@
 		6A9CA245413D34DB0E7C1A22 /* geo_ES.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_ES.json; sourceTree = "<group>"; };
 		4DEF4AD87CAEF850008E6FA2 /* geo_FI.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_FI.json; sourceTree = "<group>"; };
 		32AA6E5AC500874BA732E683 /* geo_FR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_FR.json; sourceTree = "<group>"; };
+		427F194B4DF96583B9902640 /* geo_FR-departments.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_FR-departments.json; sourceTree = "<group>"; };
 		5999CA1DDBD8FD2B10D6B1A5 /* geo_GB.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_GB.json; sourceTree = "<group>"; };
 		82C3C083A055E45C879C47C8 /* geo_GR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_GR.json; sourceTree = "<group>"; };
 		97A01FD1E762033012F80F35 /* geo_HR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_HR.json; sourceTree = "<group>"; };
@@ -1029,6 +1230,119 @@
 		F58946C1525479A53F1618A1 /* geo_UZ.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_UZ.json; sourceTree = "<group>"; };
 		AF0985451BFAD77CB600262E /* UzbekistanFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = UzbekistanFlagCredits.json; sourceTree = "<group>"; };
 		9269E8BF084BA5B619D43E05 /* KyrgyzstanCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KyrgyzstanCatalog.swift; sourceTree = "<group>"; };
+		63B47AF3917B37ECC6467C59 /* TravelMap+Parent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TravelMap+Parent.swift"; sourceTree = "<group>"; };
+		04D60FFB2988FFB132D53C9C /* map_AU-WA.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_AU-WA.json; sourceTree = "<group>"; };
+		51A54EC6C077EDDDE6A3349D /* map_AU-SA.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_AU-SA.json; sourceTree = "<group>"; };
+		D9C4A6276619232E900169AA /* map_AU-QLD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_AU-QLD.json; sourceTree = "<group>"; };
+		BDC9AB903C403B9C95D6BD09 /* map_AU-VIC.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_AU-VIC.json; sourceTree = "<group>"; };
+		6979B2BA42342B87C561025D /* map_AU-NSW.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_AU-NSW.json; sourceTree = "<group>"; };
+		16A9FB1617C22A3BAED0C8FA /* SolomonIslandsFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SolomonIslandsFlagCredits.json; sourceTree = "<group>"; };
+		AC9DECD9B30DF7A830630DD8 /* SolomonIslandsCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolomonIslandsCatalog.swift; sourceTree = "<group>"; };
+		1238D3886A967C9B122048BB /* geo_SB.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_SB.json; sourceTree = "<group>"; };
+		C9153B2E2F2E98AFC634E7DB /* map_SB.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_SB.json; sourceTree = "<group>"; };
+		432E85200108D1A0FB54D228 /* VanuatuFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = VanuatuFlagCredits.json; sourceTree = "<group>"; };
+		2A14FEC1C0CD83E38E8F3DEE /* VanuatuCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VanuatuCatalog.swift; sourceTree = "<group>"; };
+		6B2E6DB684EDC1609AAFAB93 /* geo_VU.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_VU.json; sourceTree = "<group>"; };
+		E410DE9F8782C5F2927A7B22 /* map_VU.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_VU.json; sourceTree = "<group>"; };
+		09E2F7FABA0515E6F2AFEA28 /* NicaraguaFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NicaraguaFlagCredits.json; sourceTree = "<group>"; };
+		E0C427CA26E9FE85BC14ECE7 /* NicaraguaCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicaraguaCatalog.swift; sourceTree = "<group>"; };
+		257D8D7CBA5C73C2D6378B54 /* geo_NI.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_NI.json; sourceTree = "<group>"; };
+		1E4216EEA7E43C3C20E11608 /* map_NI.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_NI.json; sourceTree = "<group>"; };
+		BF0D87EC4276C0ACACC9BCCE /* TrinidadAndTobagoCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrinidadAndTobagoCatalog.swift; sourceTree = "<group>"; };
+		8AA454014CD53EC384267979 /* geo_TT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_TT.json; sourceTree = "<group>"; };
+		1F5415B8E957D8D98ADB86D9 /* map_TT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_TT.json; sourceTree = "<group>"; };
+		80C985CE8D78670F0B65D3E6 /* MyanmarFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MyanmarFlagCredits.json; sourceTree = "<group>"; };
+		ED0AF7CA1C38251940A3BC21 /* MyanmarCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyanmarCatalog.swift; sourceTree = "<group>"; };
+		2AA454A57B0C1903D995CDAC /* geo_MM.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_MM.json; sourceTree = "<group>"; };
+		E6EC00F9CCCCB0256FD275F1 /* map_MM.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_MM.json; sourceTree = "<group>"; };
+		A3678C087146BB215BD58097 /* SamoaCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamoaCatalog.swift; sourceTree = "<group>"; };
+		E15F98095BD96222BD9CE8B9 /* geo_WS.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_WS.json; sourceTree = "<group>"; };
+		1D8372CEB2393AF4E5CE5204 /* map_WS.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_WS.json; sourceTree = "<group>"; };
+		FB37E6A09FF6DD7F4E777062 /* TongaCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TongaCatalog.swift; sourceTree = "<group>"; };
+		6FEE79FF26718584704F311D /* CoastsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoastsKey.swift; sourceTree = "<group>"; };
+		9940267FF24625EB0A6EA448 /* CoastKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoastKey.swift; sourceTree = "<group>"; };
+		99707825EABAD0B248ECAC19 /* geo_SEAS.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_SEAS.json; sourceTree = "<group>"; };
+		8C92DC2139F51A428DFCDE4F /* SeasSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasSettingsView.swift; sourceTree = "<group>"; };
+		3BC463C180093B0EDDA0DC41 /* CoastsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoastsView.swift; sourceTree = "<group>"; };
+		C8946622A0F41534CC675BDC /* SeaCoasts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeaCoasts.swift; sourceTree = "<group>"; };
+		2B94E36F5982461814028D90 /* SeasCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasCatalog.swift; sourceTree = "<group>"; };
+		25D1CDFA6777F2E85AD5B1FC /* geo_TO.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_TO.json; sourceTree = "<group>"; };
+		1CCA26F8C13EC2C0C4152EFE /* map_TO.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_TO.json; sourceTree = "<group>"; };
+		8CC99252C19E09710B53D962 /* SurinameCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurinameCatalog.swift; sourceTree = "<group>"; };
+		AD25F2A566A810B99E3872EB /* geo_SR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_SR.json; sourceTree = "<group>"; };
+		D25CC9F3E0FA9E17BF554F05 /* map_SR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_SR.json; sourceTree = "<group>"; };
+		53ED289B3C39E47AF87AF5B6 /* HaitiCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaitiCatalog.swift; sourceTree = "<group>"; };
+		2278311C8607EBF9281F0AD7 /* geo_HT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_HT.json; sourceTree = "<group>"; };
+		DB218C659E69834CB30698CA /* map_HT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_HT.json; sourceTree = "<group>"; };
+		FF205838C49D592198B37290 /* GuyanaCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuyanaCatalog.swift; sourceTree = "<group>"; };
+		E6AED46C7F06B6CEFCD623C8 /* geo_GY.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_GY.json; sourceTree = "<group>"; };
+		3CF7F1757F7E3B5CE765AD09 /* map_GY.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_GY.json; sourceTree = "<group>"; };
+		5D88B07B99264E645ADADEF1 /* BelizeCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BelizeCatalog.swift; sourceTree = "<group>"; };
+		7225C906DAEAEC6B50E9BE21 /* geo_BZ.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_BZ.json; sourceTree = "<group>"; };
+		17449DA8174A09488C29D8F4 /* map_BZ.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_BZ.json; sourceTree = "<group>"; };
+		39FA4CF0B28FC883BA336C0F /* PakistanFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PakistanFlagCredits.json; sourceTree = "<group>"; };
+		D0A486FC2ABB7E5FF7CC2181 /* PakistanCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PakistanCatalog.swift; sourceTree = "<group>"; };
+		7DF54AC9479672DAEECCD957 /* geo_PK.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_PK.json; sourceTree = "<group>"; };
+		B52E169D43A22ADE43CDDCED /* map_PK.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_PK.json; sourceTree = "<group>"; };
+		F208E596EEB4CA4089F561AE /* LebanonCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LebanonCatalog.swift; sourceTree = "<group>"; };
+		697C10882B4A74164EAFE0DF /* geo_LB.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_LB.json; sourceTree = "<group>"; };
+		B17B647A683BC376FE8E1804 /* map_LB.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_LB.json; sourceTree = "<group>"; };
+		94A185AA8DA51DE5614CA1A5 /* MoldovaFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MoldovaFlagCredits.json; sourceTree = "<group>"; };
+		8E5B435A708D2CC0220B1BBE /* MoldovaCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoldovaCatalog.swift; sourceTree = "<group>"; };
+		C737621BE81FDACB51CABACB /* geo_MD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_MD.json; sourceTree = "<group>"; };
+		DD34171C998C2962AC2CA17E /* map_MD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_MD.json; sourceTree = "<group>"; };
+		A9D5C63FD77F21F8225CF266 /* TajikistanCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TajikistanCatalog.swift; sourceTree = "<group>"; };
+		01A2A912486442B4760BFAC3 /* geo_TJ.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_TJ.json; sourceTree = "<group>"; };
+		7B60B7F1221495B0C2ED5027 /* map_TJ.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_TJ.json; sourceTree = "<group>"; };
+		3106B44B3096D1F2EC7686F4 /* GeorgiaFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GeorgiaFlagCredits.json; sourceTree = "<group>"; };
+		32C00466EFB34423EAA94FFC /* GeorgiaCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeorgiaCatalog.swift; sourceTree = "<group>"; };
+		B57B5ED82A5A9DB8F26D4F2F /* geo_GE.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_GE.json; sourceTree = "<group>"; };
+		1BEEFE7BBD5797F51B0D7A4A /* map_GE.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_GE.json; sourceTree = "<group>"; };
+		771F5CD7CB514D126191F3D4 /* map_GB-NIR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_GB-NIR.json; sourceTree = "<group>"; };
+		F93BBECE5506D0E1743DF69A /* map_GB-WLS.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_GB-WLS.json; sourceTree = "<group>"; };
+		E12A8CDC234413EFC407FF94 /* map_GB-SCT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_GB-SCT.json; sourceTree = "<group>"; };
+		141A276D9B35A8E809EB296A /* map_AU-NT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_AU-NT.json; sourceTree = "<group>"; };
+		A7098A9FFAF9C3F862A35F24 /* map_AU-TAS.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_AU-TAS.json; sourceTree = "<group>"; };
+		1F3E5BD8342B20DC70116C04 /* UnitedKingdomCouncilsCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitedKingdomCouncilsCatalog.swift; sourceTree = "<group>"; };
+		69BE2EFE022A3962907BF3D4 /* AustraliaLocalGovernmentCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AustraliaLocalGovernmentCatalog.swift; sourceTree = "<group>"; };
+		15989EDBE49F94213DE0D5ED /* VietnamCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VietnamCatalog.swift; sourceTree = "<group>"; };
+		B7AA2F20238BB0A9901840BF /* geo_VN.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_VN.json; sourceTree = "<group>"; };
+		55A211993D66D098CEE81549 /* map_VN.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_VN.json; sourceTree = "<group>"; };
+		071EB1C13DE2E06D3ED8B213 /* BruneiCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BruneiCatalog.swift; sourceTree = "<group>"; };
+		37686E3A1B1BA87E88F6549D /* geo_BN.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_BN.json; sourceTree = "<group>"; };
+		BCF4DEAD42B85620F800F3F4 /* map_BN.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_BN.json; sourceTree = "<group>"; };
+		8BEA1E0C913B552C05DC7852 /* AfghanistanCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AfghanistanCatalog.swift; sourceTree = "<group>"; };
+		65F164617CC52093CC672175 /* geo_AF.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_AF.json; sourceTree = "<group>"; };
+		7BA140DFD6BDC56C9322685D /* map_AF.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_AF.json; sourceTree = "<group>"; };
+		5D0B4251B597E69D9E53DEB6 /* BotswanaCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotswanaCatalog.swift; sourceTree = "<group>"; };
+		3A1DC4387935CD736BB5D080 /* geo_BW.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_BW.json; sourceTree = "<group>"; };
+		A8B4E1B267AC2B178AE63D09 /* map_BW.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_BW.json; sourceTree = "<group>"; };
+		7E863DFB842EBE9142BF3770 /* CameroonCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameroonCatalog.swift; sourceTree = "<group>"; };
+		4511264920DBF8DC7AACE019 /* geo_CM.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_CM.json; sourceTree = "<group>"; };
+		62B6776DA61D50FD34B80385 /* map_CM.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_CM.json; sourceTree = "<group>"; };
+		8EAD1E77325B254FDA728DBB /* MozambiqueCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MozambiqueCatalog.swift; sourceTree = "<group>"; };
+		1186C7B7EE943E0361263561 /* geo_MZ.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_MZ.json; sourceTree = "<group>"; };
+		F7198A503A91F91DBB095CBA /* map_MZ.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_MZ.json; sourceTree = "<group>"; };
+		CAB9B309FB428D309D74DC37 /* ZimbabweCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZimbabweCatalog.swift; sourceTree = "<group>"; };
+		FFAEBC8A795CCC67065EE317 /* geo_ZW.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_ZW.json; sourceTree = "<group>"; };
+		90DFBA0815A8EF989C5A6C0C /* map_ZW.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ZW.json; sourceTree = "<group>"; };
+		7F7610A644F87E276637EE3F /* ZambiaCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZambiaCatalog.swift; sourceTree = "<group>"; };
+		0208FC3EDB50F539810C1942 /* geo_ZM.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_ZM.json; sourceTree = "<group>"; };
+		822662F4F296BB8AD571B471 /* map_ZM.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ZM.json; sourceTree = "<group>"; };
+		966CB4812EE79C4CDA6338D8 /* map_ES-PV.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-PV.json; sourceTree = "<group>"; };
+		1EEE6675EC67BD5501F6BECA /* map_ES-GA.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-GA.json; sourceTree = "<group>"; };
+		D23B60AA85980A7FA1C4F466 /* map_ES-EX.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-EX.json; sourceTree = "<group>"; };
+		2549CB04D875F634D1FA5280 /* map_ES-VC.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-VC.json; sourceTree = "<group>"; };
+		98D2967FD016CBF4743F6058 /* map_ES-CT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-CT.json; sourceTree = "<group>"; };
+		4A0B2E8E5D21CF8C42C6FFBB /* map_ES-CM.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-CM.json; sourceTree = "<group>"; };
+		0741808B29BFBAECCA52C166 /* map_ES-CL.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-CL.json; sourceTree = "<group>"; };
+		5785B7F59DB311299E0CE5F0 /* map_ES-CN.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-CN.json; sourceTree = "<group>"; };
+		215B1D2738E776023E76D727 /* map_ES-AR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-AR.json; sourceTree = "<group>"; };
+		72F4CD0AEEA21A81F475AD8F /* map_ES-AN.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_ES-AN.json; sourceTree = "<group>"; };
+		8B89330E873915E2F445D461 /* SpainProvincesCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpainProvincesCatalog.swift; sourceTree = "<group>"; };
+		15535060EE366AEAA2D860BC /* SubdivisionCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubdivisionCatalog.swift; sourceTree = "<group>"; };
+		08A9694C9B1169F82339E1F8 /* SubdivisionLevels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubdivisionLevels.swift; sourceTree = "<group>"; };
+		0ED0E1840A1B074CE9EEE0A8 /* LevelCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelCard.swift; sourceTree = "<group>"; };
 		837A6D1415E0AED37CD07775 /* map_KG.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/map_KG.json; sourceTree = "<group>"; };
 		04B229C8E2DFD21E515E4278 /* geo_KG.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Maps/geo_KG.json; sourceTree = "<group>"; };
 		469BC27728AEB6E8977D55D6 /* KyrgyzstanFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = KyrgyzstanFlagCredits.json; sourceTree = "<group>"; };
@@ -1067,7 +1381,6 @@
 		45F6B6A02B63D05A00931EEB /* jpex */ = {
 			isa = PBXGroup;
 			children = (
-				45F6B6AF2B63D0A700931EEB /* japan */,
 				52BD85C643C81A821D104852 /* AdministrativeDivision.swift */,
 				D6F27C708AA0BC5005D70BCC /* Country.swift */,
 				9CB0916D0E8B3CEDBB6870D1 /* DivisionGroup.swift */,
@@ -1101,6 +1414,119 @@
 				04B229C8E2DFD21E515E4278 /* geo_KG.json */,
 				837A6D1415E0AED37CD07775 /* map_KG.json */,
 				9269E8BF084BA5B619D43E05 /* KyrgyzstanCatalog.swift */,
+				63B47AF3917B37ECC6467C59 /* TravelMap+Parent.swift */,
+				04D60FFB2988FFB132D53C9C /* map_AU-WA.json */,
+				51A54EC6C077EDDDE6A3349D /* map_AU-SA.json */,
+				D9C4A6276619232E900169AA /* map_AU-QLD.json */,
+				BDC9AB903C403B9C95D6BD09 /* map_AU-VIC.json */,
+				6979B2BA42342B87C561025D /* map_AU-NSW.json */,
+				16A9FB1617C22A3BAED0C8FA /* SolomonIslandsFlagCredits.json */,
+				AC9DECD9B30DF7A830630DD8 /* SolomonIslandsCatalog.swift */,
+				1238D3886A967C9B122048BB /* geo_SB.json */,
+				C9153B2E2F2E98AFC634E7DB /* map_SB.json */,
+				432E85200108D1A0FB54D228 /* VanuatuFlagCredits.json */,
+				2A14FEC1C0CD83E38E8F3DEE /* VanuatuCatalog.swift */,
+				6B2E6DB684EDC1609AAFAB93 /* geo_VU.json */,
+				E410DE9F8782C5F2927A7B22 /* map_VU.json */,
+				09E2F7FABA0515E6F2AFEA28 /* NicaraguaFlagCredits.json */,
+				E0C427CA26E9FE85BC14ECE7 /* NicaraguaCatalog.swift */,
+				257D8D7CBA5C73C2D6378B54 /* geo_NI.json */,
+				1E4216EEA7E43C3C20E11608 /* map_NI.json */,
+				BF0D87EC4276C0ACACC9BCCE /* TrinidadAndTobagoCatalog.swift */,
+				8AA454014CD53EC384267979 /* geo_TT.json */,
+				1F5415B8E957D8D98ADB86D9 /* map_TT.json */,
+				80C985CE8D78670F0B65D3E6 /* MyanmarFlagCredits.json */,
+				ED0AF7CA1C38251940A3BC21 /* MyanmarCatalog.swift */,
+				2AA454A57B0C1903D995CDAC /* geo_MM.json */,
+				E6EC00F9CCCCB0256FD275F1 /* map_MM.json */,
+				A3678C087146BB215BD58097 /* SamoaCatalog.swift */,
+				E15F98095BD96222BD9CE8B9 /* geo_WS.json */,
+				1D8372CEB2393AF4E5CE5204 /* map_WS.json */,
+				FB37E6A09FF6DD7F4E777062 /* TongaCatalog.swift */,
+				6FEE79FF26718584704F311D /* CoastsKey.swift */,
+				9940267FF24625EB0A6EA448 /* CoastKey.swift */,
+				99707825EABAD0B248ECAC19 /* geo_SEAS.json */,
+				8C92DC2139F51A428DFCDE4F /* SeasSettingsView.swift */,
+				3BC463C180093B0EDDA0DC41 /* CoastsView.swift */,
+				C8946622A0F41534CC675BDC /* SeaCoasts.swift */,
+				2B94E36F5982461814028D90 /* SeasCatalog.swift */,
+				25D1CDFA6777F2E85AD5B1FC /* geo_TO.json */,
+				1CCA26F8C13EC2C0C4152EFE /* map_TO.json */,
+				8CC99252C19E09710B53D962 /* SurinameCatalog.swift */,
+				AD25F2A566A810B99E3872EB /* geo_SR.json */,
+				D25CC9F3E0FA9E17BF554F05 /* map_SR.json */,
+				53ED289B3C39E47AF87AF5B6 /* HaitiCatalog.swift */,
+				2278311C8607EBF9281F0AD7 /* geo_HT.json */,
+				DB218C659E69834CB30698CA /* map_HT.json */,
+				FF205838C49D592198B37290 /* GuyanaCatalog.swift */,
+				E6AED46C7F06B6CEFCD623C8 /* geo_GY.json */,
+				3CF7F1757F7E3B5CE765AD09 /* map_GY.json */,
+				5D88B07B99264E645ADADEF1 /* BelizeCatalog.swift */,
+				7225C906DAEAEC6B50E9BE21 /* geo_BZ.json */,
+				17449DA8174A09488C29D8F4 /* map_BZ.json */,
+				39FA4CF0B28FC883BA336C0F /* PakistanFlagCredits.json */,
+				D0A486FC2ABB7E5FF7CC2181 /* PakistanCatalog.swift */,
+				7DF54AC9479672DAEECCD957 /* geo_PK.json */,
+				B52E169D43A22ADE43CDDCED /* map_PK.json */,
+				F208E596EEB4CA4089F561AE /* LebanonCatalog.swift */,
+				697C10882B4A74164EAFE0DF /* geo_LB.json */,
+				B17B647A683BC376FE8E1804 /* map_LB.json */,
+				94A185AA8DA51DE5614CA1A5 /* MoldovaFlagCredits.json */,
+				8E5B435A708D2CC0220B1BBE /* MoldovaCatalog.swift */,
+				C737621BE81FDACB51CABACB /* geo_MD.json */,
+				DD34171C998C2962AC2CA17E /* map_MD.json */,
+				A9D5C63FD77F21F8225CF266 /* TajikistanCatalog.swift */,
+				01A2A912486442B4760BFAC3 /* geo_TJ.json */,
+				7B60B7F1221495B0C2ED5027 /* map_TJ.json */,
+				3106B44B3096D1F2EC7686F4 /* GeorgiaFlagCredits.json */,
+				32C00466EFB34423EAA94FFC /* GeorgiaCatalog.swift */,
+				B57B5ED82A5A9DB8F26D4F2F /* geo_GE.json */,
+				1BEEFE7BBD5797F51B0D7A4A /* map_GE.json */,
+				771F5CD7CB514D126191F3D4 /* map_GB-NIR.json */,
+				F93BBECE5506D0E1743DF69A /* map_GB-WLS.json */,
+				E12A8CDC234413EFC407FF94 /* map_GB-SCT.json */,
+				141A276D9B35A8E809EB296A /* map_AU-NT.json */,
+				A7098A9FFAF9C3F862A35F24 /* map_AU-TAS.json */,
+				1F3E5BD8342B20DC70116C04 /* UnitedKingdomCouncilsCatalog.swift */,
+				69BE2EFE022A3962907BF3D4 /* AustraliaLocalGovernmentCatalog.swift */,
+				15989EDBE49F94213DE0D5ED /* VietnamCatalog.swift */,
+				B7AA2F20238BB0A9901840BF /* geo_VN.json */,
+				55A211993D66D098CEE81549 /* map_VN.json */,
+				071EB1C13DE2E06D3ED8B213 /* BruneiCatalog.swift */,
+				37686E3A1B1BA87E88F6549D /* geo_BN.json */,
+				BCF4DEAD42B85620F800F3F4 /* map_BN.json */,
+				8BEA1E0C913B552C05DC7852 /* AfghanistanCatalog.swift */,
+				65F164617CC52093CC672175 /* geo_AF.json */,
+				7BA140DFD6BDC56C9322685D /* map_AF.json */,
+				5D0B4251B597E69D9E53DEB6 /* BotswanaCatalog.swift */,
+				3A1DC4387935CD736BB5D080 /* geo_BW.json */,
+				A8B4E1B267AC2B178AE63D09 /* map_BW.json */,
+				7E863DFB842EBE9142BF3770 /* CameroonCatalog.swift */,
+				4511264920DBF8DC7AACE019 /* geo_CM.json */,
+				62B6776DA61D50FD34B80385 /* map_CM.json */,
+				8EAD1E77325B254FDA728DBB /* MozambiqueCatalog.swift */,
+				1186C7B7EE943E0361263561 /* geo_MZ.json */,
+				F7198A503A91F91DBB095CBA /* map_MZ.json */,
+				CAB9B309FB428D309D74DC37 /* ZimbabweCatalog.swift */,
+				FFAEBC8A795CCC67065EE317 /* geo_ZW.json */,
+				90DFBA0815A8EF989C5A6C0C /* map_ZW.json */,
+				7F7610A644F87E276637EE3F /* ZambiaCatalog.swift */,
+				0208FC3EDB50F539810C1942 /* geo_ZM.json */,
+				822662F4F296BB8AD571B471 /* map_ZM.json */,
+				966CB4812EE79C4CDA6338D8 /* map_ES-PV.json */,
+				1EEE6675EC67BD5501F6BECA /* map_ES-GA.json */,
+				D23B60AA85980A7FA1C4F466 /* map_ES-EX.json */,
+				2549CB04D875F634D1FA5280 /* map_ES-VC.json */,
+				98D2967FD016CBF4743F6058 /* map_ES-CT.json */,
+				4A0B2E8E5D21CF8C42C6FFBB /* map_ES-CM.json */,
+				0741808B29BFBAECCA52C166 /* map_ES-CL.json */,
+				5785B7F59DB311299E0CE5F0 /* map_ES-CN.json */,
+				215B1D2738E776023E76D727 /* map_ES-AR.json */,
+				72F4CD0AEEA21A81F475AD8F /* map_ES-AN.json */,
+				8B89330E873915E2F445D461 /* SpainProvincesCatalog.swift */,
+				15535060EE366AEAA2D860BC /* SubdivisionCatalog.swift */,
+				08A9694C9B1169F82339E1F8 /* SubdivisionLevels.swift */,
+				0ED0E1840A1B074CE9EEE0A8 /* LevelCard.swift */,
 				AF0985451BFAD77CB600262E /* UzbekistanFlagCredits.json */,
 				F58946C1525479A53F1618A1 /* geo_UZ.json */,
 				3A8E57949C8C43D19B96DF40 /* map_UZ.json */,
@@ -1381,6 +1807,7 @@
 				82C3C083A055E45C879C47C8 /* geo_GR.json */,
 				5999CA1DDBD8FD2B10D6B1A5 /* geo_GB.json */,
 				32AA6E5AC500874BA732E683 /* geo_FR.json */,
+				427F194B4DF96583B9902640 /* geo_FR-departments.json */,
 				4DEF4AD87CAEF850008E6FA2 /* geo_FI.json */,
 				6A9CA245413D34DB0E7C1A22 /* geo_ES.json */,
 				9EF1C3CC3AE0C7FDDDE9E79A /* geo_DK.json */,
@@ -1398,14 +1825,17 @@
 				58BDE13F879B6D3DB23C6B60 /* geo_AR.json */,
 				C6CCE3A9F320C0B1CE697E9F /* geo_AE.json */,
 				C6B88DAB5BAA2C7408572F8E /* CelebrationBurst.swift */,
+				A1E5C0DE5C4EE0EF00000002 /* ScreenEffects.swift */,
 				CA8B492C8ADB1DA8D881208B /* WorldMapPreview.swift */,
 				0B28790DA1B705DDF81AE900 /* PinnedMapView.swift */,
 				CB5B436CEDD3EEE8320D0832 /* FoldRegions.swift */,
+				F605BD38802BEB5DAB6F8F92 /* ToolbarContent+Overflow.swift */,
 				777FB33F36D923BC814DD7B0 /* MapCenter.swift */,
 				9332BD3092EF55A91B220E7B /* geo_WORLD.json */,
 				D8369D6E7D986DE0867DA0E7 /* Geography.swift */,
 				9FD5260977D41B4070F0D533 /* MapProjection.swift */,
 				69F72E15AD5E51D030E1ABA0 /* MapNavigator.swift */,
+				88E20BB4774AFA2321BBC705 /* MapLayerChooser.swift */,
 				1764291DFE8BCA98F0013057 /* MapPanel.swift */,
 				BEE9FBEAF61CC4CD58D194BB /* MapCallout.swift */,
 				ED6A035143190F6341591F66 /* VisitedNamesView.swift */,
@@ -1461,6 +1891,7 @@
 				4953C86517E5BF53887AA548 /* map_ID.json */,
 				9A3C3044F575BBBA70DC388B /* map_GB.json */,
 				BA7199AB26674BA409BBCAFE /* map_FR.json */,
+				EAD2B91FDB2D017E200E5F0F /* map_FR-departments.json */,
 				F2F6D76C4E59403C285C2BF4 /* map_ES.json */,
 				89292AF71E2F9218E8888951 /* map_DE.json */,
 				F1ED20B81BBCD410DE4BCCA0 /* map_CN.json */,
@@ -1482,6 +1913,9 @@
 				C98D9211B0FC8566B7DE4020 /* CollectionArrival.swift */,
 				EE390E2E2D33C7039E50CAD6 /* CapitalCities.swift */,
 				5935B677F4C1B8FD20D834BC /* GameLearnCard.swift */,
+				8D9AE471BB8849BF7E0D4854 /* LearnSearchSheet.swift */,
+				450E5B460152026285015907 /* LearnDeck.swift */,
+				73B47AF18FD7E849E4D958EE /* LearnSearch.swift */,
 				56FDE616F2E5CE14B5E013A7 /* MapGame.swift */,
 				D99F212B5F034A17E3157FBE /* MapGameMode.swift */,
 				C8B258B66EE63712C8BD2F07 /* MapGameLength.swift */,
@@ -1492,30 +1926,6 @@
 				014157398430A7CA3CD387C7 /* GameMapOverlay.swift */,
 				478DC0AE11D5B5B07669D03A /* GameMapGuides.swift */,
 				466A25279D4D746BC8B62EB5 /* GameSpotlight.swift */,
-				7C00BCCF26381FAC101E13E8 /* HistoricalFlagCredits.json */,
-				D4C77EEB590ACD3D0763FAA8 /* TimeMachineScrubberBar.swift */,
-				D865A3D8835AEA5DD759F862 /* TimeMachineEvents.swift */,
-				A381F178D10F311D90A9EBE5 /* TimeMachineStage.swift */,
-				2A61D2B56C2373E70CE37900 /* TimeMachineHeader.swift */,
-				02D42D2C2CE613188229F2AD /* TimeMachinePlates.json */,
-				9F7BD816D3206AE4315FA40C /* TimeMachineEras.json */,
-				243BB9E5491B2032FB3389AC /* geo_TIMEMACHINE.json */,
-				C503FBE830B39CA4A397CC3D /* TimeMachineAboutView.swift */,
-				F7A68E823647A0543E4F05DC /* TimeMachineScreen.swift */,
-				C5963812EC87AD8129995FDA /* HistoryMapOverlay.swift */,
-				484B96FD70D0E9CDC32A8E96 /* TimeStack.swift */,
-				AFCEEC3708CC4B18373AE822 /* HistoryEventCard.swift */,
-				0A1D549CCFDBDE7E7AE1500B /* TimeMachineModel.swift */,
-				FF151B3A3B411EFBA321D621 /* TimeScrubber.swift */,
-				E8E62509C679A85C16260B96 /* SpaceBackdrop.swift */,
-				F15C0583D74CA16A39B1E1A3 /* DeepTimeGlobe.swift */,
-				0B5F1D66B53AE2E7E8AA32E0 /* HistoryMapCanvas.swift */,
-				3277BED9C27D96D0A82F48AE /* HistoryMapGeometry.swift */,
-				6C0D9D1FB704F052ED961829 /* DeepTime.swift */,
-				D8ECF534A6BFF46BCE64C6CD /* HistoryColor.swift */,
-				07FB316848BFDAB40AD746C7 /* HistoricalPolity.swift */,
-				E51E775A3210EF27C719F7EE /* HistoricalEra.swift */,
-				F6D9A7C9619B9BB529B98830 /* TimeMachineAtlas.swift */,
 				AE14536B7B84033195A835A0 /* GameFlash.swift */,
 				7A7F0B61F29CFDA052DD6526 /* GameLobbyCard.swift */,
 				0989ECB896755DABED060A7A /* GameQuestionCard.swift */,
@@ -1531,11 +1941,18 @@
 				D58857A18C6CA55C82B38141 /* TravelSnapshot.swift */,
 				16A3C85C8836D8929EDB9660 /* VisitPillLabel.swift */,
 				B6B5666DFFA0787FDE692909 /* PillButtonStyle.swift */,
+				B1C2D3E4F5061728394A5B6C /* TravelsKey.swift */,
+				66D8FE3B4E5176182203EAC4 /* StatesVisibilityView.swift */,
+				88AF3761EEE970E51844E8A4 /* AtlasBookIndex.swift */,
+				611666B7641EEB8978965E33 /* AtlasBook.swift */,
+				266F3163406F16A6928D979C /* AtlasBookPager.swift */,
+				4932557E3DE9B39D43E8A090 /* AtlasBookPage.swift */,
+				611FFCAA3CF1F32661B9E5C5 /* FadingCardGrid.swift */,
+				BEB2A48173963398029C12D7 /* PlaceChoiceCard.swift */,
 				713C600153722FBC75C7CF38 /* PopEffect.swift */,
 				7C7206D074716B1C3E8C8489 /* StripeOverlay.swift */,
 				A839B95B285F53E3030237FC /* StatusTallyBar.swift */,
 				24398C7C1C6E46D05D5638C3 /* TravelTotalView.swift */,
-				99FDBAFD5225E2F20677F3DB /* StatusLadder.swift */,
 				C56CDC6E124C5EE96309B0D8 /* VisitLevel.swift */,
 				5FA6FD3DDE044EE2EA0031A7 /* VisitLadder.swift */,
 				7732F17DE9B8AA7D6786D91C /* LevelColor.swift */,
@@ -1550,6 +1967,16 @@
 				A703CCEEE6E6C1BCAF245D6E /* WorldGroup.swift */,
 				D9751DD7B49DB4A1A41E3680 /* ScrollingName.swift */,
 				C599B3360D86757F40CC35F6 /* WorldGroupBadge.swift */,
+				C47F6A2413300D969C1954EF /* CustomWorldGroup.swift */,
+				E3A9714F7278A3914BD746FC /* CustomWorldGroups.swift */,
+				5B64248E32ED9807458CCE07 /* CustomGroupDraft.swift */,
+				AFA9C9FB15B211C54512B5BC /* GroupPlaceChoices.swift */,
+				3B28D3D5A436F7001C1CFBB2 /* CustomGroupEditor.swift */,
+				B43E46AAA88BB5EDF924F836 /* GroupEmblemPicker.swift */,
+				5B34D147CBC1155FE8047BA4 /* AppReset.swift */,
+				046E18DE92123D25569A6351 /* GroupFlag.swift */,
+				34EBF8FE88A99E4EA9B42DF2 /* HiddenWorldGroups.swift */,
+				E1B500FAB659D18C1BD7526D /* WorldGroupsSettingsView.swift */,
 				BF9E7B3DE9B7DDD857B8E540 /* JapanEx.swift */,
 				A4436563A722CF5178DD6FB4 /* PrivacyPolicyView.swift */,
 				78DAD0AEF855EBDF9CD3FB82 /* FlagWave.metal */,
@@ -1573,10 +2000,55 @@
 				45F6B6A32B63D05A00931EEB /* ContentView.swift */,
 				45FE34292B723518006BF802 /* ProgressBarView.swift */,
 				45B3358E2B71FA26008C037B /* VisitPillView.swift */,
-				45FB0A3A2B70C6EA00517EF0 /* HomeView.swift */,
 				45F6B6B22B63DAAC00931EEB /* Prefecture.swift */,
 				45F6B6B62B63E3C200931EEB /* VisitStatus.swift */,
 				45F6B6A52B63D05B00931EEB /* Assets.xcassets */,
+				0139CB3430C5BF81A474EAD5 /* FlagThumbnail.swift */,
+				DD2B7755C699BA2A28A9972A /* LocalNameLanguage.swift */,
+				CC343B10898E504884C3C8D0 /* GameModeSetup.swift */,
+				B731A6561D2D2DDEE65A03E8 /* GameListAllCard.swift */,
+				A34F0F18F0BE468D50ADAC30 /* GamePictureChoices.swift */,
+				6D304EBF8A0AD9AC2452D3F8 /* JapanFlagCredits.json */,
+				308D45E62F762160D173F294 /* Starfield.metal */,
+				056FA8CA48BB0D5B24BE7402 /* SpaceGlobe.swift */,
+				9733F981FF140213CEBEB076 /* TimeZoneAtlas.swift */,
+				DC7A0E19DAE4A753E288D1E9 /* ClockWords.swift */,
+				506BF13F62B0E3D7794BD8CE /* TimeGlide.swift */,
+				E899D624213CF3E2F0ECB92D /* TimeLabel.swift */,
+				FDCCBCC7877B675247E30D64 /* WorldTimeScreen.swift */,
+				3BAC0D111C709CE523DEE4F7 /* WorldTimeDial.swift */,
+				4FE8C7C6BE029A76E253BEE0 /* WorldTimeSky.swift */,
+				3D8F4676D8985E00B2233197 /* WorldTimeSky.metal */,
+				4C47FF1B6F346EEF595B7EEB /* WorldTimeCard.swift */,
+				06338154F29A2E5BA62AF805 /* CurlingWorld.swift */,
+				AFF9ADB91184B524281F69C4 /* ZoneClock+Names.swift */,
+				88BADE63F840693D7ED762AB /* TimeZoneAtlas+Subdivisions.swift */,
+				33D44423EF27B5D0DB3A7A79 /* ZoneHistory.swift */,
+				B0D70049BA438F946C4F53DA /* ZoneFacts.swift */,
+				5042C270C79E12D7C16159AE /* SeaZones.swift */,
+				9211629C87E91E83D266D3DD /* AtlasPlaceList.swift */,
+				CD927EEDE1B8EBBA0EDB573A /* PlugGallery.swift */,
+				6F26CEC50BA664164973497B /* VoltageKey.swift */,
+				DF5A4830E2C7B214C62E97A4 /* DrivingSideKey.swift */,
+				525659196A6860FBAB5D5F54 /* AtlasKeyTile.swift */,
+				93F872CD71F999DC089FE126 /* AtlasKeyEntry.swift */,
+				2BA87A34A0B0F94FB8587901 /* MapFactRow.swift */,
+				3D1236B145923DD7AC72329D /* WorldLayerControls.swift */,
+				8CBA91A237862082705277B9 /* Antipodes.swift */,
+				2D17E37C0ECC6490B9C3C09D /* LatitudeLines.swift */,
+				F7A39AD92061EAED5557EABF /* PlugFace.swift */,
+				43DCAF491E528AFC83454150 /* MainsPower.swift */,
+				4740149C8CB72A1923F508A5 /* PlugType.swift */,
+				5700510F01169C9685C43CF1 /* DrivingSide.swift */,
+				7BB9F4E357391DB0957F6602 /* MapColouring.swift */,
+				31B80713FF46F13B03C32A37 /* WorldLayers.swift */,
+				388CE6BA6C7D1CF46F9C582E /* WorldTimeMap.swift */,
+				61485E64FC57A7A604B6CCA0 /* TimeZoneBand.swift */,
+				40D9BFAA5DFC8E8EA4E21756 /* ZoneChoices.swift */,
+				5CF83771307EA2987713F6F0 /* WelcomeView.swift */,
+				10B903A3CE18A215D220A6DC /* WelcomePlaceBar.swift */,
+				ED6E94961EB5FE539DFA5834 /* PlaceSearch.swift */,
+				84FA81B3946AA52D60A325FD /* PrivacyInfo.xcprivacy */,
 				45F6B6A72B63D05B00931EEB /* Preview Content */,
 			);
 			path = jpex;
@@ -1588,15 +2060,6 @@
 				45F6B6A82B63D05B00931EEB /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		45F6B6AF2B63D0A700931EEB /* japan */ = {
-			isa = PBXGroup;
-			children = (
-				45B3358C2B71E0EE008C037B /* 01_flag_Hokkaido.png */,
-				45F6B6B02B63D0D200931EEB /* mie.geojson */,
-			);
-			path = japan;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1657,10 +2120,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2D004BB9934111F64F272B4 /* HistoricalFlagCredits.json in Resources */,
-				6ED5C888898A5AF3B66B696F /* TimeMachinePlates.json in Resources */,
-				3B3ECBEEFA64C511D001DC1F /* TimeMachineEras.json in Resources */,
-				D08E62B65CF41586E213DB21 /* geo_TIMEMACHINE.json in Resources */,
+				0AF86193E93E5A3AE516B349 /* JapanFlagCredits.json in Resources */,
+				D551872FA22FC9482E9A8EFF /* PrivacyInfo.xcprivacy in Resources */,
 				45F6B6A92B63D05B00931EEB /* Preview Assets.xcassets in Resources */,
 				0D984047A6284E6BE5A6DDE9 /* GermanyFlagCredits.json in Resources */,
 				F569A9F9BA378057F9416A5B /* FranceFlagCredits.json in Resources */,
@@ -1671,6 +2132,82 @@
 				B1E1743BDF5C9E7517C044BC /* KyrgyzstanFlagCredits.json in Resources */,
 				BF57B98349869A36A5563F68 /* geo_KG.json in Resources */,
 				D8021205F459E504FA1080C5 /* map_KG.json in Resources */,
+				8F082DD55D84073A9EA2F5B9 /* map_AU-WA.json in Resources */,
+				A5E17E9EB7A13748401E6143 /* map_AU-SA.json in Resources */,
+				6AA93C02E4B26351D724BCF6 /* map_AU-QLD.json in Resources */,
+				81B936A01DEFB327EFE36722 /* map_AU-VIC.json in Resources */,
+				85C5F23517B5722F2EC86D76 /* map_AU-NSW.json in Resources */,
+				D947D1BF42AE5972201BDE79 /* SolomonIslandsFlagCredits.json in Resources */,
+				6CCEE8350C6C250B772FB916 /* geo_SB.json in Resources */,
+				CAEF754F0973272C4166C5BA /* map_SB.json in Resources */,
+				B3BCF2369417C3E9CB1F656E /* VanuatuFlagCredits.json in Resources */,
+				CE52CADF0701C209D16B0A18 /* geo_VU.json in Resources */,
+				0004D2C38368969B60D12B8E /* map_VU.json in Resources */,
+				592F31B27D08B09A40D1577E /* NicaraguaFlagCredits.json in Resources */,
+				BB85B1F1F6E23E0C251B73E1 /* geo_NI.json in Resources */,
+				ACCB682E3D76F58501D25119 /* map_NI.json in Resources */,
+				4FE29C73EAA140AE766272FE /* geo_TT.json in Resources */,
+				F5CAF06DFFBA1246B0464857 /* map_TT.json in Resources */,
+				48FB8DCB31C4CE6986464B72 /* MyanmarFlagCredits.json in Resources */,
+				1D0497CAF703C3B86A77D6D4 /* geo_MM.json in Resources */,
+				FD50587B6909DC39C6A609C2 /* map_MM.json in Resources */,
+				5BFA06084B69F2F8E464A1C1 /* geo_WS.json in Resources */,
+				7B2E497624C35F5C5EE502C1 /* map_WS.json in Resources */,
+				01A0B941C8189860A6E65F9A /* geo_TO.json in Resources */,
+				1641C775A7C4FC3705BF4C4A /* geo_SEAS.json in Resources */,
+				32865E91E0F91333C19032E7 /* map_TO.json in Resources */,
+				4EBD670AA3F79F13B798FF89 /* geo_SR.json in Resources */,
+				D12555A83A184E00555EE61B /* map_SR.json in Resources */,
+				211CAE73377CDD9C3290160F /* geo_HT.json in Resources */,
+				9204765CF252196FF7EC032C /* map_HT.json in Resources */,
+				4CBE65040ACA1FFAE462914F /* geo_GY.json in Resources */,
+				59E5A6D844F8A176DF6FC502 /* map_GY.json in Resources */,
+				CA83BD8C539B8428CEFA3564 /* geo_BZ.json in Resources */,
+				EFB0E8AD3E9BBF63D532479D /* map_BZ.json in Resources */,
+				26F7C195AFCF119EEB5D3FDD /* PakistanFlagCredits.json in Resources */,
+				6F67488455431AE62D612632 /* geo_PK.json in Resources */,
+				DCAAEE8FF980B5321ADE8F8F /* map_PK.json in Resources */,
+				D0BE078B5D1F636CF8A1B6B8 /* geo_LB.json in Resources */,
+				8D3B6E66149BACC7E067C92A /* map_LB.json in Resources */,
+				0069A198036EEBDD7D8682D5 /* MoldovaFlagCredits.json in Resources */,
+				D0EDC0B407E26AD8DA797DDA /* geo_MD.json in Resources */,
+				46B7010F515C85DA11FD8B57 /* map_MD.json in Resources */,
+				79E177ADA4BE8DEC4AF21474 /* geo_TJ.json in Resources */,
+				66BA5BBDBD13BA1B2FEA9755 /* map_TJ.json in Resources */,
+				E36FBED640BC67643C1468A9 /* GeorgiaFlagCredits.json in Resources */,
+				0D7D41748F48FBE335BC71AC /* geo_GE.json in Resources */,
+				902C30D2A1826B654EC50095 /* map_GE.json in Resources */,
+				D3B86CD6C09208C061F44601 /* map_GB-NIR.json in Resources */,
+				AE9482E86A3CAD7C2C220A54 /* map_GB-WLS.json in Resources */,
+				0D8F3DA6BAA61D1228B475DA /* map_GB-SCT.json in Resources */,
+				01D0AC314BDD990ECD4C7FC7 /* map_AU-NT.json in Resources */,
+				C0AAFD7D8B34AA4E933A6A2F /* map_AU-TAS.json in Resources */,
+				B85AEF3A3A4D306E33F6D201 /* geo_VN.json in Resources */,
+				4E160D6F24274F6B3D7EF6D6 /* map_VN.json in Resources */,
+				94EEECCAA5FFB1953F551C3F /* geo_BN.json in Resources */,
+				43786123E4DCFE96FECD8F3E /* map_BN.json in Resources */,
+				0A976D171944FF3BD3E4BC18 /* geo_AF.json in Resources */,
+				70C135618E21DB767CF740C7 /* map_AF.json in Resources */,
+				0DD01130ADB934DBB467EDDC /* geo_BW.json in Resources */,
+				6458E48D9691295F2745A544 /* map_BW.json in Resources */,
+				712DF42BF3512B22CA98B9E6 /* geo_CM.json in Resources */,
+				966FED8390AEDAC2D7128B59 /* map_CM.json in Resources */,
+				FF499BB85A5655E0163593C9 /* geo_MZ.json in Resources */,
+				0F3D1E4602C1408439D3E551 /* map_MZ.json in Resources */,
+				DC2D65A71D24CAB9AA5EF355 /* geo_ZW.json in Resources */,
+				879C458E4DD6CF5A23295F9E /* map_ZW.json in Resources */,
+				23FE28093FF07A5B908396F5 /* geo_ZM.json in Resources */,
+				35566B2AADC73804331FE471 /* map_ZM.json in Resources */,
+				B9099BD9F8F70B1DB9235204 /* map_ES-PV.json in Resources */,
+				4C562B7DD17362C684471C9F /* map_ES-GA.json in Resources */,
+				21F196EDEF2CB8332DEB399E /* map_ES-EX.json in Resources */,
+				50C7AAAA232A7C49338CF8E0 /* map_ES-VC.json in Resources */,
+				79DDA5E3EDD2942B8104D927 /* map_ES-CT.json in Resources */,
+				F7D34EB07A879A213F723F98 /* map_ES-CM.json in Resources */,
+				00F568FEF6524C6293B84AC1 /* map_ES-CL.json in Resources */,
+				A223D56DA8445BB683E40B8E /* map_ES-CN.json in Resources */,
+				079219A44855D85A2B6FD567 /* map_ES-AR.json in Resources */,
+				BAFBB82BADFC9EF81BE8789A /* map_ES-AN.json in Resources */,
 				8DFCF21EF6B8CF73FA84FEA5 /* UzbekistanFlagCredits.json in Resources */,
 				6FE72A3D2F2BEFBD908190C0 /* geo_UZ.json in Resources */,
 				B66356905ECC436EA7361CC0 /* map_UZ.json in Resources */,
@@ -1873,6 +2410,7 @@
 				864ED87B6CB86FDBCA00331B /* geo_GR.json in Resources */,
 				59E2542A24D7D6555AE3B9CE /* geo_GB.json in Resources */,
 				137F9482CC53E7B753298CA1 /* geo_FR.json in Resources */,
+				8BF245B930E8956873E9464C /* geo_FR-departments.json in Resources */,
 				E21611FDF99D485974F28095 /* geo_FI.json in Resources */,
 				39FCBCDB8736693AF5946C5F /* geo_ES.json in Resources */,
 				775CE192C2C8ACF634E1C474 /* geo_DK.json in Resources */,
@@ -1923,6 +2461,7 @@
 				BA801F4F6F9AC5DAB17083E0 /* map_ID.json in Resources */,
 				F886BEF8CE3626D76ABD9A0C /* map_GB.json in Resources */,
 				88CF0F08B9DC19A353A6C149 /* map_FR.json in Resources */,
+				F8D67C32A2473A29A507F2CF /* map_FR-departments.json in Resources */,
 				955F6EA501AA1E8896ED6C6D /* map_ES.json in Resources */,
 				6A2BF977A5200543CB558BF4 /* map_DE.json in Resources */,
 				07AAE07896173E97BD6DB53A /* map_CN.json in Resources */,
@@ -1942,8 +2481,6 @@
 				98274C826361BD25AF0F2157 /* SpainFlagCredits.json in Resources */,
 				1080FD47414BC125F0194962 /* ItalyFlagCredits.json in Resources */,
 				45F6B6A62B63D05B00931EEB /* Assets.xcassets in Resources */,
-				45B3358D2B71E0EE008C037B /* 01_flag_Hokkaido.png in Resources */,
-				45F6B6B12B63D0D200931EEB /* mie.geojson in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1954,28 +2491,51 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3FFFDE1AC1E34263BCDA27E9 /* TimeMachineScrubberBar.swift in Sources */,
-				EE89DD0D20C32AC5C521D0DC /* TimeMachineEvents.swift in Sources */,
-				0ABD2EA9B13C748C4D11AD23 /* TimeMachineStage.swift in Sources */,
-				F7EB56988C05804FCB60E2F2 /* TimeMachineHeader.swift in Sources */,
-				1002708465DAC30E47FC3374 /* TimeMachineAboutView.swift in Sources */,
-				449E2035310581FCFA76A14C /* TimeMachineScreen.swift in Sources */,
-				1D9A4E326C2211F5708C12CE /* HistoryMapOverlay.swift in Sources */,
-				FD24B21D21F1F0A4E4E93CE3 /* TimeStack.swift in Sources */,
-				1A19FDBA1E02AC0D67D1841F /* HistoryEventCard.swift in Sources */,
-				281D5669714FC28C42C6AE63 /* TimeMachineModel.swift in Sources */,
-				D882B4D9A1EF5B99C312548B /* TimeScrubber.swift in Sources */,
-				6147142487C6ADE2BE1433A9 /* SpaceBackdrop.swift in Sources */,
-				66C29EB026492E492EF1AF06 /* DeepTimeGlobe.swift in Sources */,
-				FBB8918BB7B40503381064AC /* HistoryMapCanvas.swift in Sources */,
-				273909F75BB6D300A537C149 /* HistoryMapGeometry.swift in Sources */,
-				DF23D7633813F5167F3AACC6 /* DeepTime.swift in Sources */,
-				5759A753C1B3BEDCEDC2DAF4 /* HistoryColor.swift in Sources */,
-				199491CF9226179B465324BD /* HistoricalPolity.swift in Sources */,
-				7EE0D9C6D077CCCE0F8A7FE5 /* HistoricalEra.swift in Sources */,
-				BED91B896CF3DBF820E1950D /* TimeMachineAtlas.swift in Sources */,
+				603B2A90A920D2A58EF575EC /* FlagThumbnail.swift in Sources */,
+				B21C837A0D085909114A6594 /* LocalNameLanguage.swift in Sources */,
+				EE6C4CA25A4BF8E0CBE26204 /* GameModeSetup.swift in Sources */,
+				EF27F5ECA037401EE84797DA /* GameListAllCard.swift in Sources */,
+				98A5E48792E8538A455A8A91 /* GamePictureChoices.swift in Sources */,
+				537BA725C6AABB20E6F23E61 /* Starfield.metal in Sources */,
+				00D0C9BF58AD1B9995A00E2E /* SpaceGlobe.swift in Sources */,
+				12CAA49DAA2CCF35885C9E60 /* TimeZoneAtlas.swift in Sources */,
+				5D7DDC247592C6B796045F6B /* ClockWords.swift in Sources */,
+				920761E71E303D7C234BA48E /* TimeGlide.swift in Sources */,
+				0C182FB3A341197E8E3C12DF /* TimeLabel.swift in Sources */,
+				54B1EBD150A035065897C60E /* WorldTimeScreen.swift in Sources */,
+				28C0FC70D86740427044F3DE /* WorldTimeDial.swift in Sources */,
+				4D1457B86258888B9EDD00E2 /* WorldTimeSky.swift in Sources */,
+				5CDDAEE00B452E5E19A174C2 /* WorldTimeSky.metal in Sources */,
+				8087FBD7C58BF2B1131682B2 /* WorldTimeCard.swift in Sources */,
+				6777C641A7B002711A18B5A6 /* CurlingWorld.swift in Sources */,
+				32EEE1FF7175FE6C72D34CB5 /* ZoneClock+Names.swift in Sources */,
+				565FA08FF92DB971345A1089 /* TimeZoneAtlas+Subdivisions.swift in Sources */,
+				2209ACE4F8AF1A0071D860CF /* ZoneHistory.swift in Sources */,
+				D7ABD58B1AA252683CC9671E /* ZoneFacts.swift in Sources */,
+				EBA3910012B23BED2DEDB6BD /* SeaZones.swift in Sources */,
+				D207AECB39864908B79A9374 /* AtlasPlaceList.swift in Sources */,
+				E7364D5C1D8BEDC790C848E4 /* PlugGallery.swift in Sources */,
+				4BEFE7D986B93C4A12DE6070 /* VoltageKey.swift in Sources */,
+				F72152AC86682A5E3A4989A4 /* DrivingSideKey.swift in Sources */,
+				F0F77F5E77DF109043B9621B /* AtlasKeyTile.swift in Sources */,
+				6CC1AAE54E668206108800EC /* AtlasKeyEntry.swift in Sources */,
+				6E75650D4259711017CC1F2F /* MapFactRow.swift in Sources */,
+				A4E750494FBCE5175A8751CE /* WorldLayerControls.swift in Sources */,
+				BF303A86E89E762CD1998817 /* Antipodes.swift in Sources */,
+				DD7F4656DE251631B1120B7E /* LatitudeLines.swift in Sources */,
+				73E24F3672A0B73DDF601980 /* PlugFace.swift in Sources */,
+				338304592313C14F2CBA197D /* MainsPower.swift in Sources */,
+				58608A1163542473F377A9E8 /* PlugType.swift in Sources */,
+				52EB0C6E3C6413EA4017EC6C /* DrivingSide.swift in Sources */,
+				43FABBF30E9321FF1E6EF0AD /* MapColouring.swift in Sources */,
+				106ED70497A5A7AC12D55F0F /* WorldLayers.swift in Sources */,
+				A2487E42D7748786F9D2DA65 /* WorldTimeMap.swift in Sources */,
+				D6347E246084670D11F93E2A /* TimeZoneBand.swift in Sources */,
+				F6A506BFEC9D92AA64695269 /* ZoneChoices.swift in Sources */,
+				EB6A80DF96022367BCA389C4 /* WelcomeView.swift in Sources */,
+				882D28DE6FFB62CEE41B37B3 /* WelcomePlaceBar.swift in Sources */,
+				D57AF942BA880D46C830BDA1 /* PlaceSearch.swift in Sources */,
 				45F6B6B32B63DAAC00931EEB /* Prefecture.swift in Sources */,
-				45FB0A3B2B70C6EA00517EF0 /* HomeView.swift in Sources */,
 				45F6B6A42B63D05A00931EEB /* ContentView.swift in Sources */,
 				45B3358F2B71FA26008C037B /* VisitPillView.swift in Sources */,
 				4552E7672B64CFD600EEB0F0 /* SaveModel.swift in Sources */,
@@ -2006,6 +2566,43 @@
 				DC67278C983B88DD0C037197 /* ChinaCatalog.swift in Sources */,
 				4FB3FD75C7B3BA12AB51E7A3 /* PlaceReorganisation.swift in Sources */,
 				DA4B4D516BF6E083CF0EB918 /* KyrgyzstanCatalog.swift in Sources */,
+				4653E4142BA35348841A16D1 /* TravelMap+Parent.swift in Sources */,
+				22288ACD4D27D169618DBB49 /* SolomonIslandsCatalog.swift in Sources */,
+				01EB15BEBE675F544C83734D /* VanuatuCatalog.swift in Sources */,
+				84CDAB6899F2D0AEF430D3F1 /* NicaraguaCatalog.swift in Sources */,
+				F52E932F8A5DF0E26196DAC2 /* TrinidadAndTobagoCatalog.swift in Sources */,
+				857FCC8436CFCB8C32A89CBA /* MyanmarCatalog.swift in Sources */,
+				9184DEC3D7EE1B4588E2E724 /* SamoaCatalog.swift in Sources */,
+				AFF5146C955C74E3CB754AD1 /* TongaCatalog.swift in Sources */,
+				C50BD6AF347BA232A43FFAA4 /* CoastsKey.swift in Sources */,
+				7FA6FD09C8CFA60838927D5E /* CoastKey.swift in Sources */,
+				61D834C03BCDEBC40C92B017 /* SeasSettingsView.swift in Sources */,
+				3902D06054E614B28246450F /* CoastsView.swift in Sources */,
+				F1CAFAF7300731A58C89B773 /* SeaCoasts.swift in Sources */,
+				D20F804734C9746C0FE6F108 /* SeasCatalog.swift in Sources */,
+				54E9743B97CFBBC9CA8875D8 /* SurinameCatalog.swift in Sources */,
+				F872A379E7B86813F1E5DE6D /* HaitiCatalog.swift in Sources */,
+				375B854EB9D7FC274819F988 /* GuyanaCatalog.swift in Sources */,
+				619D24E7489BFDB27696A01F /* BelizeCatalog.swift in Sources */,
+				3CF436CDCEB46179C49215D0 /* PakistanCatalog.swift in Sources */,
+				41774E649962111B0EB651BF /* LebanonCatalog.swift in Sources */,
+				DD8C91E4E6B079223CEA2E87 /* MoldovaCatalog.swift in Sources */,
+				FCF4B42CB99D89EA128FC2C3 /* TajikistanCatalog.swift in Sources */,
+				AF45910B77A6D2D6C13DF38D /* GeorgiaCatalog.swift in Sources */,
+				D052AD52D39B6865C8D6A01E /* UnitedKingdomCouncilsCatalog.swift in Sources */,
+				EC3F1EB8A403EAFEC23826A1 /* AustraliaLocalGovernmentCatalog.swift in Sources */,
+				CEED6003E057C43E97B1FA83 /* VietnamCatalog.swift in Sources */,
+				FC6FB3D0A0D781B6ACEEEE93 /* BruneiCatalog.swift in Sources */,
+				5D74DB7C4B9BA3DDA553F150 /* AfghanistanCatalog.swift in Sources */,
+				423CABBDDDCF714096ED5B7E /* BotswanaCatalog.swift in Sources */,
+				E5B624467561B09C6BD1BA77 /* CameroonCatalog.swift in Sources */,
+				B45C5FAAEA978193D042C2B8 /* MozambiqueCatalog.swift in Sources */,
+				B1663718899E939919B41819 /* ZimbabweCatalog.swift in Sources */,
+				1D92883EB19F9E7309F7C287 /* ZambiaCatalog.swift in Sources */,
+				9387E30B90AB31753F3E018C /* SpainProvincesCatalog.swift in Sources */,
+				5982479BEF52BB10535DA2F9 /* SubdivisionCatalog.swift in Sources */,
+				9DC65B503A400CCFCCD45C72 /* SubdivisionLevels.swift in Sources */,
+				EFC69894147DFAD47B66716A /* LevelCard.swift in Sources */,
 				8EEDB549D59F75BB222D66AC /* UzbekistanCatalog.swift in Sources */,
 				FF6BB34D5BF36E663DC269A6 /* KazakhstanCatalog.swift in Sources */,
 				096D5348393FFC2466B11DE8 /* ArmeniaCatalog.swift in Sources */,
@@ -2085,13 +2682,16 @@
 				A4ADF2971E922290D35CD17D /* SwedenCatalog.swift in Sources */,
 				A6E9BFB820E5F1002F265116 /* IrelandCatalog.swift in Sources */,
 				B28F4270C755C15674131E79 /* CelebrationBurst.swift in Sources */,
+				A1E5C0DE5C4EE0EF00000001 /* ScreenEffects.swift in Sources */,
 				DDBD23578501B7B04E6C27C9 /* WorldMapPreview.swift in Sources */,
 				9437FF9FDBA4208CED62DD84 /* PinnedMapView.swift in Sources */,
 				03C4201D18F7976852CC47E0 /* FoldRegions.swift in Sources */,
+				4AD86DDDBC92EF376AA6154A /* ToolbarContent+Overflow.swift in Sources */,
 				4EBAABFD89DB97D2300724B7 /* MapCenter.swift in Sources */,
 				EC443B2A131F7ADC6FA4EA77 /* Geography.swift in Sources */,
 				A71F4D49D4F1C87107E90E25 /* MapProjection.swift in Sources */,
 				408F4D0E890F14355142FD16 /* MapNavigator.swift in Sources */,
+				EE75E21C50DFBCFEF5CBAFD7 /* MapLayerChooser.swift in Sources */,
 				1EBB601CF37ED8E2E9AD3DD6 /* MapPanel.swift in Sources */,
 				7CFF23CBC13EDE180C432568 /* MapCallout.swift in Sources */,
 				4BFF78F7EEC0046C9BADBFFF /* VisitedNamesView.swift in Sources */,
@@ -2124,6 +2724,9 @@
 				104A6798CBB27E6AF14FA983 /* CollectionArrival.swift in Sources */,
 				BDB539747F12EC812FDF097F /* CapitalCities.swift in Sources */,
 				F72BC91980FC959408649FD1 /* GameLearnCard.swift in Sources */,
+				A09D065A947BBCA23A6E6F4D /* LearnSearchSheet.swift in Sources */,
+				E6202DCC58D05139064D5062 /* LearnDeck.swift in Sources */,
+				C106ABD690E8F374BE25E4AC /* LearnSearch.swift in Sources */,
 				267DCFB84EF9B074974DE440 /* MapGame.swift in Sources */,
 				BC4BA7A3F034A16B3139C66A /* MapGameMode.swift in Sources */,
 				3603FF880377B4F8169A8A7E /* MapGameLength.swift in Sources */,
@@ -2149,11 +2752,18 @@
 				AE6825FEE65BACBE062E2258 /* TravelSnapshot.swift in Sources */,
 				C7A523CA8BCF0B5E8AEC76A0 /* VisitPillLabel.swift in Sources */,
 				CEBF9F3015852A3278B4ACB9 /* PillButtonStyle.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5C /* TravelsKey.swift in Sources */,
+				8DCE95BB33ED0D2B5255E580 /* StatesVisibilityView.swift in Sources */,
+				23E846E5194F9094C4433342 /* AtlasBookIndex.swift in Sources */,
+				7E540217F28512BC33ED61FD /* AtlasBook.swift in Sources */,
+				D8299CEAB506C9E8F91DF1BF /* AtlasBookPager.swift in Sources */,
+				1A1634D867BB73226163B674 /* AtlasBookPage.swift in Sources */,
+				505F1FA021AAE548A23134AA /* FadingCardGrid.swift in Sources */,
+				322DB75E3A2BFEEC35025265 /* PlaceChoiceCard.swift in Sources */,
 				A6747F0D3E2952AE6A12D8B9 /* PopEffect.swift in Sources */,
 				63A91734BC42AF1192C08D5C /* StripeOverlay.swift in Sources */,
 				24F86273C9F001871708AECD /* StatusTallyBar.swift in Sources */,
 				2CD1DCF7A9F1CBA8C79FD940 /* TravelTotalView.swift in Sources */,
-				49BEAC856C36E9D7DA58C551 /* StatusLadder.swift in Sources */,
 				F224AC2991C9AC87AA94C756 /* VisitLevel.swift in Sources */,
 				A42703769DA41A0111023405 /* VisitLadder.swift in Sources */,
 				D1EF710ACF1CD26FB79CC680 /* LevelColor.swift in Sources */,
@@ -2168,6 +2778,16 @@
 				B6A1FD3707F0E0D9DFCDC728 /* WorldGroup.swift in Sources */,
 				F5986755D07F45815D9BAD40 /* ScrollingName.swift in Sources */,
 				AEAC7BB6EB2CE57F542A729D /* WorldGroupBadge.swift in Sources */,
+				93583ED045486D7C084CEE06 /* CustomWorldGroup.swift in Sources */,
+				57046A1FD1072CFE088F9F5A /* CustomWorldGroups.swift in Sources */,
+				6551A5CC31EF694A7CF081B0 /* CustomGroupDraft.swift in Sources */,
+				69D61E4DE48F767C561B6997 /* GroupPlaceChoices.swift in Sources */,
+				8ECB3723AFD39CEDC8E734FC /* CustomGroupEditor.swift in Sources */,
+				AE098968AE3ACF3D90A3722D /* GroupEmblemPicker.swift in Sources */,
+				1F3B453E37F276C88281793E /* AppReset.swift in Sources */,
+				1D76956DB5607570F4643811 /* GroupFlag.swift in Sources */,
+				FD08B4103BFBD500C580AE14 /* HiddenWorldGroups.swift in Sources */,
+				5970A600D3E55600A3A5C3C7 /* WorldGroupsSettingsView.swift in Sources */,
 				CC82D1BF9D740FD16DF8A6FD /* JapanEx.swift in Sources */,
 				B3EB9F97C4F1B59584B91856 /* PrivacyPolicyView.swift in Sources */,
 				25E4782BA05C7ACB7FB53670 /* FlagWave.metal in Sources */,
@@ -2311,12 +2931,13 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"jpex/Preview Content\"";
 				DEVELOPMENT_TEAM = 58QL7E6Z98;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Prefectures;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -2326,7 +2947,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = itemic.jpex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2342,12 +2963,13 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"jpex/Preview Content\"";
 				DEVELOPMENT_TEAM = 58QL7E6Z98;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Prefectures;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -2357,7 +2979,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = itemic.jpex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -59,8 +59,9 @@ struct StatusTallyBar: View {
             .background(Color.secondary.opacity(0.15))
             .clipShape(Capsule())
         }
-        .animation(.smooth, value: tally)
-        .animation(.smooth, value: minimumStatus)
+        // On the count's own spring, so the bar and the number beside it land together.
+        .animation(Motion.count, value: tally)
+        .animation(Motion.count, value: minimumStatus)
         .onChange(of: isComplete) { _, complete in
             if complete && !reduceMotion { shines += 1 }
         }

@@ -18,6 +18,11 @@ struct AdministrativeDivision: Identifiable, Hashable, Sendable {
     /// A one-character short name, such as 京 for Beijing, as on China's licence plates.
     var shortName: String? = nil
 
+    /// The place one level up in its own country that this one lies within, such as Île-de-France
+    /// for Paris. It rises with this place, as a country does with its places. Nil for a country's
+    /// first-level places, which belong to the country itself.
+    var parentID: String? = nil
+
     func displayName(localLanguage: Bool) -> String {
         localLanguage ? (localName ?? name) : name
     }

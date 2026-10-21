@@ -92,8 +92,6 @@ struct AppIcon: Identifiable, Hashable, RawRepresentable {
     self == Self.taiwan ? region != .chinaMainland : true
   }
 
-  var isJapan: Bool { collection == .japan }
-
   /// The alternate icon's name in the asset catalog; nil for the primary icon.
   var alternateIconName: String? {
     self == .japan ? nil : "AppIcon-\(rawValue)"

@@ -48,9 +48,7 @@ struct RegionJumpView: View {
                                 .scaleEffect(hasAppeared || reduceMotion ? 1 : 0.84)
                                 .offset(y: hasAppeared || reduceMotion ? 0 : 10)
                                 .animation(
-                                    reduceMotion
-                                        ? .easeOut(duration: 0.2)
-                                        : .bouncy(duration: 0.5, extraBounce: 0.12).delay(min(Double(index) * 0.022, 0.4)),
+                                    reduceMotion ? Motion.still : Motion.arrive.delay(Motion.stagger(index)),
                                     value: hasAppeared)
                         }
                     }
@@ -125,7 +123,8 @@ struct RegionJumpView: View {
                     .font(.caption2)
                     .foregroundStyle(tint)
                     .padding(4)
-                    .symbolEffect(.bounce, value: hasAppeared)
+                    // Bounces as the tiles arrive; with Reduce Motion, holds still.
+                    .symbolEffect(.bounce, value: reduceMotion ? false : hasAppeared)
             }
         }
     }
@@ -133,17 +132,18 @@ struct RegionJumpView: View {
     private func regionTile(for region: RegionSummary, tint: Color) -> some View {
             VStack(alignment: .leading, spacing: 6) {
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text(region.name)
-                        .placeName(region.language)
-                        .font(.subheadline.weight(.medium))
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    // One line, so every tile stands the same height; a long name glides instead of wrapping.
+                    ScrollingText {
+                        Text(region.name)
+                            .placeName(region.language)
+                            .font(.subheadline.weight(.medium))
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     if region.isComplete {
                         Image(systemName: "checkmark.seal.fill")
                             .font(.footnote)
                             .foregroundStyle(tint)
-                            .symbolEffect(.bounce, value: hasAppeared)
+                            .symbolEffect(.bounce, value: reduceMotion ? false : hasAppeared)
                     }
                 }
                 Text("\(region.counted) / \(region.total)")

@@ -9,7 +9,8 @@ struct GameSpotlight: Equatable {
         case answer
         /// A place lighting up and fading once in the lobby, as a taste of the game.
         case twinkle
-        /// A dot marking a place, in Dot, with nothing else of it lit.
+        /// A dot marking a place, with nothing else of it lit: the place in question in Dot, and in
+        /// Find with the borders hidden, where the place waiting to be confirmed was tapped.
         case marker
     }
 
@@ -28,8 +29,19 @@ struct GameSpotlight: Equatable {
     var marker: CGPoint?
     /// The place's name, floating beside it while it twinkles.
     var caption: Caption?
-    /// When a twinkle began. Places in question and answers stay lit.
+    /// When a twinkle began, or when a marker's dot dropped in, for it to land and send a ring out.
+    /// Places in question and answers stay lit.
     var start: Date?
+    /// When the light came on: an answer's glow, such as a place chosen in Find or an answer just
+    /// given, or the place in question's candy, as the camera lands on it. Until then the place
+    /// stays dark; from then it comes up over a marker's drop and sends one ring out as it lands,
+    /// as the dot does, rather than appearing; nil once it's up, and it simply stays lit.
+    var litAt: Date?
+
+    /// How long a marker's dot takes to drop in and land: a quick swell past its size and a settle.
+    static let markerDrop: TimeInterval = 0.35
+    /// How long the ring a marker sends out on landing takes to spread and fade.
+    static let markerRing: TimeInterval = 0.6
 
     /// A city marked with a dot and its name.
     struct City: Equatable {

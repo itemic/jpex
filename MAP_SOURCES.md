@@ -51,7 +51,8 @@ Thresholds are in canvas units: square units for areas, with 1000 units across t
 | AU | 16 | 88.9 KB | 1000 × 955.2 | 4.09 | 0.15 | 0.6 ≈ 10 | 4 | Albers (18°/36°S, 132°E; EPSG:3577 parameters) |
 | CA | 13 | 150.9 KB | 1000 × 862.6 | 5.43 | 0.45 | 3.0 ≈ 89 | 4 | Lambert conformal conic (Statistics Canada, EPSG:3347 parameters) |
 | CN | 34 | 170.7 KB | 1000 × 839.6 | 4.94 | 0.30 | 1.0 ≈ 24 | 4 | Albers (25°/47°N, 105°E) |
-| FR | 101 | 161.9 KB | 1000 × 907.2 | 1.20 | 0.45 | 0.6 ≈ 0.9 | 4 | Lambert-93 parameters |
+| FR | 18 | 73.6 KB | 1000 × 907.2 | 1.20 | 0.45 | 0.6 ≈ 0.9 | 4 | Lambert-93 parameters (departments merged by region) |
+| FR-departments | 101 | 161.9 KB | 1000 × 907.2 | 1.20 | 0.45 | 0.6 ≈ 0.9 | 4 | Lambert-93 parameters |
 | DE | 16 | 109.4 KB | 742.8 × 1000 | 0.89 | 0.12 | 0.8 ≈ 0.6 | 4 | Lambert conformal conic (48.67°/53.67°N, 10.5°E) |
 | IT | 20 | 82.3 KB | 762.4 × 1000 | 1.31 | 0.12 | 0.8 ≈ 1.4 | 4 | Lambert conformal conic (38°/46°N, 12.5°E) |
 | ES | 19 | 90.1 KB | 1000 × 930.5 | 1.17 | 0.15 | 0.6 ≈ 0.8 | 4 | Lambert conformal conic (37°/43°N, 3.5°W) |
@@ -113,7 +114,8 @@ All other maps have no insets.
     - It is NE's Taiwan subunit (Taiwan, Penghu, Kinmen, Green and Orchid Islands) plus the Matsu Islands (Nangan, Beigan, Juguang, Dongyin) from NE's minor-islands layer.
     - It uses the same Albers projection and transform as the CN regions, so it lines up with Fujian. Kinmen and Matsu are protected from islet removal.
     - It is inserted in area order (position 28 of 34). Every other region is byte-for-byte unchanged, and the canvas did not change.
-- **FR.** Overseas codes were mapped: GP→971, MQ→972, GF→973, RE→974, YT→976. Lac Léman is cut out.
+- **FR.** Overseas codes were mapped: GP→971, MQ→972, GF→973, RE→974, YT→976. Lac Léman is cut out. These department outlines are now `map_FR-departments.json` and `geo_FR-departments.json`, for France's departments list (16 October 2026).
+  - `map_FR.json` and `geo_FR.json` hold France's 18 regions. They are the department outlines dissolved by region (Shapely `unary_union`), which is exact because neighbouring departments share every border point. No points were added or simplified away. The five overseas regions are each a single department and keep that department's outline, label point and ID (`FR-971`…`FR-976`). Metropolitan regions use ISO 3166-2 IDs (`FR-ARA`…`FR-PAC`, `FR-20R` for Corsica), with the label at the pole of inaccessibility of the largest part. Insets and canvas are unchanged. The Enclave des Papes stays a hole in Auvergne-Rhône-Alpes, filled by Provence-Alpes-Côte d'Azur. The Hautes-Pyrénées exclaves stay with Occitanie.
 - **IT, ES, GB.** Dissolved from NE provinces or units: Italy by NE's region code, Spain by autonomous community (Ceuta and Melilla stay separate), and the UK by `geonunit`. Lakes cut out: Garda, Trasimeno and others in Italy; Lough Neagh in the UK.
 - **DE, AT, CH, NL, BE, PL.** Straight from NE. PL letter codes were mapped to the numeric ISO codes PL-02…PL-32. The NL Caribbean special municipalities are excluded. Lakes cut out: Bodensee, Müritz, the Swiss lakes, the IJsselmeer and Markermeer, and the Masurian lakes.
 - **US.**

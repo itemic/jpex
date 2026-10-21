@@ -12,7 +12,15 @@ struct LevelEditorView: View {
   @FocusState private var isNameFocused: Bool
   @Environment(\.dismiss) private var dismiss
   @Environment(\.visitLadder) private var ladder
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @ScaledMetric(relativeTo: .body) private var swatchSize = 38
+  /// One rise per change of colour, symbol or pattern, for the preview pill to hop at.
+  @State private var hops = 0
+  /// Counts each Done on a name another level already has, for the field to shake and buzz.
+  @State private var rejections = 0
+  /// For each grid's selection mark to glide from one choice to the next, or with Reduce Motion,
+  /// to fade from the one to the other where each stands.
+  @Namespace private var marks
 
   private static let maximumNameLength = 24
 
@@ -56,7 +64,7 @@ struct LevelEditorView: View {
   /// The pill as places will show it.
   private var preview: VisitLevel {
     var level = draft
-    if !isNameValid { level.name = saved?.name ?? "New Level" }
+    if !isNameValid { level.name = saved?.name ?? "New level" }
     return level
   }
 
@@ -70,17 +78,45 @@ struct LevelEditorView: View {
         VStack(spacing: 18) {
           VisitPillLabel(status: preview)
             .dynamicTypeSize(.xxxLarge ... .accessibility3)
+            // Each change lifts the pill a little and lets it settle, as if trying the new look on.
+            .keyframeAnimator(initialValue: PillHop(), trigger: hops) { pill, hop in
+              pill
+                .scaleEffect(hop.scale)
+                .rotationEffect(.degrees(hop.tilt))
+                .offset(y: hop.lift)
+            } keyframes: { _ in
+              KeyframeTrack(\.scale) {
+                SpringKeyframe(1.14, duration: 0.14, spring: .snappy)
+                SpringKeyframe(1, duration: 0.5, spring: .bouncy)
+              }
+              KeyframeTrack(\.lift) {
+                SpringKeyframe(-6, duration: 0.14, spring: .snappy)
+                SpringKeyframe(0, duration: 0.5, spring: .bouncy)
+              }
+              KeyframeTrack(\.tilt) {
+                SpringKeyframe(-4, duration: 0.12, spring: .snappy)
+                SpringKeyframe(3, duration: 0.14, spring: .snappy)
+                SpringKeyframe(0, duration: 0.4, spring: .bouncy)
+              }
+            }
             .accessibilityHidden(true)
-          TextField("Level Name", text: $draft.name)
+          TextField("Level name", text: $draft.name)
             .font(.title3.weight(.semibold))
             .multilineTextAlignment(.center)
             .textInputAutocapitalization(.words)
             .submitLabel(.done)
             .focused($isNameFocused)
-            .onSubmit(commit)
+            .onSubmit {
+              // A name another level has can't be used, so rather than nothing happening, the
+              // field shakes its head.
+              if isTaken { rejections += 1 }
+              commit()
+            }
             .padding(.vertical, 12)
             .padding(.horizontal)
             .background(.fill.tertiary, in: .rect(cornerRadius: 12))
+            .shake(on: rejections, amplitude: 8)
+            .sensoryFeedback(.error, trigger: rejections)
         }
         .padding(.vertical, 8)
       } footer: {
@@ -114,16 +150,17 @@ struct LevelEditorView: View {
         .padding(.vertical, 4)
       } header: {
         Text("Pattern")
-      } footer: {
-        Text("Shown over the colour when Level Patterns is on, so levels differ by more than colour. Automatic gives each level its own.")
       }
     }
-    .navigationTitle(saved == nil ? "New Level" : "Edit Level")
+    .navigationTitle(saved == nil ? "New level" : "Edit level")
+    // A new level named but not yet added isn't lost to a swipe down of Settings; Back still leaves it.
+    .interactiveDismissDisabled(saved == nil && !trimmedName.isEmpty)
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       if saved == nil {
+        // With a symbol as well as its title, so on iPhone Duo it can join the side bar.
         ToolbarItem(placement: .confirmationAction) {
-          Button("Add") {
+          Button("Add", systemImage: "checkmark") {
             var level = draft
             level.name = trimmedName
             onSave(level)
@@ -138,9 +175,9 @@ struct LevelEditorView: View {
         draft.name = String(draft.name.prefix(Self.maximumNameLength))
       }
     }
-    .onChange(of: draft.tint) { commit() }
-    .onChange(of: draft.symbolName) { commit() }
-    .onChange(of: draft.pattern) { commit() }
+    .onChange(of: draft.tint) { changedLook() }
+    .onChange(of: draft.symbolName) { changedLook() }
+    .onChange(of: draft.pattern) { changedLook() }
     .onChange(of: isNameFocused) {
       if !isNameFocused { commit() }
     }
@@ -169,7 +206,7 @@ struct LevelEditorView: View {
     let shown = style ?? automaticPattern
     let shape = RoundedRectangle(cornerRadius: 10, style: .continuous)
     return Button {
-      withAnimation(.snappy) { draft.pattern = style }
+      withAnimation(Motion.moving(Motion.hop, reduceMotion: reduceMotion)) { draft.pattern = style }
     } label: {
       VStack(spacing: 4) {
         ZStack {
@@ -189,9 +226,10 @@ struct LevelEditorView: View {
         .overlay {
           if isSelected {
             shape.inset(by: -3).strokeBorder(.secondary, lineWidth: 2.5)
+              .matchedGeometryEffect(id: markID("pattern", for: style?.rawValue ?? "auto"), in: marks)
           }
         }
-        .scaleEffect(isSelected ? 1 : 0.92)
+        .scaleEffect(isSelected || reduceMotion ? 1 : 0.92)
         ScrollingName(text: style?.name ?? "Automatic")
           .font(.caption2)
           .foregroundStyle(isSelected ? .primary : .secondary)
@@ -208,7 +246,7 @@ struct LevelEditorView: View {
   private func colourButton(_ tint: LevelColor) -> some View {
     let isSelected = draft.tint == tint
     return Button {
-      draft.tint = tint
+      withAnimation(Motion.moving(Motion.hop, reduceMotion: reduceMotion)) { draft.tint = tint }
     } label: {
       Circle()
         .fill(tint.color.gradient)
@@ -216,6 +254,7 @@ struct LevelEditorView: View {
         .overlay {
           if isSelected {
             Circle().strokeBorder(.secondary, lineWidth: 2.5)
+              .matchedGeometryEffect(id: markID("colour", for: tint.rawValue), in: marks)
           }
         }
         .frame(width: swatchSize, height: swatchSize)
@@ -230,19 +269,41 @@ struct LevelEditorView: View {
   private func symbolButton(_ symbol: SymbolChoice) -> some View {
     let isSelected = draft.symbolName == symbol.name
     return Button {
-      draft.symbolName = symbol.name
+      withAnimation(Motion.moving(Motion.hop, reduceMotion: reduceMotion)) { draft.symbolName = symbol.name }
     } label: {
       Image(systemName: symbol.name)
         .font(.body.weight(.semibold))
         .foregroundStyle(isSelected ? AnyShapeStyle(.white) : AnyShapeStyle(.secondary))
+        .symbolEffect(.bounce, value: reduceMotion || !isSelected ? nil : draft.symbolName)
         .frame(width: swatchSize, height: swatchSize)
-        .background(isSelected ? AnyShapeStyle(draft.color.gradient) : AnyShapeStyle(.fill.tertiary), in: .circle)
+        // The chosen symbol's disc of colour slides across to the next one picked, or with Reduce
+        // Motion, fades from the one to the other.
+        .background {
+          Circle().fill(.fill.tertiary)
+          if isSelected {
+            Circle().fill(draft.color.gradient)
+              .matchedGeometryEffect(id: markID("symbol", for: symbol.name), in: marks)
+          }
+        }
         .frame(maxWidth: .infinity, minHeight: 44)
         .contentShape(.rect)
     }
     .buttonStyle(.plain)
     .accessibilityLabel(symbol.label)
     .accessibilityAddTraits(isSelected ? .isSelected : [])
+  }
+
+  /// The ID a grid's selection mark shares across the grid, so it glides from one choice to the
+  /// next; with Reduce Motion, one of each choice's own, so nothing pairs up and the old mark
+  /// simply fades as the new one comes.
+  private func markID(_ grid: String, for choice: String) -> String {
+    reduceMotion ? "\(grid)-\(choice)" : grid
+  }
+
+  /// Saves the new look and gives the preview pill its hop.
+  private func changedLook() {
+    commit()
+    if !reduceMotion { hops += 1 }
   }
 
   /// Saves an existing level, keeping its saved name while the typed one can't be used.
@@ -286,6 +347,13 @@ struct LevelEditorView: View {
     SymbolChoice(name: "star.fill", label: "Star"),
     SymbolChoice(name: "heart.fill", label: "Heart"),
   ]
+}
+
+/// How far the preview pill has hopped: grown, lifted and tipped.
+private struct PillHop {
+  var scale = 1.0
+  var lift = 0.0
+  var tilt = 0.0
 }
 
 /// A symbol a level can use, with a name for VoiceOver.

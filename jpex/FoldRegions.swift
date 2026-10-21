@@ -9,6 +9,14 @@ struct FoldRegions: Equatable {
     /// Whether the fold runs across the screen, as when the device sits on a table.
     var isAcross: Bool
 
+    /// Two sides laid out by hand rather than measured from a fold, as when a wide page sets its map
+    /// beside its list the way a partly folded iPhone Duo does.
+    init(far: CGRect, near: CGRect, isAcross: Bool) {
+        self.far = far
+        self.near = near
+        self.isAcross = isAcross
+    }
+
     /// Nil unless the device is partially folded through this space.
     init?(in proxy: GeometryProxy) {
         let size = proxy.size

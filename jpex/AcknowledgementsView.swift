@@ -19,12 +19,56 @@ struct AcknowledgementsView: View {
       }
       Section {
         ForEach(FlagCreditSource.all) { source in
-          NavigationLink(source.title) {
+          NavigationLink {
             FlagCreditsView(title: source.title, resource: source.resource)
+          } label: {
+            ScrollingName(text: source.title)
           }
         }
       } header: {
-        Text("Maps and Flags")
+        Text("Maps and flags")
+      }
+      Section {
+        Link(destination: URL(string: "https://www.iana.org/time-zones")!) {
+          VStack(alignment: .leading, spacing: 4) {
+            Label("Time Zone Database", systemImage: "clock")
+              .font(.headline)
+            Text("World Time’s offsets and clock changes come from the IANA tz database built into your device.")
+              .font(.subheadline)
+              .foregroundStyle(.secondary)
+          }
+          .padding(.vertical, 4)
+        }
+        Link(destination: URL(string: "https://cldr.unicode.org")!) {
+          VStack(alignment: .leading, spacing: 4) {
+            Label("Unicode CLDR", systemImage: "character.book.closed")
+              .font(.headline)
+            Text("The time zones’ names in your language, such as Taiwan Standard Time, come from the Unicode Common Locale Data Repository.")
+              .font(.subheadline)
+              .foregroundStyle(.secondary)
+          }
+          .padding(.vertical, 4)
+        }
+      } header: {
+        Text("Time zones")
+      } footer: {
+        Text("Official names in their own languages are as each country’s timekeepers publish them.")
+      }
+      Section {
+        Link(destination: URL(string: "https://web.archive.org/web/20260816170935/https://www.iec.ch/world-plugs")!) {
+          VStack(alignment: .leading, spacing: 4) {
+            Label("IEC World Plugs", systemImage: "powerplug")
+              .font(.headline)
+            Text("The map’s plugs, voltages and frequencies come from the International Electrotechnical Commission’s World Plugs list, as it stood on 16 August 2026.")
+              .font(.subheadline)
+              .foregroundStyle(.secondary)
+          }
+          .padding(.vertical, 4)
+        }
+      } header: {
+        Text("Map layers")
+      } footer: {
+        Text("Places the list leaves out follow their own utilities and regulators. Driving sides follow each country’s traffic law.")
       }
     }
     .navigationTitle("Acknowledgements")
@@ -63,6 +107,7 @@ private struct FlagCreditSource: Identifiable {
     FlagCreditSource(title: "Estonia", resource: "EstoniaFlagCredits"),
     FlagCreditSource(title: "Finland", resource: "FinlandFlagCredits"),
     FlagCreditSource(title: "France", resource: "FranceFlagCredits"),
+    FlagCreditSource(title: "Georgia", resource: "GeorgiaFlagCredits"),
     FlagCreditSource(title: "Germany", resource: "GermanyFlagCredits"),
     FlagCreditSource(title: "Guatemala", resource: "GuatemalaFlagCredits"),
     FlagCreditSource(title: "Hungary", resource: "HungaryFlagCredits"),
@@ -70,6 +115,7 @@ private struct FlagCreditSource: Identifiable {
     FlagCreditSource(title: "Iraq", resource: "IraqFlagCredits"),
     FlagCreditSource(title: "Ireland", resource: "IrelandFlagCredits"),
     FlagCreditSource(title: "Italy", resource: "ItalyFlagCredits"),
+    FlagCreditSource(title: "Japan", resource: "JapanFlagCredits"),
     FlagCreditSource(title: "Kazakhstan", resource: "KazakhstanFlagCredits"),
     FlagCreditSource(title: "Kenya", resource: "KenyaFlagCredits"),
     FlagCreditSource(title: "Kyrgyzstan", resource: "KyrgyzstanFlagCredits"),
@@ -78,12 +124,16 @@ private struct FlagCreditSource: Identifiable {
     FlagCreditSource(title: "Malaysia", resource: "MalaysiaFlagCredits"),
     FlagCreditSource(title: "Malta", resource: "MaltaFlagCredits"),
     FlagCreditSource(title: "Mexico", resource: "MexicoFlagCredits"),
+    FlagCreditSource(title: "Moldova", resource: "MoldovaFlagCredits"),
     FlagCreditSource(title: "Mongolia", resource: "MongoliaFlagCredits"),
     FlagCreditSource(title: "Montenegro", resource: "MontenegroFlagCredits"),
+    FlagCreditSource(title: "Myanmar", resource: "MyanmarFlagCredits"),
     FlagCreditSource(title: "Netherlands", resource: "NetherlandsFlagCredits"),
     FlagCreditSource(title: "New Zealand", resource: "NewZealandFlagCredits"),
+    FlagCreditSource(title: "Nicaragua", resource: "NicaraguaFlagCredits"),
     FlagCreditSource(title: "Nigeria", resource: "NigeriaFlagCredits"),
     FlagCreditSource(title: "Norway", resource: "NorwayFlagCredits"),
+    FlagCreditSource(title: "Pakistan", resource: "PakistanFlagCredits"),
     FlagCreditSource(title: "Panama", resource: "PanamaFlagCredits"),
     FlagCreditSource(title: "Papua New Guinea", resource: "PapuaNewGuineaFlagCredits"),
     FlagCreditSource(title: "Paraguay", resource: "ParaguayFlagCredits"),
@@ -95,6 +145,7 @@ private struct FlagCreditSource: Identifiable {
     FlagCreditSource(title: "Russia", resource: "RussiaFlagCredits"),
     FlagCreditSource(title: "Serbia", resource: "SerbiaFlagCredits"),
     FlagCreditSource(title: "Slovakia", resource: "SlovakiaFlagCredits"),
+    FlagCreditSource(title: "Solomon Islands", resource: "SolomonIslandsFlagCredits"),
     FlagCreditSource(title: "South Korea", resource: "SouthKoreaFlagCredits"),
     FlagCreditSource(title: "Spain", resource: "SpainFlagCredits"),
     FlagCreditSource(title: "Sri Lanka", resource: "SriLankaFlagCredits"),
@@ -108,6 +159,7 @@ private struct FlagCreditSource: Identifiable {
     FlagCreditSource(title: "United States", resource: "USFlagCredits"),
     FlagCreditSource(title: "Uruguay", resource: "UruguayFlagCredits"),
     FlagCreditSource(title: "Uzbekistan", resource: "UzbekistanFlagCredits"),
+    FlagCreditSource(title: "Vanuatu", resource: "VanuatuFlagCredits"),
     FlagCreditSource(title: "Venezuela", resource: "VenezuelaFlagCredits"),
   ]
 }

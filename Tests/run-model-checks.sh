@@ -9,7 +9,7 @@ xcrun swiftc "${compiler_flags[@]}" jpex/VisitStatus.swift Tests/LegacyStoreFixt
 xcrun swiftc "${compiler_flags[@]}" \
     jpex/VisitStatus.swift jpex/VisitLevel.swift jpex/VisitLadder.swift jpex/LevelColor.swift jpex/LevelPattern.swift \
     jpex/Prefecture.swift jpex/AdministrativeDivision.swift \
-    jpex/Country.swift jpex/WorldGroup.swift jpex/DivisionGroup.swift jpex/*Catalog.swift \
+    jpex/Country.swift jpex/WorldGroup.swift jpex/CustomWorldGroup.swift jpex/GroupFlag.swift jpex/DivisionGroup.swift jpex/*Catalog.swift \
     jpex/CountingRules.swift jpex/CollectionSection.swift jpex/TravelSnapshot.swift jpex/SaveModel.swift jpex/PlaceReorganisation.swift \
     jpex/WorldFormalNames.swift jpex/AdministrativeDivision+Names.swift \
     Tests/ModelRegression.swift Tests/LevelChecks.swift -o "$validation_dir/current"

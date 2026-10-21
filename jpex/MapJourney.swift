@@ -29,6 +29,12 @@ struct MapJourney {
     /// How long the World turns to `longitude` before diving into a country, and back after pulling out.
     var turnIn: TimeInterval = 0
     var turnOut: TimeInterval = 0
+    /// Whether it dives into one of a country's places on the country's own map and back out, as from
+    /// one of France's regions to its departments, the rest of the country staying in view.
+    var isRegionDive = false
+    /// How far the rest of the map washes out as the subdivisions arrive: most of the way over the
+    /// World, a little on a country's own map, where the other regions stay in view.
+    var detailWash = 0.6
 
     /// A country's part of the journey.
     struct Leg {
@@ -58,8 +64,13 @@ struct MapJourney {
     static let departureDuration: TimeInterval = 1.35
     static let destinationDuration: TimeInterval = 2
 
+    /// How long a dive into a region takes: in, the region's places tracing themselves in, a pause,
+    /// then back out to the whole country.
+    static let regionDiveDuration: TimeInterval = 2.3
+
     var duration: TimeInterval {
-        turnIn + (departure == nil ? 0 : Self.departureDuration) + (destination == nil ? 0 : Self.destinationDuration)
+        if isRegionDive { return Self.regionDiveDuration }
+        return turnIn + (departure == nil ? 0 : Self.departureDuration) + (destination == nil ? 0 : Self.destinationDuration)
             + turnOut
     }
 
@@ -70,14 +81,27 @@ struct MapJourney {
         arrival: CollectionArrival, collections: [Country], snapshot: TravelSnapshot,
         projection: MapProjection, center: MapCenter
     ) {
+        // Between a country's list and its places' own lists, the journey stays on the country's map.
+        if let journey = Self(withinCountry: arrival, collections: collections, snapshot: snapshot) {
+            self = journey
+            return
+        }
+        // From one of a country's regions to its places at another level, such as France's
+        // departments, the journey stays on the country's map, and never flies out to the World.
+        if arrival.fromPlaceID != nil {
+            guard let journey = Self(regionDive: arrival, collections: collections, snapshot: snapshot) else { return nil }
+            self = journey
+            return
+        }
         let worldID = CountryCatalog.world.id
         guard let fromID = arrival.fromID, fromID != arrival.toID,
               let world = collections.first(where: { $0.id == worldID }),
               let resting = TravelMap.named(worldID, projection: projection, center: center)
         else { return nil }
-        // Centred where the countries on the way stay whole.
+        // Centred where the countries on the way stay whole, at whichever of their levels.
         let regionIDs = [fromID, arrival.toID].filter { $0 != worldID }.compactMap { id in
-            CountryCatalog.world.divisions.first { $0.abbreviation == id }?.id
+            let code = collections.first { $0.id == id }?.countryListID ?? id
+            return CountryCatalog.world.divisions.first { $0.abbreviation == code }?.id
         }
         let covered = regionIDs.reduce(into: Set<Int>()) { $0.formUnion(Self.coveredDegrees(of: $1)) }
         // Leaving the World, the flight sets off from wherever its globe had drifted to.
@@ -109,6 +133,115 @@ struct MapJourney {
         turnOut = arrival.toID == worldID ? Self.turnDuration(from: longitude, to: center.longitude) : 0
     }
 
+    /// The journey from one of a country's regions to its places at another level, such as from
+    /// Île-de-France among France's regions to the departments: on the country's own map, the camera
+    /// dives into the region and its places trace themselves in over it, the other regions and the
+    /// borders staying in view a little fainter, then pulls back out to the whole country, where the
+    /// new list's map takes over. Nil unless both lists are levels of one country.
+    @MainActor
+    private init?(regionDive arrival: CollectionArrival, collections: [Country], snapshot: TravelSnapshot) {
+        guard let fromID = arrival.fromID, let placeID = arrival.fromPlaceID,
+              let from = collections.first(where: { $0.id == fromID }),
+              let to = collections.first(where: { $0.id == arrival.toID }),
+              from.countryListID == to.countryListID, from.parentPlace == nil, to.parentPlace == nil,
+              let map = TravelMap.named(from.id), let local = TravelMap.named(to.id),
+              let region = map.region(id: placeID)
+        else { return nil }
+        let core = region.coreBounds
+        let places = to.divisions.filter { $0.parentID == placeID }
+        guard core.width > 0, core.height > 0, !places.isEmpty else { return nil }
+        // The region's places alone, drawn where they sit on the country's map: both levels share it.
+        let ids = Set(places.map(\.id))
+        var detailMap = local
+        detailMap.regions = local.regions.filter { ids.contains($0.id) }
+        detailMap.frames = []
+        let statuses = Dictionary(places.map { ($0.id, snapshot.status(for: $0)) }) { first, _ in first }
+        self.arrival = arrival
+        world = map
+        worldStatuses = Dictionary(from.divisions.map { ($0.id, snapshot.status(for: $0)) }) { first, _ in first }
+        // Fitted as the country's map at rest is, so the journey starts and lands exactly where it sits.
+        worldFocus = map.focusRect(including: worldStatuses.keys)
+        departure = nil
+        destination = Leg(
+            regionID: placeID, core: core,
+            detail: MapDetail(map: detailMap, statuses: statuses, ownerRegionIDs: [placeID]), local: local)
+        projection = .current
+        restingLongitude = 0
+        startLongitude = 0
+        longitude = 0
+        isRegionDive = true
+        detailWash = 0.25
+    }
+
+    /// A dive into a region `elapsed` seconds in: in on the region with a little of the country
+    /// around it, its places tracing themselves in, a pause, then back out to the whole country.
+    private func regionDiveFrame(_ dive: Leg, at elapsed: TimeInterval, size: CGSize, insets: EdgeInsets) -> Frame {
+        let base = MapGeometry(focus: worldFocus, size: size, zoom: 1, pan: .zero, insets: insets)
+        let close = base.camera(fitting: Self.diveArea(around: dive.core, within: worldFocus))
+        let camera = elapsed < 1.4
+            ? Self.glide(from: MapCamera(), to: close, around: dive.core.center, progress: Self.smoother(elapsed / 0.85), base: base)
+            : Self.glide(
+                from: close, to: MapCamera(), around: dive.core.center, progress: Self.smoother((elapsed - 1.4) / 0.85),
+                base: base)
+        return Frame(
+            camera: camera, leg: dive, detailProgress: Self.smooth((elapsed - 0.35) / 0.8), morphProgress: 0,
+            isLeaving: false, selection: elapsed < 0.6 ? dive.regionID : nil)
+    }
+
+    /// The area to dive in on for a region: the region with room around it for its neighbours, and
+    /// never less than about a third of the country across, so a small region isn't blown up.
+    private static func diveArea(around core: CGRect, within focus: CGRect) -> CGRect {
+        let room = max(core.width, core.height) * 0.35
+        var area = core.insetBy(dx: -room, dy: -room)
+        let least = CGSize(width: focus.width / 2.6, height: focus.height / 2.6)
+        if area.width < least.width { area = area.insetBy(dx: -(least.width - area.width) / 2, dy: 0) }
+        if area.height < least.height { area = area.insetBy(dx: 0, dy: -(least.height - area.height) / 2) }
+        return area
+    }
+
+    /// The journey between a country's list and one of its places' own lists, such as Australia's
+    /// states and Tasmania's local government areas, or between two of those lists, played on the
+    /// country's own map in the World's place: the camera dives into the place, and its subdivisions
+    /// trace themselves in over it and settle into their own map, as a country's do over the World.
+    /// Nil for any other pair of lists, or a list whose map can't be placed on its country's.
+    @MainActor
+    private init?(withinCountry arrival: CollectionArrival, collections: [Country], snapshot: TravelSnapshot) {
+        guard let fromID = arrival.fromID, fromID != arrival.toID,
+              let from = collections.first(where: { $0.id == fromID }),
+              let to = collections.first(where: { $0.id == arrival.toID }),
+              from.parentPlace != nil || to.parentPlace != nil, from.countryListID == to.countryListID,
+              let country = collections.first(where: { $0.id == from.countryListID }),
+              [from, to].allSatisfy({ $0.id == country.id || $0.parentPlace != nil }),
+              let map = TravelMap.named(country.id)
+        else { return nil }
+        func leg(_ list: Country) -> Leg? {
+            guard let place = list.parentPlace, let region = map.region(id: place.id),
+                  let local = TravelMap.named(list.id), let placed = local.placedOnParent
+            else { return nil }
+            let core = region.coreBounds
+            guard core.width > 0, core.height > 0 else { return nil }
+            let statuses = Dictionary(list.divisions.map { ($0.id, snapshot.status(for: $0)) }) { first, _ in first }
+            return Leg(
+                regionID: place.id, core: core,
+                detail: MapDetail(map: placed, statuses: statuses, ownerRegionIDs: [place.id]), local: local)
+        }
+        let departure = from.parentPlace == nil ? nil : leg(from)
+        let destination = to.parentPlace == nil ? nil : leg(to)
+        guard (from.parentPlace == nil) == (departure == nil), (to.parentPlace == nil) == (destination == nil) else { return nil }
+        self.arrival = arrival
+        world = map
+        worldStatuses = Dictionary(country.divisions.map { ($0.id, snapshot.status(for: $0)) }) { first, _ in first }
+        // Fitted as the country's map at rest is, so the journey starts and lands exactly where it sits.
+        worldFocus = map.focusRect(including: worldStatuses.keys)
+        self.departure = departure
+        self.destination = destination
+        // A country's map doesn't turn, so the World's centring plays no part.
+        projection = .current
+        restingLongitude = 0
+        startLongitude = 0
+        longitude = 0
+    }
+
     /// The World partway through turning, drawn with lighter outlines so it can redraw every frame.
     @MainActor
     func world(turnedTo longitude: Double) -> TravelMap {
@@ -125,7 +258,7 @@ struct MapJourney {
               let local = TravelMap.named(id),
               let subdivisions = longitude.map({ geography?.map(projection, centerLongitude: $0) })
                 ?? geography?.map(projection, center: center),
-              let place = CountryCatalog.world.divisions.first(where: { $0.abbreviation == id }),
+              let place = CountryCatalog.world.divisions.first(where: { $0.abbreviation == collection.countryListID }),
               let region = world.region(id: place.id)
         else { return nil }
         let core = region.coreBounds
@@ -142,6 +275,9 @@ struct MapJourney {
 
     /// The map `elapsed` seconds in, on a view of this size.
     func frame(at elapsed: TimeInterval, size: CGSize, insets: EdgeInsets) -> Frame {
+        if isRegionDive, let destination {
+            return regionDiveFrame(destination, at: elapsed, size: size, insets: insets)
+        }
         // First the World turns to where the country sits whole, before the camera dives in.
         if elapsed < turnIn {
             return turningFrame(from: startLongitude, to: longitude, progress: elapsed / turnIn)

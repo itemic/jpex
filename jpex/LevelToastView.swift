@@ -2,11 +2,20 @@ import SwiftUI
 
 /// A level, said briefly with the place's flag and the level's pill:
 /// - "Canada set to STAYED", with a way to undo it;
-/// - "Japan VISITED" once every place in a list has reached a level, with a burst of confetti;
+/// - "All of Japan at VISITED" once every place in a list has reached a level, throwing confetti across the
+///   whole screen;
 /// - "Benin ~~VISITED~~ → NEVER BEEN" when a change is undone or redone.
+///
+/// Its pill pops as the note lands, once it has dropped in. A finished list's note also glows once
+/// in its level's colour as it lands, so finishing a list is celebrated even with Reduce Motion,
+/// where there's no confetti.
 struct LevelToastView: View {
     var toast: LevelToast
-    @State private var bursts = 0
+    /// Set once the note has dropped in and settled, which pops its pill.
+    @State private var hasLanded = false
+
+    /// How long the note takes to drop in and settle.
+    private static let landingDelay = Duration.seconds(0.3)
 
     var body: some View {
         HStack(spacing: 10) {
@@ -25,19 +34,32 @@ struct LevelToastView: View {
         .padding(.trailing, toast.onUndo == nil ? 12 : 8)
         .padding(.vertical, 8)
         .glassPanel(in: Capsule(), tint: toast.level.color, interactive: true)
-        .overlay {
+        .background {
             if toast.kind == .completed {
-                // A finished list's confetti bursts from the toast itself, wherever the list is.
-                CelebrationBurst(trigger: bursts, colors: toast.ladder.levels.map(\.color), pieceCount: 48)
-                    .frame(width: 320, height: 320)
+                // A halo behind the glass that flares as the note lands and fades away: lit from
+                // within, in the level's colour, brighter than the page where the display allows.
+                Capsule()
+                    .fill(toast.level.color.glowing(by: 1.5))
+                    .padding(-4)
+                    .blur(radius: 14)
+                    .keyframeAnimator(initialValue: 0.0, trigger: hasLanded) { halo, glow in
+                        halo.opacity(glow)
+                    } keyframes: { _ in
+                        MoveKeyframe(hasLanded ? 0.5 : 0)
+                        CubicKeyframe(0, duration: 0.9)
+                    }
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
             }
-        }
-        .onAppear {
-            if toast.kind == .completed { bursts += 1 }
         }
         .environment(\.visitLadder, toast.ladder)
         .accessibilityElement(children: .contain)
-        .accessibilityLabel(accessibilityLabel)
+        .accessibilityLabel(toast.spokenDescription)
+        .task {
+            try? await Task.sleep(for: Self.landingDelay)
+            guard !Task.isCancelled else { return }
+            hasLanded = true
+        }
     }
 
     @ViewBuilder private var content: some View {
@@ -60,7 +82,11 @@ struct LevelToastView: View {
                     .buttonStyle(PillButtonStyle())
             }
         case .completed:
-            name
+            ScrollingText {
+                Text("\(Text("All of").foregroundStyle(.secondary)) \(Text(toast.placeName).fontWeight(.semibold)) \(Text("at").foregroundStyle(.secondary))")
+                    .font(.subheadline)
+            }
+            .accessibilityHidden(true)
             pill(toast.level)
         case .changed(let from):
             name
@@ -84,17 +110,9 @@ struct LevelToastView: View {
 
     private func pill(_ level: VisitLevel) -> some View {
         VisitPillLabel(status: level)
-            .pop(on: toast.id)
+            .pop(on: hasLanded)
             .fixedSize()
             .accessibilityHidden(true)
-    }
-
-    private var accessibilityLabel: String {
-        switch toast.kind {
-        case .raised: "\(toast.placeName) set to \(toast.level.name)"
-        case .completed: "\(toast.placeName), every place \(toast.level.name)"
-        case .changed(let from): "\(toast.placeName), \(from.name) to \(toast.level.name)"
-        }
     }
 }
 

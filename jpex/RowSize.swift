@@ -20,7 +20,7 @@ enum RowSize: String, CaseIterable, Identifiable {
         switch self {
         case .standard: "Standard"
         case .compact: "Compact"
-        case .extraCompact: "Extra Compact"
+        case .extraCompact: "Extra compact"
         }
     }
 

@@ -19,9 +19,16 @@ struct CountingRules: Equatable, Sendable {
     /// Places switched off one by one, by ISO code, within groups that are otherwise counted,
     /// such as a single territory the person doesn't count.
     var excludedPlaces: Set<String> = []
+    /// Countries hidden from the World altogether, by ISO code, such as UN members the person
+    /// doesn't count: left out of the World's list, its totals and its groups, and not tappable on
+    /// its map. Choosing a standard shows them all again.
+    var hiddenStates: Set<String> = []
     /// The continent chosen for each country whose main territory spans two, by ISO code,
     /// such as "asia" for Russia. Countries not listed keep their usual continent.
     var continentChoices: [String: String] = [:]
+    /// The name chosen for each sea known by more than one, by the sea's ID, such as "East Sea"
+    /// for the Sea of Japan. Seas not listed keep the name the IHO's sea areas give them.
+    var seaNames: [String: String] = [:]
 
     /// The level counting starts from, or the lowest level if that one has been removed.
     func minimumLevel(in ladder: VisitLadder) -> VisitLevel {
@@ -47,7 +54,9 @@ extension CountingRules {
         static let associatedStates = "countsAssociatedStates"
         static let deFactoStates = "countsDeFactoStates"
         static let continentChoices = "continentChoices"
+        static let seaNames = "seaNames"
         static let excludedPlaces = "excludedWorldPlaces"
+        static let hiddenStates = "hiddenWorldStates"
     }
 
     init(defaults: UserDefaults) {
@@ -61,7 +70,9 @@ extension CountingRules {
         includesTerritories = defaults.object(forKey: Key.territories) as? Bool ?? includesTerritories
         includesRemotePlaces = defaults.object(forKey: Key.remotePlaces) as? Bool ?? includesRemotePlaces
         continentChoices = defaults.dictionary(forKey: Key.continentChoices) as? [String: String] ?? continentChoices
+        seaNames = defaults.dictionary(forKey: Key.seaNames) as? [String: String] ?? seaNames
         excludedPlaces = Set(defaults.stringArray(forKey: Key.excludedPlaces) ?? [])
+        hiddenStates = Set(defaults.stringArray(forKey: Key.hiddenStates) ?? [])
         includesObservers = defaults.object(forKey: Key.observers) as? Bool ?? includesObservers
         // Western Sahara, the Cook Islands and Niue used to count with territories, so until
         // their own groups are set they follow whatever territories were set to.
@@ -81,7 +92,9 @@ extension CountingRules {
         defaults.set(includesTerritories, forKey: Key.territories)
         defaults.set(includesRemotePlaces, forKey: Key.remotePlaces)
         defaults.set(continentChoices, forKey: Key.continentChoices)
+        defaults.set(seaNames, forKey: Key.seaNames)
         defaults.set(excludedPlaces.sorted(), forKey: Key.excludedPlaces)
+        defaults.set(hiddenStates.sorted(), forKey: Key.hiddenStates)
         defaults.set(includesObservers, forKey: Key.observers)
         defaults.set(includesPartlyRecognised, forKey: Key.partlyRecognised)
         defaults.set(includesAssociatedStates, forKey: Key.associatedStates)
@@ -92,7 +105,7 @@ extension CountingRules {
     /// of their own count them only then, so rules that counted everywhere still do.
     private var countsEverywhereElse: Bool {
         OptionalPlaceGroup.allCases.allSatisfy { $0 == .deFactoStates || includes($0) }
-            && excludedPlaces.isEmpty && !splitsUnitedKingdom
+            && excludedPlaces.isEmpty && hiddenStates.isEmpty && !splitsUnitedKingdom
     }
 }
 
@@ -141,11 +154,6 @@ extension CountingRules {
             excludedPlaces.insert(code)
             if codes.allSatisfy(excludedPlaces.contains) { setIncludes(group, false) }
         }
-    }
-
-    /// How many of a group's places count.
-    func includedCount(in group: OptionalPlaceGroup) -> Int {
-        CountryCatalog.places(in: group).count { includesWorldPlace(code: $0.abbreviation) }
     }
 }
 
@@ -219,6 +227,7 @@ enum CountingStandard: String, CaseIterable, Identifiable, Sendable {
             rules.setIncludes(group, groups.contains(group))
         }
         rules.excludedPlaces = []
+        rules.hiddenStates = []
         rules.splitsUnitedKingdom = false
         return rules
     }
@@ -228,7 +237,7 @@ extension CountingRules: Codable {
     private enum CodingKeys: String, CodingKey {
         case minimumLevelID, includesSpecialRegions, includesTaiwan, splitsUnitedKingdom, includesTerritories
         case includesRemotePlaces, includesObservers, includesPartlyRecognised, includesAssociatedStates
-        case includesDeFactoStates, excludedPlaces, continentChoices
+        case includesDeFactoStates, excludedPlaces, hiddenStates, continentChoices, seaNames
     }
 
     /// Reads saved rules, falling back to the defaults for anything they predate.
@@ -245,7 +254,9 @@ extension CountingRules: Codable {
         includesPartlyRecognised = try container.decodeIfPresent(Bool.self, forKey: .includesPartlyRecognised) ?? includesPartlyRecognised
         includesAssociatedStates = try container.decodeIfPresent(Bool.self, forKey: .includesAssociatedStates) ?? includesAssociatedStates
         excludedPlaces = try container.decodeIfPresent(Set<String>.self, forKey: .excludedPlaces) ?? excludedPlaces
+        hiddenStates = try container.decodeIfPresent(Set<String>.self, forKey: .hiddenStates) ?? hiddenStates
         continentChoices = try container.decodeIfPresent([String: String].self, forKey: .continentChoices) ?? continentChoices
+        seaNames = try container.decodeIfPresent([String: String].self, forKey: .seaNames) ?? seaNames
         includesDeFactoStates = try container.decodeIfPresent(Bool.self, forKey: .includesDeFactoStates) ?? countsEverywhereElse
     }
 
@@ -262,6 +273,8 @@ extension CountingRules: Codable {
         try container.encode(includesAssociatedStates, forKey: .includesAssociatedStates)
         try container.encode(includesDeFactoStates, forKey: .includesDeFactoStates)
         try container.encode(excludedPlaces, forKey: .excludedPlaces)
+        try container.encode(hiddenStates, forKey: .hiddenStates)
         try container.encode(continentChoices, forKey: .continentChoices)
+        try container.encode(seaNames, forKey: .seaNames)
     }
 }

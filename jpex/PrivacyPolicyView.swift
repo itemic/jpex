@@ -23,13 +23,17 @@ struct PrivacyPolicyView: View {
           title: "Terms and conditions", systemImage: "signature",
           text: "By downloading and using this app, these terms apply to you. I intend to make it as useful as possible and may update it often to do so, but I can’t guarantee it will be useful to you. Some of its information, such as maps and flags, comes from third parties, and I accept no liability for any loss, direct or indirect, from relying on it. This policy may be updated from time to time, so please review it now and then. If you have any questions, please don’t hesitate to get in touch.")
         Link(destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!) {
-          Label("Licensed Application End User License Agreement", systemImage: "doc.text")
+          Label {
+            ScrollingText { Text("Licensed Application End User License Agreement") }
+          } icon: {
+            Image(systemName: "doc.text")
+          }
         }
       } header: {
         Text("Terms")
       }
     }
-    .navigationTitle("Privacy Policy")
+    .navigationTitle("Privacy policy")
     .navigationBarTitleDisplayMode(.inline)
   }
 }

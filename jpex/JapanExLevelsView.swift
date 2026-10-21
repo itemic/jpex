@@ -42,13 +42,13 @@ struct JapanExLevelsView: View {
           .pickerStyle(.menu)
         }
       } header: {
-        Text("Your Levels")
+        Text("Your levels")
       } footer: {
         Text("JapanEx scores each prefecture from 0 for never been to 5 for lived. Choose the score each of your levels shows as. Levels you haven’t chosen for are matched by how far up your ladder they are.")
       }
       if mapping.hasChoices(in: ladder) {
         Section {
-          Button("Match All Automatically") {
+          Button("Match all automatically") {
             withAnimation(.snappy) { mapping = JapanExMapping() }
           }
         }
@@ -67,11 +67,11 @@ struct JapanExLevelsView: View {
   }
 }
 
-/// A JapanEx level's name and score, such as Lived · 5.
+/// A JapanEx level's name and score, such as Lived (5).
 private struct JapanExLevelName: View {
   var level: JapanExLevel
 
   var body: some View {
-    Text("\(level.name) · \(level.score)")
+    Text("\(level.name) (\(level.score))")
   }
 }

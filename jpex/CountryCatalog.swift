@@ -2,7 +2,7 @@ import Foundation
 
 enum CountryCatalog {
     static let countries: [Country] = [
-        world, japan, australia, canada, china, france, germany, italy, spain, switzerland, unitedKingdom, unitedStates,
+        world, seas, japan, australia, canada, china, france, frenchDepartments, germany, italy, spain, switzerland, unitedKingdom, unitedStates,
         southKorea, taiwan, austria, netherlands, belgium, poland, portugal, norway,
         brazil, argentina, mexico, malaysia, thailand, philippines, indonesia, india,
         ireland, sweden, denmark, finland, czechia, croatia, greece, hungary, chile, colombia, peru, turkey, unitedArabEmirates, sriLanka, newZealand, southAfrica,
@@ -11,27 +11,65 @@ enum CountryCatalog {
         jordan, oman, qatar, kuwait, bahrain, iran, iraq, cambodia, laos, bangladesh, bhutan, papuaNewGuinea, fiji,
         venezuela, paraguay, guatemala, costaRica, panama, dominicanRepublic, jamaica, honduras, elSalvador, nigeria, tanzania, ghana, senegal, rwanda, namibia, tunisia, algeria,
         serbia, bosniaAndHerzegovina, albania, montenegro, latvia, luxembourg, malta, belarus, armenia, kazakhstan, uzbekistan, kyrgyzstan,
-    ]
+        vietnam, afghanistan, brunei, zambia, zimbabwe, mozambique, cameroon, botswana,
+        georgia, tajikistan, moldova, lebanon, pakistan, belize, guyana, haiti, suriname, tonga, samoa,
+        myanmar, trinidadAndTobago, nicaragua, vanuatu, solomonIslands,
+    ] + subdivisionLists
 
     static func country(id: String) -> Country? {
         countries.first { $0.id == id }
     }
 
-    /// Every collection, with Countries and China shaped by what the person counts as a country.
+    /// Every collection, with Countries and China shaped by what the person counts as a country, and
+    /// Seas by the names the person calls them.
     static func countries(applying rules: CountingRules) -> [Country] {
         countries.map { collection in
             switch collection.id {
             case world.id: world(applying: rules)
+            case seas.id: seas(applying: rules)
             case china.id: china(applying: rules)
             default: collection
             }
         }
     }
 
-    /// Countries first, then every other collection by continent, alphabetically.
+    /// A country's lists, one for each level it's listed at, first level first, such as France's
+    /// regions and then its departments. Just the list itself for every other list. Lists of one
+    /// place's own subdivisions, such as Tasmania's, aren't levels of their country.
+    static func levels(of collection: Country) -> [Country] {
+        let levels = countries.filter { $0.countryListID == collection.countryListID && $0.parentPlace == nil }
+        return levels.count > 1 ? levels : [collection]
+    }
+
+    /// The places a place lies within that rise with it, nearest first: where its country is listed
+    /// at more than one level, its place on the first, such as Île-de-France for Paris; then the
+    /// countries it belongs to under the counting rules, such as France.
+    static func placesContaining(_ place: AdministrativeDivision, rules: CountingRules) -> [AdministrativeDivision] {
+        guard let parent = place.parentID.flatMap({ countryPlaces[$0] }), parent.id != place.id else {
+            return countries(containing: place, rules: rules)
+        }
+        return [parent] + placesContaining(parent, rules: rules)
+    }
+
+    /// A place in a country's own list, by ID, such as Île-de-France.
+    static func countryPlace(id: String) -> AdministrativeDivision? {
+        countryPlaces[id]
+    }
+
+    /// The IDs of the places other places lie within, such as France's regions.
+    static let regionIDs = Set(countryPlaces.values.compactMap(\.parentID))
+
+    /// Every place in countries' own lists, by ID, for finding the place another lies within.
+    private static let countryPlaces: [String: AdministrativeDivision] = Dictionary(
+        countries.filter { $0.id != world.id }.flatMap(\.divisions).map { ($0.id, $0) }
+    ) { first, _ in first }
+
+    /// Countries and Seas first, then every other collection by continent, alphabetically. A country listed
+    /// at more than one level is listed once, by its first level. A list of one place's own
+    /// subdivisions, such as Tasmania's, opens from that place instead.
     static func sections(applying rules: CountingRules) -> [CollectionSection] {
-        let all = countries(applying: rules)
-        let pinnedIDs = [world.id]
+        let all = countries(applying: rules).filter { $0.firstLevelID == nil && $0.parentPlace == nil }
+        let pinnedIDs = [world.id, seas.id]
         var sections = [CollectionSection(title: nil, countries: pinnedIDs.compactMap { id in all.first { $0.id == id } })]
         let others = all.filter { !pinnedIDs.contains($0.id) }
         for continent in ["Asia", "Europe", "Americas", "Africa", "Oceania"] {
@@ -68,13 +106,22 @@ enum CountryCatalog {
         "JO": "Asia", "OM": "Asia", "QA": "Asia", "KW": "Asia", "BH": "Asia", "IR": "Asia", "IQ": "Asia", "KH": "Asia", "LA": "Asia", "BD": "Asia", "BT": "Asia", "PG": "Oceania", "FJ": "Oceania",
         "VE": "Americas", "PY": "Americas", "GT": "Americas", "CR": "Americas", "PA": "Americas", "DO": "Americas", "JM": "Americas", "HN": "Americas", "SV": "Americas", "NG": "Africa", "TZ": "Africa", "GH": "Africa", "SN": "Africa", "RW": "Africa", "NA": "Africa", "TN": "Africa", "DZ": "Africa",
         "RS": "Europe", "BA": "Europe", "AL": "Europe", "ME": "Europe", "LV": "Europe", "LU": "Europe", "MT": "Europe", "BY": "Europe", "AM": "Asia", "KZ": "Asia", "UZ": "Asia", "KG": "Asia",
+        "VN": "Asia", "AF": "Asia", "BN": "Asia", "ZM": "Africa", "ZW": "Africa", "MZ": "Africa", "CM": "Africa", "BW": "Africa",
+        "GE": "Asia", "TJ": "Asia", "MD": "Europe", "LB": "Asia", "PK": "Asia", "BZ": "Americas", "GY": "Americas",
+        "HT": "Americas", "SR": "Americas", "TO": "Oceania", "WS": "Oceania", "MM": "Asia", "TT": "Americas", "NI": "Americas", "VU": "Oceania", "SB": "Oceania",
     ]
 
-    /// The collection that lists a country's own subdivisions, such as Japan's prefectures.
+    /// The collection that lists a place's own subdivisions: for a country, such as Japan, its
+    /// prefectures; for a place in a country's list, such as Tasmania, its local government areas.
     static func collection(for place: AdministrativeDivision) -> Country? {
-        guard place.countryID == world.id else { return nil }
+        guard place.countryID == world.id else { return listsBySubdividedPlace[place.id] }
         return countries.first { $0.id != world.id && $0.id == place.abbreviation }
     }
+
+    /// Lists of one place's own subdivisions, by that place's ID.
+    private static let listsBySubdividedPlace: [String: Country] = Dictionary(
+        countries.compactMap { list in list.parentPlace.map { ($0.id, list) } }
+    ) { first, _ in first }
 
     static let japan = Country(
         id: "JP",

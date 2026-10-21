@@ -3,17 +3,22 @@ import SwiftData
 
 @main struct ModelRegression {
     @MainActor static func main() throws {
+        #if WORLD_TIME_CHECKS
+        checkSameTimeNames()
+        #endif
         let jp = CountryCatalog.japan
         let au = CountryCatalog.australia
-        let fr = CountryCatalog.france
+        let fr = CountryCatalog.frenchDepartments
+        let frRegions = CountryCatalog.france
         let de = CountryCatalog.germany
         precondition(jp.divisions.count == 47)
         precondition(au.divisions.count == 16)
         precondition(fr.divisions.count == 101 && fr.groups.count == 18)
+        precondition(frRegions.groups.map(\.divisions.count) == [13, 5])
         precondition(de.divisions.count == 16)
         let divisionCounts = Dictionary(uniqueKeysWithValues: CountryCatalog.countries.map { ($0.id, $0.divisions.count) })
         precondition(divisionCounts == [
-            "WORLD": 251, "JP": 47, "AU": 16, "CA": 13, "CN": 33, "FR": 101,
+            "WORLD": 251, "SEAS": 103, "JP": 47, "AU": 16, "CA": 13, "CN": 33, "FR": 18, "FR-departments": 101,
             "DE": 16, "IT": 20, "ES": 19, "CH": 26, "GB": 4, "US": 56,
             "KR": 16, "TW": 22, "AT": 9, "NL": 12, "BE": 11, "PL": 16, "PT": 20, "NO": 15,
             "BR": 27, "AR": 24, "MX": 32, "MY": 16, "TH": 77, "PH": 83, "ID": 38, "IN": 36,
@@ -23,18 +28,37 @@ import SwiftData
             "JO": 12, "OM": 11, "QA": 8, "KW": 6, "BH": 4, "IR": 31, "IQ": 19, "KH": 25, "LA": 18, "BD": 8, "BT": 20, "PG": 22, "FJ": 5,
             "VE": 25, "PY": 18, "GT": 22, "CR": 7, "PA": 14, "DO": 32, "JM": 14, "HN": 18, "SV": 14, "NG": 37, "TZ": 31, "GH": 16, "SN": 14, "RW": 5, "NA": 14, "TN": 24, "DZ": 69,
             "RS": 25, "BA": 12, "AL": 12, "ME": 25, "LV": 42, "LU": 12, "MT": 68, "BY": 7, "AM": 11, "KZ": 20, "UZ": 14, "KG": 9,
+            "VN": 34, "AF": 34, "BN": 4, "ZM": 10, "ZW": 10, "MZ": 11, "CM": 10, "BW": 16,
+            "GE": 12, "TJ": 5, "MD": 37, "LB": 8, "PK": 7, "BZ": 6, "GY": 10, "HT": 10, "SR": 10, "TO": 5, "WS": 11,
+            "MM": 15, "TT": 15, "NI": 17, "VU": 6, "SB": 10,
+            "ES-AN": 8, "ES-AR": 3, "ES-PV": 3, "ES-CN": 2, "ES-CL": 9, "ES-CM": 5, "ES-CT": 4, "ES-EX": 2, "ES-GA": 4, "ES-VC": 3,
+            "AU-TAS": 29, "AU-NT": 19, "GB-SCT": 32, "GB-WLS": 22, "GB-NIR": 11,
+            "AU-NSW": 130, "AU-VIC": 81, "AU-QLD": 78, "AU-SA": 71, "AU-WA": 137,
         ])
         let frenchDepartmentCodes = (1...95).filter { $0 != 20 }.map { String(format: "%02d", $0) }
             + ["2A", "2B", "971", "972", "973", "974", "976"]
         precondition(Set(fr.divisions.map(\.id)) == Set(frenchDepartmentCodes.map { "FR-\($0)" }))
+        // France opens on its regions; its departments are a further level, out of the sidebar.
+        precondition(CountryCatalog.levels(of: fr).map(\.id) == ["FR", "FR-departments"])
+        precondition(CountryCatalog.levels(of: jp).map(\.id) == ["JP"])
+        precondition(!CountryCatalog.sections(applying: CountingRules()).flatMap(\.countries).contains { $0.id == fr.id })
+        precondition(fr.flagAssetName == frRegions.flagAssetName && fr.distinctName == "France (Departments)")
+        // Every department lies within a region on the list, but the overseas ones, each a region of
+        // its own, which both lists share.
+        let regionIDs = Set(frRegions.divisions.map(\.id))
+        precondition(fr.divisions.allSatisfy { department in
+            department.parentID.map { regionIDs.contains($0) } ?? regionIDs.contains(department.id)
+        })
+        precondition(regionIDs.intersection(fr.divisions.map(\.id)) == ["FR-971", "FR-972", "FR-973", "FR-974", "FR-976"])
         precondition(au.groups.map { $0.divisions.count } == [6, 3, 7])
         precondition(Set(CountryCatalog.countries.map(\.id)).isSuperset(of: ["JP", "AU", "FR", "DE"]))
-        // IDs are unique within each collection. A place may appear in two collections only when
-        // Countries deliberately shares another collection's record for it.
+        // IDs are unique within each collection. A place may appear in two countries' collections
+        // only when Countries deliberately shares another collection's record for it; a country's
+        // levels may share one too, as France's overseas regions and departments do.
         var collectionsByID: [String: Set<String>] = [:]
         for country in CountryCatalog.countries {
             precondition(Set(country.divisions.map(\.id)).count == country.divisions.count)
-            for division in country.divisions { collectionsByID[division.id, default: []].insert(country.id) }
+            for division in country.divisions { collectionsByID[division.id, default: []].insert(country.countryListID) }
         }
         let sharedIDs = Set(CountryCatalog.sharedPlaceIDs.values)
         precondition(collectionsByID.filter { $0.value.count > 1 }.keys.allSatisfy(sharedIDs.contains))
@@ -150,7 +174,7 @@ import SwiftData
         precondition(au.divisions.allSatisfy { $0.legacyJapanIndex == nil })
         for country in CountryCatalog.countries {
             precondition(country.groups.allSatisfy { group in
-                group.divisions.allSatisfy { $0.countryID == country.id && $0.groupID == group.id }
+                group.divisions.allSatisfy { $0.countryID == country.countryListID && $0.groupID == group.id }
             })
         }
         let oldEncoded = Data("[{\"never\":{}},{\"passed\":{}},{\"alighted\":{}},{\"visited\":{}},{\"stayed\":{}},{\"lived\":{}}]".utf8)
@@ -204,11 +228,77 @@ import SwiftData
             "WORLD-JP": "lived", "WORLD-AU": "passed", "WORLD-FR": "visited", "WORLD-DE": "stayed", "WORLD-US": "lived",
         ])
         let ontario = CountryCatalog.canada.divisions[0]
-        let raised = scratch.snapshot().countriesRaised(by: level("stayed"), at: ontario, rules: CountingRules())
+        let raised = scratch.snapshot().placesRaised(by: level("stayed"), at: ontario, rules: CountingRules())
         precondition(raised.map(\.place.id) == ["WORLD-CA"] && raised[0].previous == .never)
-        precondition(scratch.snapshot().countriesRaised(by: .never, at: ontario, rules: CountingRules()).isEmpty)
-        precondition(scratch.snapshot().countriesRaised(by: level("passed"), at: jp.divisions[0], rules: CountingRules())
+        precondition(scratch.snapshot().placesRaised(by: .never, at: ontario, rules: CountingRules()).isEmpty)
+        precondition(scratch.snapshot().placesRaised(by: level("passed"), at: jp.divisions[0], rules: CountingRules())
             .map(\.place.id) == ["WORLD-JP"])
+        // A department lifts its region, then France; a region lifts France; overseas, a department
+        // is its own region.
+        let ain = fr.divisions[0]
+        precondition(scratch.snapshot().placesRaised(by: level("stayed"), at: ain, rules: CountingRules())
+            .map(\.place.id) == ["FR-ARA", "WORLD-FR"])
+        precondition(CountryCatalog.placesContaining(frRegions.divisions[0], rules: CountingRules()).map(\.id) == ["WORLD-FR"])
+        precondition(CountryCatalog.placesContaining(guadeloupe, rules: strict).map(\.id) == ["WORLD-FR"])
+        // A place's own subdivisions are a list of their own that opens from its row, out of the
+        // sidebar and not a level of its country, and they lift it: Seville, Andalusia, then Spain.
+        let andalusia = CountryCatalog.spain.divisions.first { $0.id == "ES-AN" }!
+        let andalusianProvinces = CountryCatalog.collection(for: andalusia)!
+        precondition(andalusianProvinces.id == "ES-AN" && andalusianProvinces.parentPlace == andalusia)
+        precondition(andalusianProvinces.countryListID == "ES" && andalusianProvinces.listTitle == "Andalusia")
+        precondition(andalusianProvinces.flagAssetName == andalusia.flagAssetName)
+        precondition(CountryCatalog.levels(of: CountryCatalog.spain).map(\.id) == ["ES"])
+        precondition(CountryCatalog.levels(of: andalusianProvinces).map(\.id) == ["ES-AN"])
+        precondition(!CountryCatalog.sections(applying: CountingRules()).flatMap(\.countries).contains { $0.parentPlace != nil })
+        precondition(CountryCatalog.collection(for: CountryCatalog.spain.divisions.first { $0.id == "ES-MD" }!) == nil)
+        let seville = andalusianProvinces.divisions.first { $0.id == "ES-SE" }!
+        precondition(CountryCatalog.placesContaining(seville, rules: CountingRules()).map(\.id) == ["ES-AN", "WORLD-ES"])
+        precondition(CountryCatalog.subdivisionLists.allSatisfy { list in
+            list.divisions.allSatisfy { $0.parentID == list.id && $0.countryID == list.countryListID }
+        })
+        func subdivision(_ id: String, of listID: String) -> AdministrativeDivision {
+            CountryCatalog.subdivisionLists.first { $0.id == listID }!.divisions.first { $0.id == id }!
+        }
+        let hobart = subdivision("AU-62810", of: "AU-TAS")
+        precondition(CountryCatalog.placesContaining(hobart, rules: CountingRules()).map(\.id) == ["AU-TAS", "WORLD-AU"])
+        // With the UK's nations counted as countries, Scotland opens its councils from the World too,
+        // and a council lifts Scotland alone.
+        let edinburgh = subdivision("GB-EDH", of: "GB-SCT")
+        precondition(CountryCatalog.placesContaining(edinburgh, rules: CountingRules()).map(\.id) == ["GB-SCT", "WORLD-GB"])
+        precondition(CountryCatalog.placesContaining(edinburgh, rules: everything).map(\.id) == ["GB-SCT"])
+        let scotlandAsCountry = CountryCatalog.world(applying: everything).divisions.first { $0.id == "GB-SCT" }!
+        precondition(CountryCatalog.collection(for: scotlandAsCountry)?.id == "GB-SCT")
+        // A country with lists of its places' own subdivisions goes by its own name and chooses
+        // beneath its map between its places and theirs, as from any of those lists: Australia's
+        // states, or any state's or the Northern Territory's local government areas.
+        let tasmanianAreas = CountryCatalog.collection(for: CountryCatalog.australia.divisions.first { $0.id == "AU-TAS" }!)!
+        let australianAreaLists = ["AU-NSW", "AU-NT", "AU-QLD", "AU-SA", "AU-TAS", "AU-VIC", "AU-WA"]
+        precondition(CountryCatalog.subdivisionLists(of: CountryCatalog.australia).map(\.id) == australianAreaLists)
+        precondition(CountryCatalog.subdivisionLists(of: tasmanianAreas).map(\.id) == australianAreaLists)
+        // Sydney lifts New South Wales, then Australia; Lord Howe Island and Victoria's alpine
+        // resorts are places of their own, split off their states' unincorporated areas.
+        let sydney = subdivision("AU-17200", of: "AU-NSW")
+        precondition(sydney.name == "Sydney")
+        precondition(CountryCatalog.placesContaining(sydney, rules: CountingRules()).map(\.id) == ["AU-NSW", "WORLD-AU"])
+        precondition(subdivision("AU-LHI", of: "AU-NSW").name == "Lord Howe Island")
+        precondition(subdivision("AU-19399", of: "AU-NSW").name == "Unincorporated Far West")
+        precondition(subdivision("AU-ARV", of: "AU-VIC").name == "Alpine Resorts")
+        precondition(subdivision("AU-24600", of: "AU-VIC").name == "Melbourne")
+        precondition(CountryCatalog.subdivisionLists(of: CountryCatalog.unitedKingdom).map(\.id) == ["GB-NIR", "GB-SCT", "GB-WLS"])
+        precondition(CountryCatalog.subdivisionLists(of: CountryCatalog.spain).count == 10)
+        precondition(CountryCatalog.subdivisionLists(of: CountryCatalog.france).isEmpty)
+        precondition(CountryCatalog.subdivisionLists(of: CountryCatalog.world).isEmpty)
+        precondition(CountryCatalog.subdivisionLabel(of: CountryCatalog.australia) == "Local government areas")
+        precondition(CountryCatalog.subdivisionLabel(of: CountryCatalog.unitedKingdom) == "Councils")
+        precondition(CountryCatalog.subdivisionLabel(of: andalusianProvinces) == "Provinces")
+        precondition(CountryCatalog.subdivisionLabel(of: CountryCatalog.japan) == nil)
+        precondition(CountryCatalog.australia.listTitle == "Australia" && CountryCatalog.japan.listTitle == "Prefectures")
+        let levelLabels = Set(CountryCatalog.countries.map(\.divisionLabel))
+        precondition(CountryCatalog.shortLevelLabels.keys.allSatisfy(levelLabels.contains))
+        // Regions catch up with what's already marked in their departments.
+        let regionCatchUp = scratch.snapshot().regionsBelowTheirPlaces(among: CountryCatalog.regionIDs)
+        precondition(regionCatchUp.map { "\($0.0.id) \($0.1.id)" } == ["FR-ARA visited"])
+        precondition(scratch.snapshot().regionsBelowTheirPlaces(among: ["FR-IDF"]).isEmpty)
 
         // Shared places: one record, visible from both collections.
         let chinaHongKong = CountryCatalog.china.divisions.first { $0.id == "CN-HK" }!
@@ -258,7 +348,34 @@ import SwiftData
         } catch {
             precondition(scratch.statusesData == badData && scratch.visitStatus == legacyBefore)
         }
-        print("PASS: catalog identity, legacy Codable, short data, country isolation, reset, unknown entries, corrupted data")
+
+        // Changes made by hand are logged with their dates, oldest first; a reset starts the log afresh.
+        let logging = SaveModel()
+        memoryContext.insert(logging)
+        let firstDate = Date(timeIntervalSinceReferenceDate: 1_000)
+        logging.logChanges([(place: jp.divisions[2], level: level("visited"))], at: firstDate)
+        logging.logChanges([(place: jp.divisions[2], level: level("lived")), (place: au.divisions[0], level: .never)])
+        let log = try logging.changeLog()
+        precondition(log.count == 3 && log[0] == PlaceChange(placeID: jp.divisions[2].id, levelID: "visited", date: firstDate))
+        precondition(log[1].levelID == "lived" && log[1].date > firstDate)
+        precondition(log[2].placeID == au.divisions[0].id && log[2].levelID == VisitLevel.never.id)
+        precondition(log.allSatisfy { $0.previousLevelID == nil && $0.wasRaised == nil })
+        // With what came before: the level each place left, and which rose by themselves.
+        try logging.setStatus(level("visited"), for: jp.divisions[5])
+        logging.logChanges(
+            [(place: jp.divisions[5], level: level("stayed")), (place: CountryCatalog.world.divisions[0], level: level("passed"))],
+            from: logging.snapshot(), raised: [CountryCatalog.world.divisions[0].id])
+        let detailed = try logging.changeLog().suffix(2)
+        precondition(detailed.first?.previousLevelID == "visited" && detailed.first?.wasRaised == nil)
+        precondition(detailed.last?.previousLevelID == VisitLevel.never.id && detailed.last?.wasRaised == true)
+        logging.changeLogData = badData
+        logging.logChanges([(place: jp.divisions[3], level: level("passed"))])
+        precondition(logging.changeLogData == badData) // An unreadable log is never replaced.
+        logging.resetPlaces()
+        let afterReset = try logging.changeLog()
+        precondition(afterReset.isEmpty)
+        memoryContext.delete(logging)
+        print("PASS: catalog identity, legacy Codable, short data, country isolation, reset, unknown entries, corrupted data, change log")
         try LevelChecks.run(in: memoryContext)
 
         let url = URL(fileURLWithPath: CommandLine.arguments[1])
@@ -302,3 +419,48 @@ import SwiftData
         }
     }
 }
+
+#if WORLD_TIME_CHECKS
+/// World Time's lists of the places keeping a time, which need the time zone atlas compiled in:
+/// build with `-D WORLD_TIME_CHECKS` and TimeZoneAtlas.swift, TimeZoneAtlas+Subdivisions.swift,
+/// TimeZoneBand.swift, ZoneClock+Names.swift and CapitalCities.swift beside the catalogues.
+extension ModelRegression {
+    static func checkSameTimeNames() {
+        // Mid-October: New South Wales is on summer time, UTC+11, while the Northern Territory keeps
+        // UTC+9:30 all year.
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .gmt
+        let date = calendar.date(from: DateComponents(year: 2026, month: 10, day: 15, hour: 12))!
+        let here = ZoneClock(timeZone: TimeZone(identifier: "Europe/London")!, city: "London")
+        let bands = TimeZoneAtlas.bands(at: date, here: here) { _ in 0 }
+        func australia(at offset: Int) -> TimeZoneBand.Sharer? {
+            bands.first { $0.offset == offset }?.sharers.first { $0.placeID == "WORLD-AU" }
+        }
+        let eastern = australia(at: 11 * 3600)!.name
+        precondition(eastern.contains("New South Wales") && !eastern.contains("Northern Territory"), eastern)
+        precondition(australia(at: 9 * 3600 + 1800)!.name.contains("Northern Territory"))
+        // Every offset is written from UTC, UTC itself as ±0.
+        precondition(ZoneClock.utcName(offset: 9 * 3600) == "UTC+9")
+        precondition(ZoneClock.utcName(offset: 5 * 3600 + 1800) == "UTC+5:30")
+        precondition(ZoneClock.utcName(offset: -3 * 3600) == "UTC−3")
+        precondition(ZoneClock.utcName(offset: 0) == "UTC±0")
+        // No place keeping a time is named by a subdivision keeping another.
+        let world = Dictionary(CountryCatalog.world.divisions.map { ($0.id, $0) }) { first, _ in first }
+        for band in bands {
+            for sharer in band.sharers {
+                guard let place = world[sharer.placeID], TimeZoneAtlas.dividedCountries.contains(place.abbreviation),
+                      let list = CountryCatalog.collection(for: place) else { continue }
+                let named = sharer.name.dropLast(place.name.count + 2)
+                for division in list.divisions where named.contains(division.name) {
+                    // A name inside another, such as Baja California in Baja California Sur, is checked by the longer.
+                    guard !list.divisions.contains(where: { $0.id != division.id && $0.name.contains(division.name) && named.contains($0.name) })
+                    else { continue }
+                    let kept = TimeZoneAtlas.subdivisionNames(of: place, atOffset: band.offset, date: date)
+                    precondition(kept.contains(division.name), "\(sharer.name) at \(band.utcName)")
+                }
+            }
+        }
+        print("PASS: places keeping a time are named by the parts of them keeping it")
+    }
+}
+#endif

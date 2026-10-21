@@ -38,10 +38,17 @@ final class CountingPreferences {
     func savePreset(named name: String) {
         presets.append(CountingPreset(name: name, rules: rules))
     }
+
+    /// Back to counting as the app first did, with no presets saved.
+    func reset() {
+        rules = CountingRules()
+        presets = []
+    }
 }
 
 /// A mix of counting choices the person saved under a name, such as "My travel club".
-/// It leaves the level counted from alone, since that's chosen separately.
+/// It leaves the level counted from alone, since that's chosen separately, and the names of
+/// seas, which count nothing.
 struct CountingPreset: Codable, Identifiable, Equatable, Sendable {
     var id = UUID()
     var name: String
@@ -50,6 +57,7 @@ struct CountingPreset: Codable, Identifiable, Equatable, Sendable {
     func applied(to current: CountingRules) -> CountingRules {
         var applied = rules
         applied.minimumLevelID = current.minimumLevelID
+        applied.seaNames = current.seaNames
         return applied
     }
 }

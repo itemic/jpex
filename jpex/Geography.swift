@@ -8,6 +8,11 @@ final class Geography {
     /// The world's countries, with the globe's outline and lines of latitude and longitude.
     static let world = Geography(named: "geo_WORLD", isGlobe: true)
 
+    /// The world's countries moved to their antipodes, the far side of the Earth, as `Antipodes`
+    /// draws them over the World. Each point turns half way round and goes as far south of the
+    /// Equator as it was north, so each country comes out mirrored.
+    static let antipodes = world.map { Geography(source: $0.source.antipodal(), isGlobe: false) }
+
     private static var subdivisionCache: [String: Geography] = [:]
     private static var missing: Set<String> = []
 
@@ -44,6 +49,46 @@ final class Geography {
         self.isGlobe = isGlobe
     }
 
+    private init(source: GeoSource, isGlobe: Bool) {
+        self.source = source
+        self.isGlobe = isGlobe
+    }
+
+    // MARK: Places on the Earth
+
+    /// The place at a point on the Earth, given in degrees, by ID, or nil for the sea. Where one
+    /// place lies within another, such as Lesotho within South Africa, the smaller one.
+    func regionID(atLongitude longitude: Double, latitude: Double) -> String? {
+        let point = CGPoint(x: longitude, y: latitude)
+        return geographicOutlines
+            .filter { $0.bounds.contains(point) && $0.path.contains(point, eoFill: true) }
+            .min { $0.bounds.width * $0.bounds.height < $1.bounds.width * $1.bounds.height }?
+            .id
+    }
+
+    /// Whether a place covers a point on the Earth, given in degrees.
+    func region(_ id: String, containsLongitude longitude: Double, latitude: Double) -> Bool {
+        let point = CGPoint(x: longitude, y: latitude)
+        return geographicOutlines.contains { $0.id == id && $0.bounds.contains(point) && $0.path.contains(point, eoFill: true) }
+    }
+
+    /// The box in longitude and latitude a place's largest piece of land lies in, such as New
+    /// Zealand's South Island, rather than one stretched round the World by islands across the
+    /// date line.
+    func mainlandBounds(of id: String) -> CGRect? {
+        geographicOutlines.first { $0.id == id }?.mainland
+    }
+
+    /// Each place's outline in longitude and latitude, for asking what lies at a point on the Earth.
+    private lazy var geographicOutlines: [(id: String, path: Path, bounds: CGRect, mainland: CGRect)] = source.regions.map { feature in
+        var path = Path()
+        for ring in feature.rings { path.addRing(ring.points[...], closed: ring.isClosed) }
+        let mainland = feature.rings
+            .map { ring in ring.points.reduce(CGRect.null) { $0.union(CGRect(origin: $1, size: .zero)) } }
+            .max { $0.width * $0.height < $1.width * $1.height } ?? path.boundingRect
+        return (feature.id, path, path.boundingRect, mainland)
+    }
+
     /// The outlines in a projection and centre, projected once and kept.
     func map(_ projection: MapProjection, center: MapCenter) -> TravelMap {
         let key = Key(projection: projection, center: center)
@@ -73,9 +118,41 @@ final class Geography {
         return map
     }
 
+    /// The outlines partway from one projection to another, as `map(from:to:progress:center:)` draws
+    /// them, but from the lighter outlines, so a reshaping that redraws at every frame keeps up, such
+    /// as the welcome's globe unrolling into the World.
+    func lightMap(from start: MapProjection, to end: MapProjection, progress: Double, center: MapCenter) -> TravelMap {
+        let shapes = lightShapes[center] ?? GeoShapes(source: lightSource, centerLongitude: center.longitude, isGlobe: isGlobe)
+        lightShapes[center] = shapes
+        func points(in projection: MapProjection) -> [CGPoint] {
+            let key = Key(projection: projection, center: center)
+            if let points = lightPoints[key] { return points }
+            var points = shapes.geographic.map(projection.project)
+            Self.shapeOutline(of: shapes, projection: projection, into: &points)
+            lightPoints[key] = points
+            return points
+        }
+        let from = points(in: start)
+        let to = points(in: end)
+        let t = CGFloat(min(max(progress, 0), 1))
+        var blended = from
+        for index in blended.indices {
+            blended[index].x += (to[index].x - from[index].x) * t
+            blended[index].y += (to[index].y - from[index].y) * t
+        }
+        var map = shapes.map(points: blended, visible: visibility(in: t < 0.5 ? start : end, shapes: shapes))
+        map.isSphere = (start == .globe && t < 0.5) || (end == .globe && t >= 0.5)
+        return map
+    }
+
+    /// The lighter outlines cut for a centre, and their points in each projection, kept for reshaping.
+    private var lightShapes: [MapCenter: GeoShapes] = [:]
+    private var lightPoints: [Key: [CGPoint]] = [:]
+
     /// The World turning to a new centre, cut afresh at every step. Uses lighter outlines so it
     /// can redraw at every frame.
     func turningMap(_ projection: MapProjection, centerLongitude: Double) -> TravelMap {
+        if projection == .globe { return turningGlobe(centerLongitude: centerLongitude) }
         let shapes = GeoShapes(source: lightSource, centerLongitude: centerLongitude, isGlobe: isGlobe)
         var points = shapes.geographic.map(projection.project)
         Self.shapeOutline(of: shapes, projection: projection, into: &points)
@@ -85,6 +162,23 @@ final class Geography {
         map.centerLongitude = centerLongitude
         return map
     }
+
+    /// The globe turning to a new centre. A globe has no edge to cut the outlines along, so they're
+    /// laid out once and only turned and projected at each step.
+    private func turningGlobe(centerLongitude: Double) -> TravelMap {
+        let shapes = globeShapes
+        let turned = shapes.geographic.map { CGPoint(x: $0.x - centerLongitude, y: $0.y) }
+        var points = turned.map(MapProjection.globe.project)
+        Self.shapeOutline(of: shapes, projection: .globe, into: &points)
+        var map = shapes.map(points: points, visible: turned.map(MapProjection.globe.isVisible))
+        map.isSphere = true
+        map.projection = .globe
+        map.centerLongitude = centerLongitude
+        return map
+    }
+
+    /// The lighter outlines uncut, with every meridian, for turning the globe.
+    private lazy var globeShapes = GeoShapes(source: lightSource, centerLongitude: 0, isGlobe: isGlobe, keepsEveryMeridian: true)
 
     /// The outlines in full detail centred on any longitude, such as a globe turned by hand.
     /// The most recent few are kept, so flying in and out of a turned globe doesn't rebuild them.
@@ -199,6 +293,25 @@ private struct GeoSource {
     var disputedAreas: [Feature]
     var disputedLines: [Feature]
 
+    /// A copy with each place's latitudes turned south for north, the first half of moving it to its
+    /// antipodes; the other half, turning it half way round, happens as it's centred. Disputed
+    /// areas and lines are left out.
+    func antipodal() -> GeoSource {
+        func flipped(_ feature: Feature) -> Feature {
+            var flipped = feature
+            flipped.rings = feature.rings.map { ring in
+                MapRing(points: ring.points.map { CGPoint(x: $0.x, y: -$0.y) }, isClosed: ring.isClosed)
+            }
+            flipped.label = feature.label.map { CGPoint(x: $0.x, y: -$0.y) }
+            return flipped
+        }
+        var copy = self
+        copy.regions = regions.map(flipped)
+        copy.disputedAreas = []
+        copy.disputedLines = []
+        return copy
+    }
+
     /// A copy keeping every other point of longer rings, for drawing while the map turns.
     func thinned() -> GeoSource {
         func thin(_ feature: Feature) -> Feature {
@@ -225,10 +338,14 @@ private struct GeoSource {
         func feature(_ item: GeoFile.Feature) -> Feature {
             Feature(id: item.id, rings: TravelMap.rings(fromSVG: item.d), label: label(of: item))
         }
-        // Lakes inside a place are filled in rather than shown as holes.
+        // Lakes inside a place are filled in rather than shown as holes. A sea's holes are islands,
+        // so they stay.
         let labels = file.regions.compactMap(label(of:))
         regions = file.regions.map { item in
-            Feature(id: item.id, rings: TravelMap.fillingLakes(in: TravelMap.rings(fromSVG: item.d), labels: labels), label: label(of: item))
+            let rings = TravelMap.rings(fromSVG: item.d)
+            return Feature(
+                id: item.id, rings: file.keepsHoles == true ? rings : TravelMap.fillingLakes(in: rings, labels: labels),
+                label: label(of: item))
         }
         disputedAreas = (file.disputed ?? []).map(feature)
         disputedLines = (file.disputedLines ?? []).map(feature)
@@ -255,7 +372,9 @@ private struct GeoShapes {
     var outline: Shape?
     var graticule: Shape?
 
-    init(source: GeoSource, centerLongitude center: Double, isGlobe: Bool) {
+    /// With `keepsEveryMeridian`, the meridian on the map's edge is kept too, for a globe that turns
+    /// it into view.
+    init(source: GeoSource, centerLongitude center: Double, isGlobe: Bool, keepsEveryMeridian: Bool = false) {
         var points: [CGPoint] = []
         func add(_ id: String, rings: [MapRing], label: CGPoint? = nil) -> Shape {
             var ranges: [RingRange] = []
@@ -281,7 +400,7 @@ private struct GeoShapes {
         disputedAreas = source.disputedAreas.map(addFeature)
         disputedLines = source.disputedLines.map(addFeature)
         outline = isGlobe ? add("outline", rings: [Self.outlineRing]) : nil
-        graticule = isGlobe ? add("graticule", rings: Self.graticuleLines(center: center)) : nil
+        graticule = isGlobe ? add("graticule", rings: Self.graticuleLines(center: center, keepsEdge: keepsEveryMeridian)) : nil
         geographic = points
     }
 
@@ -436,10 +555,10 @@ private struct GeoShapes {
     }
 
     /// Meridians and parallels every 30 degrees, the meridians where they fall for this centre.
-    private static func graticuleLines(center: Double) -> [MapRing] {
+    private static func graticuleLines(center: Double, keepsEdge: Bool) -> [MapRing] {
         let meridians = stride(from: -150.0, through: 180, by: 30).compactMap { longitude -> MapRing? in
             let x = recentered(CGPoint(x: longitude, y: 0), on: center).x
-            guard abs(x) < 179.5 else { return nil }
+            guard keepsEdge || abs(x) < 179.5 else { return nil }
             return MapRing(points: stride(from: -90.0, through: 90, by: 2).map { CGPoint(x: x, y: $0) })
         }
         let parallels = stride(from: -60.0, through: 60, by: 30).map { latitude in
@@ -451,6 +570,8 @@ private struct GeoShapes {
 
 private struct GeoFile: Decodable {
     var regions: [Feature]
+    /// Whether its places' holes are always shown, as islands in seas are, rather than filled as lakes.
+    var keepsHoles: Bool?
     var disputed: [Feature]?
     var disputedLines: [Feature]?
 

@@ -119,7 +119,8 @@ private struct WorldDrifting: ViewModifier {
     var spinner: WorldSpinner
     var center: MapCenter
     var isEnabled: Bool
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// Off with Reduce Motion, in Low Power Mode and while the app isn't in front.
+    @Environment(\.allowsAmbientMotion) private var allowsAmbientMotion
 
     private struct Key: Equatable {
         var isOn: Bool
@@ -127,14 +128,17 @@ private struct WorldDrifting: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        content.task(id: Key(isOn: isEnabled && !reduceMotion, center: center)) {
-            guard isEnabled, !reduceMotion else {
+        content.task(id: Key(isOn: isEnabled && allowsAmbientMotion, center: center)) {
+            guard isEnabled, allowsAmbientMotion else {
                 spinner.brake()
                 return
             }
             while !Task.isCancelled {
-                try? await Task.sleep(for: .milliseconds(500))
-                if spinner.hasDriftedLongEnough || ProcessInfo.processInfo.isLowPowerModeEnabled {
+                // Asleep until something can change: the globe left alone long enough to drift, or a
+                // drift run its course, rather than waking twice a second to ask.
+                let wait = spinner.nextDriftCheck.map { max($0.timeIntervalSinceNow, 0.25) } ?? 5
+                try? await Task.sleep(for: .seconds(wait))
+                if spinner.hasDriftedLongEnough {
                     spinner.brake()
                 } else if spinner.wantsToDrift {
                     spinner.startDrift(from: center)
@@ -308,6 +312,14 @@ final class WorldSpinner {
     var wantsToDrift: Bool {
         spin == nil && turn == nil && drift == nil && !hasDriftedSinceTouch
             && Date.now.timeIntervalSince(lastTouch) > WorldDrift.idleDelay
+    }
+
+    /// When a drift might next begin or should end, for checking then; nil once it has drifted and
+    /// rests until it's next touched. While a finger or a fling turns it, soon.
+    var nextDriftCheck: Date? {
+        if spin != nil || turn != nil { return .now.addingTimeInterval(1) }
+        if let drift { return drift.braking == nil ? drift.start.addingTimeInterval(WorldDrift.longest) : nil }
+        return hasDriftedSinceTouch ? nil : lastTouch.addingTimeInterval(WorldDrift.idleDelay)
     }
 
     /// Whether a drift has gone on long enough, so a map left for good comes to rest.

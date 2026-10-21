@@ -14,7 +14,6 @@ enum LevelChecks {
         precondition(standard.isValid)
         precondition(standard.levels.map(\.id) == VisitStatus.allCases.filter { $0 != .never }.map(\.storageKey))
         precondition(standard.allLevels.first == .never && standard.level(id: "never") == .never)
-        precondition(standard.next(after: .never) == passed && standard.next(after: lived) == .never)
         precondition(standard.higher(than: .never) == passed && standard.higher(than: lived) == nil)
         precondition(standard.lower(than: passed) == .never && standard.lower(than: .never) == nil)
         precondition(Array(standard.levels(from: visited)) == [visited, stayed, lived])

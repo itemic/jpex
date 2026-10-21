@@ -8,6 +8,7 @@ struct AppIconView: View {
   /// Counts taps on icons, so the tick plays for a choice, not when the screen opens or a failed
   /// change goes back.
   @State private var taps = 0
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   var body: some View {
     Form {
@@ -16,28 +17,28 @@ struct AppIconView: View {
       } header: {
         Text("Japan")
       } footer: {
-        Text("都道府県 and the islands of Japan, in your choice of colour.")
+        Text("Original Japan prefectures icon")
       }
-      Section("Other Maps") {
+      Section("Other maps") {
         IconGrid(icons: AppIcon.otherMaps, selection: selection, choose: choose)
       }
       Section {
         IconGrid(icons: AppIcon.chinesePlates, selection: selection, choose: choose)
       } header: {
-        Text("Chinese Licence Plates")
+        Text("Chinese licence plates")
       } footer: {
         Text("Each province’s one-character short name, as on its cars’ plates.")
       }
       Section {
         IconGrid(icons: AppIcon.europeanPlates, selection: selection, choose: choose)
       } header: {
-        Text("European Licence Plates")
+        Text("European licence plates")
       } footer: {
         Text("The blue band that starts plates across the European Union, with each country’s code.")
       }
     }
     .headerProminence(.increased)
-    .navigationTitle("App Icon")
+    .navigationTitle("App icon")
     .navigationBarTitleDisplayMode(.inline)
     .sensoryFeedback(.selection, trigger: taps)
     .onAppear {
@@ -45,7 +46,7 @@ struct AppIconView: View {
       selection = AppIcon.current
     }
     .alert(
-      "Couldn’t Change the Icon",
+      "Couldn’t change the icon",
       isPresented: Binding(get: { failure != nil }, set: { if !$0 { failure = nil } })
     ) {
       Button("OK", role: .cancel) {}
@@ -58,12 +59,13 @@ struct AppIconView: View {
     guard icon != selection else { return }
     let previous = selection
     taps += 1
-    withAnimation(.snappy) { selection = icon }
+    let hop = Motion.moving(Motion.hop, reduceMotion: reduceMotion)
+    withAnimation(hop) { selection = icon }
     Task {
       do {
         try await icon.apply()
       } catch {
-        withAnimation(.snappy) { selection = previous }
+        withAnimation(hop) { selection = previous }
         failure = error.localizedDescription
       }
     }
@@ -94,10 +96,13 @@ private struct IconGrid: View {
   }
 }
 
+/// An icon with its name beneath, ringed and ticked while it's the one worn; with Reduce Motion,
+/// the ring and tick fade in rather than growing.
 private struct IconTile: View {
   var icon: AppIcon
   var isSelected: Bool
   var size: CGFloat
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   var body: some View {
     let shape = RoundedRectangle(cornerRadius: size * 0.225, style: .continuous)
@@ -115,7 +120,7 @@ private struct IconTile: View {
           if isSelected {
             RoundedRectangle(cornerRadius: size * 0.225 + 4, style: .continuous)
               .strokeBorder(.tint, lineWidth: 2.5)
-              .transition(.scale(scale: 0.9).combined(with: .opacity))
+              .transition(reduceMotion ? .opacity : .scale(scale: 0.9).combined(with: .opacity))
           }
         }
         .overlay(alignment: .bottomTrailing) {
@@ -126,15 +131,14 @@ private struct IconTile: View {
               .foregroundStyle(.white, .tint)
               .background(Circle().fill(.background).padding(2))
               .offset(x: 4, y: 4)
-              .transition(.scale.combined(with: .opacity))
+              .transition(.arrive(reduceMotion: reduceMotion, anchor: .bottomTrailing))
           }
         }
-      Text(icon.name)
-        .font(.caption.weight(isSelected ? .semibold : .regular))
-        .foregroundStyle(isSelected ? AnyShapeStyle(.primary) : AnyShapeStyle(.secondary))
-        .multilineTextAlignment(.center)
-        .lineLimit(2)
-        .fixedSize(horizontal: false, vertical: true)
+      ScrollingText {
+        Text(icon.name)
+          .font(.caption.weight(isSelected ? .semibold : .regular))
+          .foregroundStyle(isSelected ? AnyShapeStyle(.primary) : AnyShapeStyle(.secondary))
+      }
     }
     .frame(maxWidth: .infinity)
     .contentShape(Rectangle())
