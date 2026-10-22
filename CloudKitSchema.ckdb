@@ -1,0 +1,37 @@
+DEFINE SCHEMA
+
+    RECORD TYPE CD_SaveModel (
+        CD_changeLogData         BYTES QUERYABLE SORTABLE,
+        CD_changeLogData_ckAsset ASSET,
+        CD_entityName            STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_levelsData            BYTES QUERYABLE SORTABLE,
+        CD_levelsData_ckAsset    ASSET,
+        CD_moveReceipt           BYTES QUERYABLE SORTABLE,
+        CD_moveReceipt_ckAsset   ASSET,
+        CD_saveID                STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_statusesData          BYTES QUERYABLE SORTABLE,
+        CD_statusesData_ckAsset  ASSET,
+        CD_visitStatus           BYTES QUERYABLE SORTABLE,
+        CD_visitStatus_ckAsset   ASSET,
+        "___createTime"          TIMESTAMP,
+        "___createdBy"           REFERENCE,
+        "___etag"                STRING,
+        "___modTime"             TIMESTAMP,
+        "___modifiedBy"          REFERENCE,
+        "___recordID"            REFERENCE,
+        GRANT WRITE TO "_creator",
+        GRANT CREATE TO "_icloud",
+        GRANT READ TO "_world"
+    );
+
+    RECORD TYPE Users (
+        "___createTime" TIMESTAMP,
+        "___createdBy"  REFERENCE,
+        "___etag"       STRING,
+        "___modTime"    TIMESTAMP,
+        "___modifiedBy" REFERENCE,
+        "___recordID"   REFERENCE,
+        roles           LIST<INT64>,
+        GRANT WRITE TO "_creator",
+        GRANT READ TO "_world"
+    );

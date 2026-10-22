@@ -65,12 +65,21 @@ import SwiftData
         precondition(sharedIDs.allSatisfy { collectionsByID[$0]?.count == 2 && collectionsByID[$0]!.contains("WORLD") })
         precondition(Set(CountryCatalog.legacyStatusIDs.values).count == CountryCatalog.legacyStatusIDs.count)
 
-        // Counting rules shape Countries without touching any other collection.
+        // Counting rules shape Countries without touching any other collection. A fresh install
+        // counts the UN's members and observers, Taiwan, Hong Kong and Macau.
         let standardCountries = CountryCatalog.world(applying: CountingRules())
-        precondition(standardCountries.divisions.count == 243)
-        precondition(Set(["HK", "MO", "TW", "GB", "GL"]).isSubset(of: Set(standardCountries.divisions.map(\.abbreviation))))
-        precondition(!standardCountries.divisions.contains { ["AQ", "BV", "UM", "ENG"].contains($0.abbreviation) })
-        var everything = CountingRules()
+        precondition(standardCountries.divisions.count == 198)
+        precondition(Set(["HK", "MO", "TW", "GB", "VA", "PS"]).isSubset(of: Set(standardCountries.divisions.map(\.abbreviation))))
+        precondition(!standardCountries.divisions.contains {
+            ["AQ", "BV", "UM", "ENG", "GL", "XK", "EH", "CK", "NU"].contains($0.abbreviation)
+        })
+        // Territories and every self-governing state too, as the defaults once were.
+        var broad = CountingRules()
+        broad.includesTerritories = true
+        broad.includesPartlyRecognised = true
+        broad.includesAssociatedStates = true
+        precondition(CountryCatalog.world(applying: broad).divisions.count == 243)
+        var everything = broad
         everything.splitsUnitedKingdom = true
         everything.includesRemotePlaces = true
         let splitCountries = CountryCatalog.world(applying: everything)
@@ -79,7 +88,7 @@ import SwiftData
         precondition(europe.contains("Scotland") && !europe.contains("United Kingdom"))
         precondition(europe.firstIndex(of: "England")! < europe.firstIndex(of: "Estonia")!)
         precondition(splitCountries.groups.allSatisfy { group in group.divisions.allSatisfy { $0.groupID == group.id } })
-        var strict = CountingRules()
+        var strict = broad
         strict.includesSpecialRegions = false
         strict.includesTaiwan = false
         strict.includesTerritories = false
@@ -133,7 +142,8 @@ import SwiftData
         let scotland = CountryCatalog.unitedKingdom.divisions.first { $0.abbreviation == "SCT" }!
         precondition(owners(scotland, CountingRules()) == ["WORLD-GB"] && owners(scotland, everything).isEmpty)
         let guadeloupe = CountryCatalog.france.divisions.first { $0.id == "FR-971" }!
-        precondition(owners(guadeloupe, CountingRules()).isEmpty && owners(guadeloupe, strict) == ["WORLD-FR"])
+        precondition(owners(guadeloupe, broad).isEmpty && owners(guadeloupe, strict) == ["WORLD-FR"])
+        precondition(owners(guadeloupe, CountingRules()) == ["WORLD-FR"])
         precondition(owners(CountryCatalog.world.divisions.first { $0.abbreviation == "CA" }!, CountingRules()).isEmpty)
         let strictOwners = CountryCatalog.mapRegionOwners(applying: strict)
         precondition(strictOwners["WORLD-TW"] == "WORLD-CN" && strictOwners["CN-HK"] == "WORLD-CN")
@@ -377,6 +387,7 @@ import SwiftData
         memoryContext.delete(logging)
         print("PASS: catalog identity, legacy Codable, short data, country isolation, reset, unknown entries, corrupted data, change log")
         try LevelChecks.run(in: memoryContext)
+        try SaveMergeChecks.run(in: memoryContext)
 
         let url = URL(fileURLWithPath: CommandLine.arguments[1])
         let configuration = ModelConfiguration(schema: schema, url: url)

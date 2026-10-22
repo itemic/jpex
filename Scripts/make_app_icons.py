@@ -2,9 +2,9 @@
 """Makes the alternate app icons, and the small previews Settings shows of them.
 
 Japan's colours recolour the original icon, so its 都道府県 artwork stays exactly as drawn.
-The other countries are drawn from the app's own outlines in `jpex/Maps/geo_<ID>.json`, white on
+The other countries are drawn from the app's own outlines in `jpex/Resources/Maps/geo_<ID>.json`, white on
 colour over hollow lettering, in the original's style. China's licence plates are drawn for each
-place with a short name in `jpex/ChinaCatalog.swift`: its character, white on plate blue. The
+place with a short name in `jpex/Places/Countries/ChinaCatalog.swift`: its character, white on plate blue. The
 European Union's members get the blue band their plates start with: the ring of stars over the
 country's code, in white.
 
@@ -19,7 +19,7 @@ from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent / "jpex"
-ASSETS = ROOT / "Assets.xcassets"
+ASSETS = ROOT / "Resources" / "Assets.xcassets"
 ORIGINAL = ASSETS / "AppIcon.appiconset" / "Icon_1024x1024.png"
 ORIGINAL_BACKGROUND = (38, 189, 226)
 
@@ -93,7 +93,7 @@ def main():
 
 def chinese_short_names():
     """Each place's code and licence-plate character, as the app lists them."""
-    catalog = (ROOT / "ChinaCatalog.swift").read_text()
+    catalog = (ROOT / "Places" / "Countries" / "ChinaCatalog.swift").read_text()
     return re.findall(r'\("([A-Z]{2})", "[^"]+", "[^"]+", "(.)",', catalog)
 
 
@@ -262,7 +262,7 @@ def draw_tall_lettering(image, lines, font_spec, background, tint):
 
 def land_mask(country, bounds, big):
     """The country's outline, white on black, fitted into the middle of the square."""
-    file = json.loads((ROOT / "Maps" / f"geo_{country}.json").read_text())
+    file = json.loads((ROOT / "Resources" / "Maps" / f"geo_{country}.json").read_text())
     rings = []
     for region in file["regions"]:
         for part in re.split(r"(?=M)", region["d"]):

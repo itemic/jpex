@@ -1,13 +1,10 @@
 {
   "placements": [
-    {
-      "fileName": "Untitled-2Artboard 1.jpg"
-    },
-    {
-      "fileName": "Untitled-2Artboard 1 copy 2.jpg"
-    },
-    {
-      "fileName": "Untitled-2Artboard 1 copy.jpg"
-    }
+    { "fileName": "01-world.png" },
+    { "fileName": "02-japan.png" },
+    { "fileName": "03-flag-quiz.png" },
+    { "fileName": "04-atlas.png" },
+    { "fileName": "05-time-zones.png" },
+    { "fileName": "06-voltage.png" }
   ]
 }
