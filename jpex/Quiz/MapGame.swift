@@ -1459,11 +1459,6 @@ final class MapGame: Identifiable {
         return .wrong
     }
 
-    /// Whether a typed answer already spells out the answer in full, so it can be taken as it's typed.
-    func isExactAnswer(_ typed: String) -> Bool {
-        CapitalCities.closest(typed, among: answerPlaces.flatMap(typedNames(of:)))?.isExact == true
-    }
-
     /// The names a place is answered by when typed: in Capital, every name of each of its
     /// capitals; otherwise its own name, its local name and its formal name.
     private func typedNames(of place: AdministrativeDivision) -> [String] {

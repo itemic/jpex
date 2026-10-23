@@ -2,8 +2,7 @@ import SwiftUI
 
 /// The card for the place in question. A striped bar across the top shows how far through the
 /// round you are. How it's answered follows the options. Typed, a field takes the place's name or
-/// its capital, answering by itself once it's spelt out in full and forgiving a small slip, with
-/// the right spelling shown after. From a list of four, candy names or capitals are dealt to pick
+/// its capital, checked with Return and forgiving a small slip, with the right spelling shown after. From a list of four, candy names or capitals are dealt to pick
 /// from, with Reveal and then the way on at the foot. From a list of all, every place in play, or
 /// every capital, is a grid of cards, like a Sporcle quiz: type to narrow them down. Either way a
 /// wrong answer turns red or shakes, and you try again. Find gives a name to find: tap a place on
@@ -628,9 +627,9 @@ struct GameQuestionCard: View {
         }
     }
 
-    /// Where the answer is typed: a place's name, or in Capital, its capital. Spelt out in full it
-    /// answers by itself; Return checks it, letting a small slip through. A wrong one shakes and
-    /// clears for another go.
+    /// Where the answer is typed: a place's name, or in Capital, its capital. Only Return checks it,
+    /// so a right answer never gives itself away as it's typed, letting a small slip through. A
+    /// wrong one shakes and clears for another go.
     private var typedField: some View {
         let isCapital = game.mode == .capitals
         let isCode = game.mode == .pickCode
@@ -653,9 +652,6 @@ struct GameQuestionCard: View {
                         onTyped(query)
                     }
                     isSearching = true
-                }
-                .onChange(of: query) {
-                    if game.phase == .asking, game.isExactAnswer(query) { onTyped(query) }
                 }
                 // A slip taken as right: the field shows the name spelt as it is.
                 .onChange(of: game.correction) { _, correction in
@@ -704,7 +700,6 @@ struct GameQuestionCard: View {
                 .autocorrectionDisabled()
                 .submitLabel(.done)
                 .onSubmit(submit)
-                .onChange(of: query) { answerIfRight() }
             if !query.isEmpty {
                 Button("Clear", systemImage: "xmark.circle.fill") { query = "" }
                     .labelStyle(.iconOnly)
@@ -715,15 +710,6 @@ struct GameQuestionCard: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
         .background(.primary.opacity(0.07), in: Capsule())
-    }
-
-    /// Typing the right name in full answers as soon as it's complete, as in a Sporcle quiz.
-    private func answerIfRight() {
-        guard let place = game.current, game.phase == .asking else { return }
-        let typed = CardChoices.folded(query)
-        let entries = CardChoices.entries(in: game, localLanguage: localLanguage)
-        guard entries.contains(where: { $0.places.contains(place) && $0.searchNames.contains(typed) }) else { return }
-        onAnswer(place)
     }
 
     /// Return answers with the only card left, or one typed out in full.
