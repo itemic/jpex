@@ -3,10 +3,10 @@ import SwiftUI
 /// The end of a round: how many you knew first time, counting up, a pill for each way the answers
 /// went, how long it took, and the places worth another look: one tapped lights up on the map, and
 /// beneath them, shows what was asked about it, such as its code or its capital. Then the ways on:
-/// Back to the quizzes, Review to play only the places worth another look again, and Replay to
-/// play the whole round again. Once the count has run up, the number pops with a soft tap and
-/// throws confetti out across the whole screen, every round, however it went: it marks finishing,
-/// never the score. Reduce Motion leaves all of it out.
+/// Back to the quizzes, Review to play only the places worth another look again, and New game to
+/// play a fresh round of the same quiz. Once the count has run up, the number pops with a soft tap
+/// and throws confetti out across the whole screen, every round, however it went: it marks
+/// finishing, never the score. Reduce Motion leaves all of it out.
 struct GameResultsCard: View {
     var game: MapGame
     var localLanguage: Bool
@@ -16,8 +16,8 @@ struct GameResultsCard: View {
     var onLookAgain: (AdministrativeDivision) -> Void
     /// Plays the places worth another look again.
     var onReview: () -> Void
-    /// Plays the whole round again.
-    var onReplay: () -> Void
+    /// Starts a fresh round of the same quiz, shuffled anew.
+    var onNewGame: () -> Void
     var onBack: () -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var shownCount = 0.0
@@ -191,7 +191,7 @@ struct GameResultsCard: View {
     }
 
     /// Back to the quizzes, Review for the places worth another look, where there are any, and
-    /// Replay for the whole round.
+    /// New game for a fresh round.
     private var buttons: some View {
         HStack(spacing: 8) {
             Button(action: onBack) {
@@ -213,14 +213,14 @@ struct GameResultsCard: View {
                 .buttonStyle(CandyButtonStyle(color: game.mode.color, pattern: .dots))
                 .accessibilityHint("Replays the \(game.placesToReview.count) you missed.")
             }
-            Button(action: onReplay) {
-                Label("Replay", systemImage: "arrow.clockwise")
+            Button(action: onNewGame) {
+                Label("New game", systemImage: "arrow.clockwise")
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
             }
             .buttonStyle(CandyButtonStyle(color: game.mode.color, pattern: .candyStripes))
             .keyboardShortcut(.defaultAction)
-            .accessibilityHint("Plays the whole round again.")
+            .accessibilityHint("Starts a fresh round of this quiz.")
         }
         .font(.headline.weight(.medium))
         .lineLimit(1)

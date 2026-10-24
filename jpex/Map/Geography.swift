@@ -180,6 +180,36 @@ final class Geography {
     /// The lighter outlines uncut, with every meridian, for turning the globe.
     private lazy var globeShapes = GeoShapes(source: lightSource, centerLongitude: 0, isGlobe: isGlobe, keepsEveryMeridian: true)
 
+    /// The globe turned to any longitude and tipped any way between the poles, as two fingers turn
+    /// it on a shared picture: from the lighter outlines while it moves, and in full detail at rest.
+    /// The outlines are turned uncut, as `turningGlobe` turns them, since a tipped globe shows its
+    /// far side's edge near the poles. The last few at rest are kept.
+    func globe(centerLongitude: Double, tilt: Double, isMoving: Bool) -> TravelMap {
+        let key = TiltedKey(tenthsOfDegree: Int((centerLongitude * 10).rounded()), tiltTenths: Int((tilt * 10).rounded()))
+        if !isMoving, let map = tiltedGlobes.first(where: { $0.key == key })?.map { return map }
+        let shapes = isMoving ? globeShapes : detailedGlobeShapes
+        let turned = shapes.geographic.map { CGPoint(x: $0.x - centerLongitude, y: $0.y) }
+        let radians = tilt * .pi / 180
+        var points = turned.map { MapProjection.globePoint($0, tilt: radians) }
+        Self.shapeOutline(of: shapes, projection: .globe, into: &points)
+        var map = shapes.map(points: points, visible: turned.map { MapProjection.facesViewer($0, tilt: radians) })
+        map.isSphere = true
+        map.projection = .globe
+        map.centerLongitude = centerLongitude
+        if !isMoving { tiltedGlobes = Array((tiltedGlobes + [(key, map)]).suffix(2)) }
+        return map
+    }
+
+    private struct TiltedKey: Hashable {
+        var tenthsOfDegree: Int
+        var tiltTenths: Int
+    }
+
+    private var tiltedGlobes: [(key: TiltedKey, map: TravelMap)] = []
+
+    /// The outlines in full detail uncut, with every meridian, for a globe turned and tipped by hand.
+    private lazy var detailedGlobeShapes = GeoShapes(source: source, centerLongitude: 0, isGlobe: isGlobe, keepsEveryMeridian: true)
+
     /// The outlines in full detail centred on any longitude, such as a globe turned by hand.
     /// The most recent few are kept, so flying in and out of a turned globe doesn't rebuild them.
     func map(_ projection: MapProjection, centerLongitude: Double) -> TravelMap {

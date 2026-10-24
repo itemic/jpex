@@ -1,7 +1,8 @@
 import UIKit
 
-/// An icon the app can wear on the Home Screen: Japan in the original sky blue or another
-/// colour, another country's outline, or a Chinese or European licence plate. Made by
+/// An icon the app can wear on the Home Screen: Japan in the original sky blue, another colour
+/// or neon, another country's outline, or a Chinese or European licence plate. Each has a dark
+/// version for a dark Home Screen, and each, with its preview, is made by
 /// `Scripts/make_app_icons.py`.
 struct AppIcon: Identifiable, Hashable, RawRepresentable {
   /// The stem the icon's assets are named with, such as `JapanRed` or `Plate-BJ`.
@@ -10,7 +11,7 @@ struct AppIcon: Identifiable, Hashable, RawRepresentable {
   var collection: Collection
 
   enum Collection {
-    /// Japan's colours, which keep the original 都道府県 artwork.
+    /// Japan's colours, which keep the original 都道府県 artwork, and the same design in neon.
     case japan
     /// Other countries' outlines, each on its own colour.
     case otherMaps
@@ -45,6 +46,7 @@ struct AppIcon: Identifiable, Hashable, RawRepresentable {
     AppIcon("JapanPink", name: "Sakura", collection: .japan),
     AppIcon("JapanPurple", name: "Fuji", collection: .japan),
     AppIcon("JapanNight", name: "Night", collection: .japan),
+    AppIcon("JapanNeon", name: "Neon", collection: .japan),
   ]
 
   private static let taiwan = AppIcon("Taiwan", name: "Taiwan", collection: .otherMaps)

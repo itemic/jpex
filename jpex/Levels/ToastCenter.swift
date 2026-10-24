@@ -14,6 +14,8 @@ struct LevelToast: Identifiable, Equatable {
     var ladder = VisitLadder.standard
     /// Puts the change back, when it can be undone.
     var onUndo: (() -> Void)?
+    /// Opens the share screen on the places just been to, where sharing them is suggested.
+    var onShare: (() -> Void)?
 
     enum Kind: Equatable {
         /// A country rose along with one of its places: "Canada set to STAYED".
@@ -22,15 +24,20 @@ struct LevelToast: Identifiable, Equatable {
         case completed
         /// An undo or redo moved a place from one level to another.
         case changed(from: VisitLevel)
+        /// A place newly been to, said only to suggest sharing it: "Kyoto added".
+        case added
     }
 
     /// How long it stays: long enough to reach Undo when there is one, and to enjoy a finished list.
     /// With VoiceOver, long enough to hear it and move to Undo.
     var duration: Duration {
-        if UIAccessibility.isVoiceOverRunning { return .seconds(onUndo == nil ? 5 : 10) }
+        if UIAccessibility.isVoiceOverRunning { return .seconds(onUndo == nil && onShare == nil ? 5 : 10) }
+        // Long enough to reach Share, where it's suggested.
+        if onShare != nil { return .seconds(5) }
         return switch kind {
         case .completed: .seconds(3.2)
         case .changed: .seconds(2.2)
+        case .added: .seconds(3)
         case .raised: .seconds(onUndo == nil ? 2.6 : 4)
         }
     }
@@ -41,6 +48,7 @@ struct LevelToast: Identifiable, Equatable {
         case .raised: "\(placeName) set to \(level.name)"
         case .completed: "All of \(placeName) at \(level.name)"
         case .changed(let from): "\(placeName), \(from.name) to \(level.name)"
+        case .added: "\(placeName) added at \(level.name)"
         }
     }
 

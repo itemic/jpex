@@ -56,6 +56,10 @@ struct ContentView: View {
     @State private var game: MapGame?
     /// Learn asked for from the quiz lobby, for the list of its collection to open its full map in.
     @State private var learnRequest: LearnDeck.Request?
+    /// A nudge for a list to open its share screen on the places just been to, from a toast.
+    @State private var shareRequest: ShareRequest?
+    /// When the toast last suggested sharing, so it does so only now and then.
+    @AppStorage("shareSuggestedAt") private var shareSuggestedAt = 0.0
     /// The width of the page before the fold while iPhone Duo is held partly folded like a book.
     @State private var leadingPageWidth: CGFloat?
     /// Where the list starts on screen, and how far a side bar of controls insets it there.
@@ -435,7 +439,8 @@ struct ContentView: View {
             revealedPlace: revealedPlace,
             onOpenPlace: { placeID, collectionID in openPlace(placeID, in: collectionID, keepsWayBack: true) },
             mapLocation: listMap,
-            learnRequest: learnRequest
+            learnRequest: learnRequest,
+            shareRequest: shareRequest
         )
         .environment(\.regionCelebration, regionCelebration)
         // In a country, the way back leads to the World, or to the list it was opened from, rather
@@ -772,6 +777,9 @@ struct ContentView: View {
             raised: Set(raised.map(\.place.id)))
         else { return }
         let after = model.snapshot()
+        // Now and then, a place newly been to suggests sharing the places just added.
+        let onShare = shareSuggestion(
+            for: collection, newlyVisited: previous.id == VisitLevel.never.id && status.id != VisitLevel.never.id)
         let milestone = self.milestone(changing: division, in: collection, before: before, after: after)
         haptic = StatusHaptic(feedback: feedback(from: previous, to: status, ladder: after.ladder, isMilestone: milestone != nil))
         switch milestone {
@@ -779,7 +787,7 @@ struct ContentView: View {
             // Every place in the list has reached a level: "Japan VISITED", with confetti.
             ToastCenter.shared.show(LevelToast(
                 placeName: collection.name, flagAssetName: collection.flagAssetName, level: level,
-                kind: .completed, ladder: after.ladder))
+                kind: .completed, ladder: after.ladder, onShare: onShare))
             return
         case .region(let id):
             // The place lifts off the list's map first, and the region celebrates as it lands, so
@@ -798,7 +806,46 @@ struct ContentView: View {
             let undoManager = undoManager
             ToastCenter.shared.show(LevelToast(
                 placeName: country.name, flagAssetName: country.flagAssetName, level: status,
-                ladder: after.ladder, onUndo: undoManager.map { manager in { manager.undo() } }))
+                ladder: after.ladder, onUndo: undoManager.map { manager in { manager.undo() } }, onShare: onShare))
+        } else if let onShare {
+            // No toast of its own, so one just for suggesting the share: "Kyoto added".
+            ToastCenter.shared.show(LevelToast(
+                placeName: division.displayName(localLanguage: localLanguage), flagAssetName: division.flagAssetName,
+                level: status, kind: .added, ladder: after.ladder, onShare: onShare))
+        }
+    }
+
+    /// Share for the places just added to a list, offered now and then: for a place newly been to, in
+    /// a list with a map to picture, and no sooner than a couple of days after it was last offered.
+    private func shareSuggestion(for collection: Country, newlyVisited: Bool) -> (() -> Void)? {
+        let now = Date.now.timeIntervalSince1970
+        guard newlyVisited, now - shareSuggestedAt >= Self.shareSuggestionGap, TravelMap.named(collection.id) != nil
+        else { return nil }
+        shareSuggestedAt = now
+        let id = collection.id
+        return {
+            ToastCenter.shared.dismiss()
+            requestShare(of: id)
+        }
+    }
+
+    /// How long after suggesting sharing the toast waits before suggesting it again.
+    private static let shareSuggestionGap: TimeInterval = 2 * 24 * 60 * 60
+
+    /// Opens a list's share screen on the places just been to, from a toast's Share: the list comes
+    /// forward, opening if it isn't the one showing, and takes the request up.
+    private func requestShare(of collectionID: String) {
+        guard countries.contains(where: { $0.id == collectionID }) else { return }
+        if collectionID != selectedCountryID {
+            open(collectionID, fliesMap: false)
+        }
+        preferredColumn = .detail
+        let request = ShareRequest(collectionID: collectionID)
+        shareRequest = request
+        // Only a nudge: once the list has taken it up, it's let go, so it isn't taken up again.
+        Task {
+            try? await Task.sleep(for: .seconds(1.5))
+            if shareRequest == request { shareRequest = nil }
         }
     }
 

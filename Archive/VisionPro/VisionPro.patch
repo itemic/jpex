@@ -1,0 +1,817 @@
+diff --git a/jpex/App/ContentView.swift b/jpex/App/ContentView.swift
+index 5d13764..e5eb3f1 100755
+--- a/jpex/App/ContentView.swift
++++ b/jpex/App/ContentView.swift
+@@ -10,6 +10,10 @@ struct ContentView: View {
+     @Environment(CountingPreferences.self) private var counting
+     @Environment(CustomWorldGroups.self) private var customGroups
+     @Environment(SaveStore.self) private var saveStore
++    #if os(visionOS)
++    @Environment(\.openWindow) private var openWindow
++    @AppStorage(SpatialWindow.hasFloatedGlobeKey) private var hasFloatedGlobe = false
++    #endif
+     @Query private var saveModels: [SaveModel]
+     /// The person's save. iCloud may bring in one from each of their devices for a moment, until
+     /// they're folded into this one, which every device keeps.
+@@ -72,6 +76,9 @@ struct ContentView: View {
+     /// own margins either side of the crease. Nil while the screen is flat, folds across, or the
+     /// fold leaves too little room on either side, such as a window beside another app.
+     nonisolated private static func leadingPageWidth(in proxy: GeometryProxy) -> CGFloat? {
++        #if os(visionOS)
++        return nil
++        #else
+         guard #available(iOS 27.1, *), let fold = proxy.reservedRegions(kind: .division).first,
+               fold.frame.height > fold.frame.width
+         else { return nil }
+@@ -79,6 +86,7 @@ struct ContentView: View {
+         let after = proxy.size.width - fold.frame.maxX - fold.margins.trailing
+         guard before > 260, after > 260 else { return nil }
+         return fold.frame.midX
++        #endif
+     }
+ 
+     /// Whether the list's leading edge is the screen's own, where a swipe in from the edge can
+@@ -117,6 +125,14 @@ struct ContentView: View {
+         // In parts, so each is quick to type-check.
+         observing(presenting(splitView, ladder: ladder), ladder: ladder)
+             .environment(\.visitLadder, ladder)
++            #if os(visionOS)
++            // The first time the welcome's over, the World floats out beside the lists as a globe.
++            .onChange(of: hasSeenWelcome && !showingWelcome, initial: true) { _, isOver in
++                guard isOver, !hasFloatedGlobe else { return }
++                hasFloatedGlobe = true
++                openWindow.openGlobe()
++            }
++            #endif
+     }
+ 
+     /// The places in the sidebar, and the list open beside them.
+@@ -180,8 +196,12 @@ struct ContentView: View {
+                         .ignoresSafeArea()
+                 }
+             }
++            // Apple Vision Pro has no status bar, and its controls are white already: its toolbar's
++            // buttons fill with a tint, which in white would hide their labels.
++            #if !os(visionOS)
+             .statusBarHidden(showingWelcome || !hasSeenWelcome)
+             .tint(.primary)
++            #endif
+             .sensoryFeedback(trigger: haptic) { _, event in event?.feedback }
+             .sheet(isPresented: $showingSettings) {
+                 // A change to iCloud sync opens the store chosen, which makes these screens anew.
+@@ -486,13 +506,19 @@ struct ContentView: View {
+             }
+             if TravelMap.named(collection.id) != nil {
+                 ToolbarItem(placement: .primaryAction) {
+-                    // The one thing to play here, so it stands out from Settings beside it.
++                    // The one thing to play here, so it stands out from Settings beside it, where
++                    // there's Liquid Glass to stand out in. Apple Vision Pro's toolbar draws every
++                    // button alike.
++                    #if os(visionOS)
++                    Button("Quiz", systemImage: "gamecontroller") { openGame(collection) }
++                    #else
+                     if #available(iOS 26.0, *) {
+                         Button("Quiz", systemImage: "gamecontroller") { openGame(collection) }
+                             .buttonStyle(.glassProminent)
+                     } else {
+                         Button("Quiz", systemImage: "gamecontroller") { openGame(collection) }
+                     }
++                    #endif
+                 }
+                 .overflowsLast()
+             }
+@@ -511,18 +537,23 @@ struct ContentView: View {
+             if undoState.isButtonShown {
+                 // On iPhone the list's search field sits in this bar too, and would be pushed out of
+                 // it by the button, so it's named here to keep its place, with the button beside it.
++                // Apple Vision Pro keeps the search field up in the window's title bar.
++                #if !os(visionOS)
+                 if #available(iOS 26.0, *) {
+                     DefaultToolbarItem(kind: .search, placement: .bottomBar)
+                     ToolbarSpacer(.flexible, placement: .bottomBar)
+                 }
++                #endif
+                 ToolbarItem(placement: .bottomBar) {
+                     undoButton
+                 }
+                 .overflowsLast()
+             }
++            #if !os(visionOS)
+             if #available(iOS 26.0, *) {
+                 ToolbarSpacer(.fixed, placement: .primaryAction)
+             }
++            #endif
+             // Lists are chosen from the sidebar, so only Settings sits here.
+             ToolbarItem(placement: .primaryAction) {
+                 Button("Settings", systemImage: "gearshape") { showingSettings = true }
+diff --git a/jpex/App/FoldRegions.swift b/jpex/App/FoldRegions.swift
+index 471fc65..6bb4486 100644
+--- a/jpex/App/FoldRegions.swift
++++ b/jpex/App/FoldRegions.swift
+@@ -42,13 +42,17 @@ struct FoldRegions: Equatable {
+         return regions
+     }
+ 
+-    /// The fold and the room to keep around it.
++    /// The fold and the room to keep around it. Apple Vision Pro's windows have none.
+     private static func crease(in proxy: GeometryProxy) -> CGRect? {
++        #if os(visionOS)
++        return nil
++        #else
+         guard #available(iOS 27.1, *), let fold = proxy.reservedRegions(kind: .division).first else { return nil }
+         return CGRect(
+             x: fold.frame.minX - fold.margins.leading,
+             y: fold.frame.minY - fold.margins.top,
+             width: fold.frame.width + fold.margins.leading + fold.margins.trailing,
+             height: fold.frame.height + fold.margins.top + fold.margins.bottom)
++        #endif
+     }
+ }
+diff --git a/jpex/App/jpexApp.swift b/jpex/App/jpexApp.swift
+index 2357495..4084672 100755
+--- a/jpex/App/jpexApp.swift
++++ b/jpex/App/jpexApp.swift
+@@ -31,13 +31,57 @@ struct jpexApp: App {
+     var body: some Scene {
+         WindowGroup {
+             ContentView()
+-                // Made anew on each store, so nothing holds a save from the last one.
+-                .id(saveStore.generation)
+-                .modelContainer(saveStore.container)
+-                .environment(saveStore)
+-                .environment(countingPreferences)
+-                .environment(CustomWorldGroups.shared)
+-                .appliesMotionPreference()
++                .sharingTravels(saveStore, counting: countingPreferences)
+         }
++        #if os(visionOS)
++        // The World as a globe in a volume, floating in the room beside the lists. It presents the
++        // World, so asking for it again brings the one already out to the front. A `Window` would
++        // too, but on Apple Vision Pro a second request while it's still opening crashes it.
++        WindowGroup(id: SpatialWindow.globe.rawValue, for: String.self) { _ in
++            GlobeVolume()
++                .sharingTravels(saveStore, counting: countingPreferences)
++        } defaultValue: {
++            SpatialWindow.globeValue
++        }
++        .windowStyle(.volumetric)
++        .defaultSize(width: 0.45, height: 0.45, depth: 0.45, in: .meters)
++        .defaultWorldScaling(.dynamic)
++        .volumeWorldAlignment(.gravityAligned)
++        .defaultWindowPlacement { _, context in
++            // Beside the lists rather than in front of them, where it would fade them out.
++            guard let lists = context.windows.first(where: { $0.id == nil }) else { return WindowPlacement() }
++            return WindowPlacement(.trailing(lists))
++        }
++        .defaultLaunchBehavior(.suppressed)
++        // A list's map out of its window, hanging in the room with nothing behind it.
++        WindowGroup(id: SpatialWindow.floatingMap.rawValue, for: String.self) { $listID in
++            if let listID {
++                FloatingMapView(listID: listID)
++                    .sharingTravels(saveStore, counting: countingPreferences)
++            }
++        }
++        .windowStyle(.plain)
++        .windowResizability(.contentSize)
++        .defaultWindowPlacement { _, context in
++            // Beside the lists, on the other side from the globe.
++            guard let lists = context.windows.first(where: { $0.id == nil }) else { return WindowPlacement() }
++            return WindowPlacement(.leading(lists))
++        }
++        .defaultLaunchBehavior(.suppressed)
++        #endif
++    }
++}
++
++private extension View {
++    /// The person's saves and how they count places, the same in every window.
++    func sharingTravels(_ saveStore: SaveStore, counting: CountingPreferences) -> some View {
++        self
++            // Made anew on each store, so nothing holds a save from the last one.
++            .id(saveStore.generation)
++            .modelContainer(saveStore.container)
++            .environment(saveStore)
++            .environment(counting)
++            .environment(CustomWorldGroups.shared)
++            .appliesMotionPreference()
+     }
+ }
+diff --git a/jpex/Atlas/AtlasBook.swift b/jpex/Atlas/AtlasBook.swift
+index d2af098..8a65a51 100644
+--- a/jpex/Atlas/AtlasBook.swift
++++ b/jpex/Atlas/AtlasBook.swift
+@@ -10,6 +10,9 @@ enum AtlasBook {
+     /// the device is partly folded or lying open flat. Nil where there's no such fold, as on any
+     /// other device, iPhone Duo closed, or open and turned on its side, where the fold runs across.
+     static func spread(in proxy: GeometryProxy) -> FoldRegions? {
++        #if os(visionOS)
++        return nil
++        #else
+         guard #available(iOS 27.1, *),
+               let fold = proxy.reservedRegions(kind: .division, options: .includeInactive).first
+         else { return nil }
+@@ -26,6 +29,7 @@ enum AtlasBook {
+         // Each page needs room to be a page.
+         guard far.width > 240, near.width > 240 else { return nil }
+         return FoldRegions(far: far, near: near, isAcross: false)
++        #endif
+     }
+ 
+     /// The paper the pages are printed on: the soft gray of the map's sea, so the spread reads as
+diff --git a/jpex/Atlas/LearnSearchSheet.swift b/jpex/Atlas/LearnSearchSheet.swift
+index 0b195b8..e41961e 100644
+--- a/jpex/Atlas/LearnSearchSheet.swift
++++ b/jpex/Atlas/LearnSearchSheet.swift
+@@ -53,7 +53,9 @@ struct LearnSearchSheet: View {
+                 // with Reduce Motion ease there in a moment.
+                 .animation(Motion.moving(.snappy(duration: 0.3), reduceMotion: reduceMotion), value: results.map(\.id))
+                 .animation(.smooth(duration: 0.3), value: isQuerying)
++                #if !os(visionOS)
+                 .scrollDismissesKeyboard(.immediately)
++                #endif
+                 .overlay {
+                     if isQuerying, results.isEmpty, search != nil {
+                         ContentUnavailableView.search(text: query)
+diff --git a/jpex/Components/CandyButtonStyle.swift b/jpex/Components/CandyButtonStyle.swift
+index 463443d..0cdc707 100644
+--- a/jpex/Components/CandyButtonStyle.swift
++++ b/jpex/Components/CandyButtonStyle.swift
+@@ -54,6 +54,11 @@ private struct CandyButton<Label: View, S: InsettableShape>: View {
+                 .clipShape(shape)
+             }
+             .contentShape(shape)
++            #if os(visionOS)
++            // Lit in its own shape as the eyes rest on it.
++            .contentShape(.hoverEffect, shape)
++            .hoverEffect()
++            #endif
+             .shadow(color: color.opacity(isLit ? 0.35 : 0), radius: isPressed ? 2 : 8, y: isPressed ? 1 : 4)
+             .scaleEffect(isPressed ? 0.93 : 1)
+             .opacity(isEnabled ? 1 : 0.35)
+diff --git a/jpex/Components/PillButtonStyle.swift b/jpex/Components/PillButtonStyle.swift
+index c8368a6..b505096 100644
+--- a/jpex/Components/PillButtonStyle.swift
++++ b/jpex/Components/PillButtonStyle.swift
+@@ -5,6 +5,7 @@ import SwiftUI
+ ///
+ /// Round icon buttons give the full squish. Large cards, tiles and pills on the map and in the
+ /// Atlas give only a little, `cardScale`, so calm glass stays calm and the candy is left to the games.
++/// On Apple Vision Pro it lights up as you look at it, as the system's own buttons do.
+ struct PillButtonStyle: ButtonStyle {
+     /// How small the label gets while it's held: 0.88 by default, a round button's full squish.
+     var pressedScale: CGFloat = 0.88
+@@ -15,6 +16,9 @@ struct PillButtonStyle: ButtonStyle {
+ 
+     func makeBody(configuration: Configuration) -> some View {
+         configuration.label
++            #if os(visionOS)
++            .hoverEffect()
++            #endif
+             .scaleEffect(configuration.isPressed ? pressedScale : 1)
+             .animation(Motion.moving(Motion.press, reduceMotion: reduceMotion), value: configuration.isPressed)
+     }
+diff --git a/jpex/Components/ToolbarContent+Overflow.swift b/jpex/Components/ToolbarContent+Overflow.swift
+index 979b763..fe48dc8 100644
+--- a/jpex/Components/ToolbarContent+Overflow.swift
++++ b/jpex/Components/ToolbarContent+Overflow.swift
+@@ -1,24 +1,33 @@
+ import SwiftUI
+ 
++/// Apple Vision Pro's toolbars don't rank their items, so there each keeps its place as it is.
+ extension ToolbarContent {
+     /// Kept in view after the others as room runs short, such as in iPhone Duo's side bar on its
+     /// short outer display, where items go into the overflow menu from the foot of the bar up.
+     @ToolbarContentBuilder
+     func overflowsLast() -> some ToolbarContent {
++        #if os(visionOS)
++        self
++        #else
+         if #available(iOS 27.0, *) {
+             visibilityPriority(.high)
+         } else {
+             self
+         }
++        #endif
+     }
+ 
+     /// The first to go into the overflow menu as room runs short, for something also found elsewhere.
+     @ToolbarContentBuilder
+     func overflowsFirst() -> some ToolbarContent {
++        #if os(visionOS)
++        self
++        #else
+         if #available(iOS 27.0, *) {
+             visibilityPriority(.low)
+         } else {
+             self
+         }
++        #endif
+     }
+ }
+diff --git a/jpex/Components/View+Effects.swift b/jpex/Components/View+Effects.swift
+index 93224fd..a4cbd87 100644
+--- a/jpex/Components/View+Effects.swift
++++ b/jpex/Components/View+Effects.swift
+@@ -2,7 +2,9 @@ import SwiftUI
+ 
+ extension View {
+     /// Liquid Glass where available, optionally tinted with a level's colour and responding to
+-    /// touch, falling back to a material with its own soft shadow on earlier systems.
++    /// touch, falling back to a material with its own soft shadow on earlier systems. Apple Vision
++    /// Pro has no Liquid Glass, but its windows are glass already, so a panel there is a tinted
++    /// material, without the shadow.
+     func glassPanel(in shape: some Shape, tint: Color? = nil, interactive: Bool = false) -> some View {
+         modifier(GlassPanel(shape: shape, tint: tint, interactive: interactive))
+     }
+@@ -14,6 +16,14 @@ private struct GlassPanel<S: Shape>: ViewModifier {
+     var interactive: Bool
+ 
+     func body(content: Content) -> some View {
++        #if os(visionOS)
++        content.background {
++            shape.fill(.regularMaterial)
++            if let tint {
++                shape.fill(tint.opacity(0.16))
++            }
++        }
++        #else
+         if #available(iOS 26.0, *) {
+             content.glassEffect(.regular.tint(tint?.opacity(0.16)).interactive(interactive), in: shape)
+         } else {
+@@ -23,6 +33,7 @@ private struct GlassPanel<S: Shape>: ViewModifier {
+                     .shadow(color: .black.opacity(0.12), radius: 16, y: 6)
+             }
+         }
++        #endif
+     }
+ }
+ 
+diff --git a/jpex/Groups/CustomGroupEditor.swift b/jpex/Groups/CustomGroupEditor.swift
+index 599dde3..10fad5c 100644
+--- a/jpex/Groups/CustomGroupEditor.swift
++++ b/jpex/Groups/CustomGroupEditor.swift
+@@ -267,7 +267,9 @@ struct CustomGroupEditor: View {
+             // there, so they sit wherever its holder's edges are. Held 16 in, they line up with the
+             // header and search above, with 12 of that left for a card's pop.
+             .padding(.horizontal, 16)
++            #if !os(visionOS)
+             .scrollDismissesKeyboard(.interactively)
++            #endif
+             .animation(.snappy, value: shownIDs)
+             .onChange(of: query) {
+                 withAnimation(reduceMotion ? nil : .smooth(duration: 0.4)) { proxy.scrollTo(Self.topID, anchor: .top) }
+diff --git a/jpex/Lists/MapCard.swift b/jpex/Lists/MapCard.swift
+index 4855f7d..a0a45cf 100644
+--- a/jpex/Lists/MapCard.swift
++++ b/jpex/Lists/MapCard.swift
+@@ -168,6 +168,12 @@ struct MapCard: View {
+         // Around a map narrower than the card, a tap opens the map too.
+         .contentShape(Rectangle())
+         .onTapGesture(perform: onOpen)
++        #if os(visionOS)
++        // Swells a touch as the eyes rest on it, rather than lighting up a card the page doesn't draw.
++        .hoverEffect { effect, isActive, _ in
++            effect.scaleEffect(isActive ? 1.02 : 1)
++        }
++        #endif
+         .accessibilityElement(children: .ignore)
+         .accessibilityLabel("Map, \(counted) of \(statuses.count)")
+         .accessibilityHint(onSelect == nil ? "Opens the map." : Self.findingHint)
+diff --git a/jpex/Lists/VisitedNamesView.swift b/jpex/Lists/VisitedNamesView.swift
+index 98b3bd5..c9c19be 100644
+--- a/jpex/Lists/VisitedNamesView.swift
++++ b/jpex/Lists/VisitedNamesView.swift
+@@ -81,6 +81,9 @@ struct VisitedNamesView: View {
+ private struct NameButtonStyle: ButtonStyle {
+     func makeBody(configuration: Configuration) -> some View {
+         configuration.label
++            #if os(visionOS)
++            .hoverEffect()
++            #endif
+             .scaleEffect(configuration.isPressed ? 0.94 : 1)
+             .opacity(configuration.isPressed ? 0.6 : 1)
+             .animation(.snappy(duration: 0.2), value: configuration.isPressed)
+diff --git a/jpex/Map/MapScreen.swift b/jpex/Map/MapScreen.swift
+index 1f5f83c..f5dd46d 100644
+--- a/jpex/Map/MapScreen.swift
++++ b/jpex/Map/MapScreen.swift
+@@ -339,7 +339,9 @@ struct MapScreen: View {
+                         .accessibilityHidden(true)
+                 }
+             }
++            #if !os(visionOS)
+             .containerBackground(.clear, for: .navigation)
++            #endif
+             .navigationTitle(collection.name)
+             .navigationBarTitleDisplayMode(.inline)
+             .toolbar { toolbar }
+@@ -737,9 +739,11 @@ struct MapScreen: View {
+         .overflowsLast()
+         // Apart from Layers, beside Search, as a way somewhere else rather than something the map
+         // shows: the list of the places on the map flown into.
++        #if !os(visionOS)
+         if #available(iOS 26.0, *) {
+             ToolbarSpacer(.fixed, placement: .primaryAction)
+         }
++        #endif
+         if navigator.previous != nil {
+             ToolbarItem(placement: .primaryAction) {
+                 Button("Open list", systemImage: "list.bullet.rectangle") { leave(toList: navigator.current.collection.id) }
+@@ -749,6 +753,10 @@ struct MapScreen: View {
+         }
+         // A way to find any place by its name, capital or codes, on any map: in Learn it brings
+         // the row round to it; otherwise the map flies there and opens its callout.
++        #if os(visionOS)
++        searchItem
++            .overflowsLast()
++        #else
+         if #available(iOS 26.0, *) {
+             searchItem
+                 .matchedTransitionSource(id: Self.learnSearchZoomID, in: learnSearchZoom)
+@@ -757,6 +765,7 @@ struct MapScreen: View {
+             searchItem
+                 .overflowsLast()
+         }
++        #endif
+     }
+ 
+     private static let learnSearchZoomID = "learnSearch"
+@@ -1436,11 +1445,15 @@ struct MapScreen: View {
+                     mapPick = result.place
+                 }
+             }
++            #if os(visionOS)
++            sheet
++            #else
+             if #available(iOS 26.0, *) {
+                 sheet.navigationTransition(.zoom(sourceID: Self.learnSearchZoomID, in: learnSearchZoom))
+             } else {
+                 sheet
+             }
++            #endif
+         }
+     }
+ 
+diff --git a/jpex/Quiz/GameModeSetup.swift b/jpex/Quiz/GameModeSetup.swift
+index fc99762..d554985 100644
+--- a/jpex/Quiz/GameModeSetup.swift
++++ b/jpex/Quiz/GameModeSetup.swift
+@@ -746,6 +746,10 @@ struct SetupToggleStyle: ButtonStyle {
+                 shape.strokeBorder(isOn ? AnyShapeStyle(.white.opacity(0.35)) : AnyShapeStyle(.separator), lineWidth: isOn ? 1 : 0.5)
+             }
+             .contentShape(shape)
++            #if os(visionOS)
++            .contentShape(.hoverEffect, shape)
++            .hoverEffect()
++            #endif
+             .shadow(color: color.opacity(isOn ? 0.35 : 0), radius: 6, y: 3)
+             // A press dims it a touch, and the choice cross-fades: nothing jumps or bounces.
+             .opacity(configuration.isPressed ? 0.7 : 1)
+diff --git a/jpex/Quiz/GameQuestionCard.swift b/jpex/Quiz/GameQuestionCard.swift
+index d60979b..6afd1be 100644
+--- a/jpex/Quiz/GameQuestionCard.swift
++++ b/jpex/Quiz/GameQuestionCard.swift
+@@ -1756,7 +1756,9 @@ private struct CardChoices: View {
+                     }
+                 }
+             }
++            #if !os(visionOS)
+             .scrollDismissesKeyboard(.interactively)
++            #endif
+             // The card grids' own scrolling chrome: room for a lit card's glow and pop, and a soft
+             // edge only where the list carries on out of sight.
+             .cardGridScrolling(bottomInset: bottomInset)
+diff --git a/jpex/Quiz/GameScreen.swift b/jpex/Quiz/GameScreen.swift
+index 85b0b58..9c1aa86 100644
+--- a/jpex/Quiz/GameScreen.swift
++++ b/jpex/Quiz/GameScreen.swift
+@@ -118,7 +118,9 @@ struct GameScreen: View {
+                 .ignoresSafeArea(.keyboard)
+                 .accessibilityHidden(true)
+             }
++            #if !os(visionOS)
+             .containerBackground(.clear, for: .navigation)
++            #endif
+             .navigationTitle(game.collection.name)
+             .navigationBarTitleDisplayMode(.inline)
+             // Other places are chosen between rounds, not partway through one, which would lose it.
+diff --git a/jpex/Settings/WorldMapPreview.swift b/jpex/Settings/WorldMapPreview.swift
+index 9002acf..bcba955 100644
+--- a/jpex/Settings/WorldMapPreview.swift
++++ b/jpex/Settings/WorldMapPreview.swift
+@@ -162,21 +162,30 @@ private struct WorldTurning: ViewModifier {
+             content
+                 .onGeometryChange(for: Double.self) { $0.size.width } action: { width = max($0, 1) }
+                 .contentShape(.rect)
+-                .gesture(SidewaysPan { translation in
+-                    spinner.drag(by: translation, width: width, from: center)
+-                } onEnd: { translation, predicted in
+-                    if let nearest = spinner.release(
+-                        translation: translation, flungBy: predicted, width: width, reduceMotion: reduceMotion
+-                    ) {
+-                        center = nearest
+-                    }
+-                })
++                #if os(visionOS)
++                // Alongside the page's own scrolling, which a SwiftUI drag would otherwise hold up.
++                .simultaneousGesture(pan)
++                #else
++                .gesture(pan)
++                #endif
+                 // As the map settles on its centre, not as the finger lifts, the same as the full map.
+                 .sensoryFeedback(.alignment, trigger: spinner.landings)
+         } else {
+             content
+         }
+     }
++
++    private var pan: SidewaysPan {
++        SidewaysPan { translation in
++            spinner.drag(by: translation, width: width, from: center)
++        } onEnd: { translation, predicted in
++            if let nearest = spinner.release(
++                translation: translation, flungBy: predicted, width: width, reduceMotion: reduceMotion
++            ) {
++                center = nearest
++            }
++        }
++    }
+ }
+ 
+ /// Where a World map turned by hand is pointing: following the finger while it drags, then
+@@ -491,6 +500,27 @@ struct WorldDrift: Equatable {
+     }
+ }
+ 
++#if os(visionOS)
++/// A drag that only turns the World while it's gone more sideways than up or down, so a scrolling
++/// page around it still scrolls, and a tap on what it covers still taps. Apple Vision Pro can't
++/// bring UIKit's gesture recognizers into SwiftUI, so it's SwiftUI's own drag.
++struct SidewaysPan: Gesture {
++    var onChange: (Double) -> Void
++    /// The translation when the hand lets go, and where its speed would have carried it.
++    var onEnd: (Double, Double) -> Void
++
++    var body: some Gesture {
++        DragGesture(minimumDistance: 12)
++            .onChanged { drag in
++                guard abs(drag.translation.width) > abs(drag.translation.height) else { return }
++                onChange(drag.translation.width)
++            }
++            .onEnded { drag in
++                onEnd(drag.translation.width, drag.translation.width + drag.velocity.width * 0.2)
++            }
++    }
++}
++#else
+ /// A pan that only starts when the finger moves more sideways than up or down, so a scrolling
+ /// page around it still scrolls, and a tap on what it covers still taps.
+ struct SidewaysPan: UIGestureRecognizerRepresentable {
+@@ -528,3 +558,4 @@ struct SidewaysPan: UIGestureRecognizerRepresentable {
+         }
+     }
+ }
++#endif
+diff --git a/jpex/Welcome/SpaceGlobe.swift b/jpex/Welcome/SpaceGlobe.swift
+index c0eb02d..3f2b475 100644
+--- a/jpex/Welcome/SpaceGlobe.swift
++++ b/jpex/Welcome/SpaceGlobe.swift
+@@ -28,6 +28,12 @@ struct SpaceGlobe: View {
+     /// Countries whose borders glow, as Game Mode's lobby lights them.
+     var glows: [GlobeGlow] = []
+ 
++    /// The World's colours from space: deep sea, pale land, and the dark lines between countries.
++    /// Apple Vision Pro's globe wears them too.
++    static let spaceSea = Color(red: 0.07, green: 0.17, blue: 0.36)
++    static let spaceLand = Color(red: 0.80, green: 0.86, blue: 0.94)
++    static let spaceBorder = Color(red: 0.05, green: 0.12, blue: 0.27)
++
+     var body: some View {
+         Canvas { context, _ in
+             draw(in: &context)
+@@ -45,11 +51,11 @@ struct SpaceGlobe: View {
+         let night = 1 - daylight
+         let environment = context.environment
+ 
+-        let spaceSea = Color(red: 0.07, green: 0.17, blue: 0.36).resolve(in: environment)
++        let spaceSea = Self.spaceSea.resolve(in: environment)
+         let daySea = Color(uiColor: .systemGray6).resolve(in: environment)
+-        let spaceLand = Color(red: 0.80, green: 0.86, blue: 0.94).resolve(in: environment)
++        let spaceLand = Self.spaceLand.resolve(in: environment)
+         let dayLand = Color(uiColor: .systemGray4).resolve(in: environment)
+-        let spaceBorder = Color(red: 0.05, green: 0.12, blue: 0.27).resolve(in: environment)
++        let spaceBorder = Self.spaceBorder.resolve(in: environment)
+         let dayBorder = Color(uiColor: .systemBackground).resolve(in: environment)
+         let landResolved = dayLand.blended(toward: spaceLand, by: night)
+         let land = Color(landResolved)
+diff --git a/jpex/Welcome/WelcomeView.swift b/jpex/Welcome/WelcomeView.swift
+index 16e7ce5..ee10810 100644
+--- a/jpex/Welcome/WelcomeView.swift
++++ b/jpex/Welcome/WelcomeView.swift
+@@ -1001,11 +1001,15 @@ private final class ArrivalHaptics {
+ /// A round, prominent Liquid Glass button where there is one, or else a round bordered prominent one.
+ private struct ProminentGlassCircle: ViewModifier {
+     func body(content: Content) -> some View {
++        #if os(visionOS)
++        content.buttonStyle(.borderedProminent).buttonBorderShape(.circle)
++        #else
+         if #available(iOS 26.0, *) {
+             content.buttonStyle(.glassProminent).buttonBorderShape(.circle)
+         } else {
+             content.buttonStyle(.borderedProminent).buttonBorderShape(.circle)
+         }
++        #endif
+     }
+ }
+ 
+diff --git a/jpex/WorldTime/WorldTimeScreen.swift b/jpex/WorldTime/WorldTimeScreen.swift
+index 498d662..7c15a45 100644
+--- a/jpex/WorldTime/WorldTimeScreen.swift
++++ b/jpex/WorldTime/WorldTimeScreen.swift
+@@ -190,7 +190,9 @@ struct WorldTimeScreen: View {
+                     .allowsHitTesting(false)
+                     .accessibilityHidden(true)
+             }
++            #if !os(visionOS)
+             .containerBackground(.clear, for: .navigation)
++            #endif
+             .toolbar { toolbar }
+             .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+             .toolbarColorScheme(.dark, for: .navigationBar)
+@@ -2132,6 +2134,9 @@ private struct GrabberButtonStyle: ButtonStyle {
+             .frame(maxWidth: .infinity)
+             .frame(height: 22)
+             .contentShape(.rect)
++            #if os(visionOS)
++            .hoverEffect()
++            #endif
+             .animation(Motion.press, value: configuration.isPressed)
+     }
+ }
+@@ -2142,6 +2147,10 @@ private struct MiniatureButtonStyle: ButtonStyle {
+         Color.white.opacity(configuration.isPressed ? 0.08 : 0.001)
+             .clipShape(.rect(cornerRadius: 14, style: .continuous))
+             .contentShape(.rect)
++            #if os(visionOS)
++            .contentShape(.hoverEffect, .rect(cornerRadius: 14, style: .continuous))
++            .hoverEffect()
++            #endif
+             .animation(.snappy(duration: 0.2), value: configuration.isPressed)
+     }
+ }
+diff --git a/jpex/Lists/CountryCollectionView.swift b/jpex/Lists/CountryCollectionView.swift
+index 0597b59..4180608 100644
+--- a/jpex/Lists/CountryCollectionView.swift
++++ b/jpex/Lists/CountryCollectionView.swift
+@@ -34,6 +34,9 @@ struct CountryCollectionView: View {
+   @Environment(\.visitLadder) private var ladder
+   @Environment(\.accessibilityReduceMotion) private var reduceMotion
+   @Environment(\.breaksOutOntoScreen) private var breaksOutOntoScreen
++  #if os(visionOS)
++  @Environment(\.openWindow) private var openWindow
++  #endif
+   @AppStorage(MapProjection.storageKey) private var projection = MapProjection.standard
+   @AppStorage(MapCenter.storageKey) private var center = MapCenter.standard
+   @State private var searchText = ""
+@@ -300,6 +303,22 @@ struct CountryCollectionView: View {
+             onOpen: { openMap() }, onOpenLayer: { openMap(on: $0) })
+         }
+       }
++      #if os(visionOS)
++      // On Apple Vision Pro the map can leave the window and float in the room: flat, with nothing
++      // behind it, and the World as a globe too.
++      if map != nil {
++        ToolbarItemGroup(placement: .primaryAction) {
++          if country.id == CountryCatalog.world.id {
++            Button("Globe", systemImage: "globe.europe.africa") {
++              openWindow.openGlobe()
++            }
++          }
++          Button("Float map", systemImage: "pip.exit") {
++            openWindow(id: SpatialWindow.floatingMap.rawValue, value: country.id)
++          }
++        }
++      }
++      #endif
+       // JapanEx knows only the original levels; others show as the person maps them in Levels.
+       if country.id == CountryCatalog.japan.id {
+         // Tucked into the overflow menu, so the toolbar stays short on iPhone Duo's side bar.
+@@ -1947,11 +1966,15 @@ private struct TotalSubtitle: ViewModifier {
+   var text: String?
+ 
+   func body(content: Content) -> some View {
++    #if os(visionOS)
++    content
++    #else
+     if #available(iOS 26.0, *) {
+       content.navigationSubtitle(text ?? "")
+     } else {
+       content
+     }
++    #endif
+   }
+ }
+ 
+diff --git a/jpex.xcodeproj/project.pbxproj b/jpex.xcodeproj/project.pbxproj
+index f9d33ee..68fa8df 100755
+--- a/jpex.xcodeproj/project.pbxproj
++++ b/jpex.xcodeproj/project.pbxproj
+@@ -7,6 +7,13 @@
+ 	objects = {
+ 
+ /* Begin PBXBuildFile section */
++		D92D14AE61D97BBCFDB4C630 /* FloatingMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F20CC3F5517BAB46C0A712F /* FloatingMapView.swift */; };
++		F3D14867602274D8D7431255 /* GlobeEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10241EE83ECD920C22E1B6EA /* GlobeEntity.swift */; };
++		7439F8F61515BC9F4D498807 /* GlobeSpin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C77DF16C791886DC5776955 /* GlobeSpin.swift */; };
++		F99F14D8CF7DCF46B6CFCAE0 /* GlobeTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BDFD7A7E756CA1D714C0D1 /* GlobeTexture.swift */; };
++		D62D934B9E827679D37D4064 /* GlobeVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92E1DF6E5C6812C89D3EB65 /* GlobeVolume.swift */; };
++		ED0172E04AFC2C958CD4459D /* SpatialMapLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F592F38C808B94BBBCC505 /* SpatialMapLabel.swift */; };
++		CA09AB7B832CA7AD0B464781 /* SpatialWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE71BE1D141272608103059 /* SpatialWindow.swift */; };
+ 		0004D2C38368969B60D12B8E /* map_VU.json in Resources */ = {isa = PBXBuildFile; fileRef = E410DE9F8782C5F2927A7B22 /* map_VU.json */; };
+ 		004D961FFE975727A446F3C9 /* map_BY.json in Resources */ = {isa = PBXBuildFile; fileRef = 6186F24C415C3BE4B16234CB /* map_BY.json */; };
+ 		0069A198036EEBDD7D8682D5 /* MoldovaFlagCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 94A185AA8DA51DE5614CA1A5 /* MoldovaFlagCredits.json */; };
+@@ -681,6 +688,13 @@
+ /* End PBXBuildFile section */
+ 
+ /* Begin PBXFileReference section */
++		9F20CC3F5517BAB46C0A712F /* FloatingMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingMapView.swift; sourceTree = "<group>"; };
++		10241EE83ECD920C22E1B6EA /* GlobeEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobeEntity.swift; sourceTree = "<group>"; };
++		8C77DF16C791886DC5776955 /* GlobeSpin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobeSpin.swift; sourceTree = "<group>"; };
++		C8BDFD7A7E756CA1D714C0D1 /* GlobeTexture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobeTexture.swift; sourceTree = "<group>"; };
++		D92E1DF6E5C6812C89D3EB65 /* GlobeVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobeVolume.swift; sourceTree = "<group>"; };
++		11F592F38C808B94BBBCC505 /* SpatialMapLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialMapLabel.swift; sourceTree = "<group>"; };
++		DEE71BE1D141272608103059 /* SpatialWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialWindow.swift; sourceTree = "<group>"; };
+ 		0018BBC8EF192181D7620D1C /* geo_IQ.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geo_IQ.json; sourceTree = "<group>"; };
+ 		002497E9C02DBAE981486A0E /* ArmeniaCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArmeniaCatalog.swift; sourceTree = "<group>"; };
+ 		0073C61F5630917C5084F129 /* BosniaFlagCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BosniaFlagCredits.json; sourceTree = "<group>"; };
+@@ -1368,6 +1382,20 @@
+ /* End PBXFrameworksBuildPhase section */
+ 
+ /* Begin PBXGroup section */
++		366A3821FCA8E125A97F6F68 /* Spatial */ = {
++			isa = PBXGroup;
++			children = (
++				9F20CC3F5517BAB46C0A712F /* FloatingMapView.swift */,
++				10241EE83ECD920C22E1B6EA /* GlobeEntity.swift */,
++				8C77DF16C791886DC5776955 /* GlobeSpin.swift */,
++				C8BDFD7A7E756CA1D714C0D1 /* GlobeTexture.swift */,
++				D92E1DF6E5C6812C89D3EB65 /* GlobeVolume.swift */,
++				11F592F38C808B94BBBCC505 /* SpatialMapLabel.swift */,
++				DEE71BE1D141272608103059 /* SpatialWindow.swift */,
++			);
++			path = Spatial;
++			sourceTree = "<group>";
++		};
+ 		00B36F56E5B3F450D8D98733 /* App */ = {
+ 			isa = PBXGroup;
+ 			children = (
+@@ -1525,6 +1553,7 @@
+ 				037F2FF812492847E11702C3 /* Quiz */,
+ 				88230BD1975DCEEE0FA3B9DE /* Settings */,
+ 				848F5A8428B1E19E4A00B064 /* Welcome */,
++				366A3821FCA8E125A97F6F68 /* Spatial */,
+ 				D74505AF5CF77AAE59150557 /* Components */,
+ 				3C06B47DA46054CE5BB666DB /* Shaders */,
+ 				662AC2C7C19EA5D35CC5413F /* Resources */,
+@@ -2645,6 +2674,13 @@
+ 			isa = PBXSourcesBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
++				D92D14AE61D97BBCFDB4C630 /* FloatingMapView.swift in Sources */,
++				F3D14867602274D8D7431255 /* GlobeEntity.swift in Sources */,
++				7439F8F61515BC9F4D498807 /* GlobeSpin.swift in Sources */,
++				F99F14D8CF7DCF46B6CFCAE0 /* GlobeTexture.swift in Sources */,
++				D62D934B9E827679D37D4064 /* GlobeVolume.swift in Sources */,
++				ED0172E04AFC2C958CD4459D /* SpatialMapLabel.swift in Sources */,
++				CA09AB7B832CA7AD0B464781 /* SpatialWindow.swift in Sources */,
+ 				603B2A90A920D2A58EF575EC /* FlagThumbnail.swift in Sources */,
+ 				B21C837A0D085909114A6594 /* LocalNameLanguage.swift in Sources */,
+ 				EE6C4CA25A4BF8E0CBE26204 /* GameModeSetup.swift in Sources */,
+@@ -3108,9 +3144,12 @@
+ 				MARKETING_VERSION = 2.01;
+ 				PRODUCT_BUNDLE_IDENTIFIER = itemic.jpex;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
++				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
++				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+ 				SWIFT_EMIT_LOC_STRINGS = YES;
+ 				SWIFT_VERSION = 5.0;
+-				TARGETED_DEVICE_FAMILY = "1,2";
++				TARGETED_DEVICE_FAMILY = "1,2,7";
++				XROS_DEPLOYMENT_TARGET = 27.0;
+ 			};
+ 			name = Debug;
+ 		};
+@@ -3142,9 +3181,12 @@
+ 				MARKETING_VERSION = 2.01;
+ 				PRODUCT_BUNDLE_IDENTIFIER = itemic.jpex;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
++				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
++				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+ 				SWIFT_EMIT_LOC_STRINGS = YES;
+ 				SWIFT_VERSION = 5.0;
+-				TARGETED_DEVICE_FAMILY = "1,2";
++				TARGETED_DEVICE_FAMILY = "1,2,7";
++				XROS_DEPLOYMENT_TARGET = 27.0;
+ 			};
+ 			name = Release;
+ 		};

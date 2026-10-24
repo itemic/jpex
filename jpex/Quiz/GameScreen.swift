@@ -497,7 +497,7 @@ struct GameScreen: View {
             case .finished:
                 GameResultsCard(
                     game: game, localLanguage: localLanguage, reviewID: reviewID, onLookAgain: review,
-                    onReview: reviewMisses, onReplay: { start(game.mode) }, onBack: backToLobby)
+                    onReview: reviewMisses, onNewGame: { start(game.mode) }, onBack: backToLobby)
                     .transition(swap)
             }
         }

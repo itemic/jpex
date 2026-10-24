@@ -53,8 +53,8 @@ struct TravelsKey: View {
 }
 
 /// A small tile of a level's colour, lit from above as the level pills are, which pops as its
-/// level is lit.
-private struct LevelSwatch: View {
+/// level is lit. The shared map's key uses it too.
+struct LevelSwatch: View {
     var color: Color
 
     var body: some View {

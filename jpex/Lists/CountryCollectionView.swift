@@ -30,6 +30,8 @@ struct CountryCollectionView: View {
   /// Learn asked for from elsewhere, such as the quiz lobby: where it's for this list, its full map
   /// opens in Learn.
   var learnRequest: LearnDeck.Request? = nil
+  /// A nudge to open the share screen on the places just been to, as from a toast's Share.
+  var shareRequest: ShareRequest? = nil
   @Environment(CountingPreferences.self) private var counting
   @Environment(\.visitLadder) private var ladder
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -43,6 +45,12 @@ struct CountryCollectionView: View {
   @State private var isSearching = false
   @State private var totalHeight = 0.0
   @State private var showingMap = false
+  /// Whether the share screen is open, with a picture of the list's map to send.
+  @State private var showingShare = false
+  /// The list's map as Share was tapped, for the share screen's card to peel off the page.
+  @State private var shareOrigin: ShareOrigin?
+  /// Whether the share screen opens on the places just been to.
+  @State private var shareStartsOnNew = false
   /// Where the full map opens in Learn, rather than on the person's travels.
   @State private var learnStart: LearnDeck.Request?
   /// Where the map is on screen, kept in state only while it's pinned to the top, where the headers
@@ -309,10 +317,26 @@ struct CountryCollectionView: View {
           }
         }
       }
+      // A picture of the list's map to send, wherever the list has a map.
+      if map != nil {
+        ToolbarItem(placement: .primaryAction) {
+          Button("Share map", systemImage: "square.and.arrow.up") { openShare() }
+        }
+      }
       // How the list is arranged and what it shows, including local names first.
       ToolbarItem(placement: .primaryAction) {
         ListViewMenu(country: country, localLanguage: $localLanguage)
       }
+    }
+    .fullScreenCover(isPresented: $showingShare) {
+      ShareMapView(
+        country: country, saveModel: saveModel, localLanguage: localLanguage, origin: shareOrigin,
+        // The map peels off the page, so the list's own goes while the share screen's up.
+        onPresent: { isMapCardHidden = shareOrigin != nil },
+        onClose: closeShare,
+        startsOnNew: shareStartsOnNew
+      )
+      .presentationBackground(.clear)
     }
     .fullScreenCover(isPresented: $showingMap) {
       if let map {
@@ -342,6 +366,17 @@ struct CountryCollectionView: View {
     .sensoryFeedback(.selection, trigger: country.id) { old, new in
       guard let old = CountryCatalog.country(id: old), let new = CountryCatalog.country(id: new) else { return false }
       return old.countryListID == new.countryListID
+    }
+    .onChange(of: shareRequest, initial: true) { _, request in
+      guard let request, request.collectionID == country.id, map != nil, !showingShare else { return }
+      // A moment for the list to settle in, and the full map to go if it's open, before the share
+      // screen opens on the places just been to.
+      if showingMap { closeMap() }
+      Task {
+        try? await Task.sleep(for: .milliseconds(350))
+        guard country.id == request.collectionID, !showingShare else { return }
+        openShare(startsOnNew: true)
+      }
     }
     .onChange(of: learnRequest, initial: true) { _, request in
       guard let request, request.collectionID == country.id, map != nil else { return }
@@ -1087,6 +1122,34 @@ struct CountryCollectionView: View {
     var transaction = Transaction()
     transaction.disablesAnimations = true
     withTransaction(transaction) { showingMap = true }
+  }
+
+  /// Opens the share screen, its card peeling off the list's map where the map's in view, as the
+  /// full map grows from it; on the places just been to, as from a toast's Share.
+  private func openShare(startsOnNew: Bool = false) {
+    shareStartsOnNew = startsOnNew
+    let inView: Bool
+    if isMapPinned {
+      inView = cardFrame.rect != nil
+    } else if let mapCardFrame = cardFrame.rect, !listFrame.isEmpty {
+      inView = mapCardFrame.intersection(listFrame).height >= mapCardFrame.height * 0.6
+    } else {
+      inView = false
+    }
+    shareOrigin = inView ? cardFrame.rect.flatMap(ShareOrigin.capture) : nil
+    var transaction = Transaction()
+    transaction.disablesAnimations = true
+    withTransaction(transaction) { showingShare = true }
+  }
+
+  private func closeShare() {
+    var transaction = Transaction()
+    transaction.disablesAnimations = true
+    withTransaction(transaction) {
+      isMapCardHidden = false
+      showingShare = false
+    }
+    shareOrigin = nil
   }
 
   private func closeMap() {

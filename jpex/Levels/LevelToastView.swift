@@ -4,7 +4,10 @@ import SwiftUI
 /// - "Canada set to STAYED", with a way to undo it;
 /// - "All of Japan at VISITED" once every place in a list has reached a level, throwing confetti across the
 ///   whole screen;
-/// - "Benin ~~VISITED~~ → NEVER BEEN" when a change is undone or redone.
+/// - "Benin ~~VISITED~~ → NEVER BEEN" when a change is undone or redone;
+/// - "Kyoto added VISITED", now and then, to suggest sharing the places just been to.
+///
+/// Where sharing's suggested, a Share button opens the share screen on the places just added.
 ///
 /// Its pill pops as the note lands, once it has dropped in. A finished list's note also glows once
 /// in its level's colour as it lands, so finishing a list is celebrated even with Reduce Motion,
@@ -31,7 +34,7 @@ struct LevelToastView: View {
             content
         }
         .padding(.leading, toast.flagAssetName == nil ? 16 : 10)
-        .padding(.trailing, toast.onUndo == nil ? 12 : 8)
+        .padding(.trailing, toast.onUndo == nil && toast.onShare == nil ? 12 : 8)
         .padding(.vertical, 8)
         .glassPanel(in: Capsule(), tint: toast.level.color, interactive: true)
         .background {
@@ -81,6 +84,7 @@ struct LevelToastView: View {
                     .contentShape(Capsule())
                     .buttonStyle(PillButtonStyle())
             }
+            shareButton
         case .completed:
             ScrollingText {
                 Text("\(Text("All of").foregroundStyle(.secondary)) \(Text(toast.placeName).fontWeight(.semibold)) \(Text("at").foregroundStyle(.secondary))")
@@ -88,6 +92,15 @@ struct LevelToastView: View {
             }
             .accessibilityHidden(true)
             pill(toast.level)
+            shareButton
+        case .added:
+            ScrollingText {
+                Text("\(Text(toast.placeName).fontWeight(.semibold)) \(Text("added").foregroundStyle(.secondary))")
+                    .font(.subheadline)
+            }
+            .accessibilityHidden(true)
+            pill(toast.level)
+            shareButton
         case .changed(let from):
             name
             StruckPill(level: from)
@@ -97,6 +110,22 @@ struct LevelToastView: View {
                 .foregroundStyle(.secondary)
                 .accessibilityHidden(true)
             pill(toast.level)
+        }
+    }
+
+    /// Share, suggested now and then for places just been to: it opens the share screen on them.
+    @ViewBuilder private var shareButton: some View {
+        if let onShare = toast.onShare {
+            Button(action: onShare) {
+                Label("Share", systemImage: "square.and.arrow.up")
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(toast.level.color.opacity(0.22), in: Capsule())
+                    .contentShape(Capsule())
+            }
+            .buttonStyle(PillButtonStyle())
+            .accessibilityHint("Shares a picture of the places just added.")
         }
     }
 

@@ -47,9 +47,27 @@ enum MapProjection: String, CaseIterable, Identifiable, Sendable {
     /// Whether a point faces the viewer. Only the globe has a far side.
     func isVisible(_ point: CGPoint) -> Bool {
         guard self == .globe else { return true }
+        return Self.facesViewer(point, tilt: Self.globeTilt)
+    }
+
+    /// Whether a point, in degrees, faces the viewer on a globe tipped `tilt` radians towards the north.
+    static func facesViewer(_ point: CGPoint, tilt: Double) -> Bool {
         let longitude = point.x * .pi / 180
         let latitude = point.y * .pi / 180
-        return sin(Self.globeTilt) * sin(latitude) + cos(Self.globeTilt) * cos(latitude) * cos(longitude) >= 0
+        return sin(tilt) * sin(latitude) + cos(tilt) * cos(latitude) * cos(longitude) >= 0
+    }
+
+    /// Projects a point, in degrees, onto a globe tipped `tilt` radians towards the north, as the
+    /// globe projection does at its own tilt.
+    static func globePoint(_ point: CGPoint, tilt: Double) -> CGPoint {
+        let longitude = point.x * .pi / 180
+        let latitude = point.y * .pi / 180
+        let x = cos(latitude) * sin(longitude)
+        let y = cos(tilt) * sin(latitude) - sin(tilt) * cos(latitude) * cos(longitude)
+        let facing = sin(tilt) * sin(latitude) + cos(tilt) * cos(latitude) * cos(longitude)
+        guard facing < 0 else { return CGPoint(x: x, y: -y) }
+        let length = max((x * x + y * y).squareRoot(), 1e-9)
+        return CGPoint(x: x / length, y: -y / length)
     }
 
     /// Projects a point given as longitude and latitude in degrees into map units, north up.
@@ -152,13 +170,7 @@ enum MapProjection: String, CaseIterable, Identifiable, Sendable {
         case .globe:
             // Seen from far away, tilted a little towards the north. Points on the far side settle
             // on the rim, so every projection moves the same points and can morph into this one.
-            let tilt = Self.globeTilt
-            let x = cos(latitude) * sin(longitude)
-            let y = cos(tilt) * sin(latitude) - sin(tilt) * cos(latitude) * cos(longitude)
-            let facing = sin(tilt) * sin(latitude) + cos(tilt) * cos(latitude) * cos(longitude)
-            guard facing < 0 else { return CGPoint(x: x, y: -y) }
-            let length = max((x * x + y * y).squareRoot(), 1e-9)
-            return CGPoint(x: x / length, y: -y / length)
+            return Self.globePoint(point, tilt: Self.globeTilt)
         }
     }
 

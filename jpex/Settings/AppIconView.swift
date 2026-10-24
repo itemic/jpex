@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// Every icon the app can wear, to tap and see on the Home Screen: Japan in its colours, then
-/// other countries' outlines.
+/// Every icon the app can wear, to tap and see on the Home Screen: Japan in its colours and neon,
+/// other countries' outlines and licence plates. In Dark Mode, each shows its dark version, as a
+/// dark Home Screen would.
 struct AppIconView: View {
   @AppStorage(AppIcon.storageKey) private var selection = AppIcon.japan
   @State private var failure: String?
@@ -22,19 +23,11 @@ struct AppIconView: View {
       Section("Other maps") {
         IconGrid(icons: AppIcon.otherMaps, selection: selection, choose: choose)
       }
-      Section {
+      Section("Chinese licence plates") {
         IconGrid(icons: AppIcon.chinesePlates, selection: selection, choose: choose)
-      } header: {
-        Text("Chinese licence plates")
-      } footer: {
-        Text("Each province’s one-character short name, as on its cars’ plates.")
       }
-      Section {
+      Section("European licence plates") {
         IconGrid(icons: AppIcon.europeanPlates, selection: selection, choose: choose)
-      } header: {
-        Text("European licence plates")
-      } footer: {
-        Text("The blue band that starts plates across the European Union, with each country’s code.")
       }
     }
     .headerProminence(.increased)
